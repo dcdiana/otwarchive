@@ -194,7 +194,7 @@ class MassImportTool
   end
 =end
 
-=begin
+
 # Convert Source DB Ratings to those of target archive in advance
   def transform_source_ratings()
     puts "transform source ratings"
@@ -219,13 +219,11 @@ class MassImportTool
   end
 
   #link up tags from source to target
-  def fill_tag_list(tl)
+  def check_tag_presence(tl)
     i = 0
     while i <= tl.length - 1
       temptag = tl[i]
-      connection = Mysql.new('localhost','stephanies','Trustno1','stephanies_development')
-
-
+      connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
       r = connection.query("Select id from tags where name = '#{temptag.tag}'; ")
       connection.close
       ##if not found add tag
@@ -249,7 +247,7 @@ class MassImportTool
     end
     return tl
   end
-=end
+
 
   #get all possible tags from source
   def get_tag_list(tl, at)
@@ -263,7 +261,7 @@ class MassImportTool
         r = connection.query("Select caid, caname from #{@source_table_prefix}category; ")
         r.each do |r|
           nt = ImportTag.new()
-          nt.tag_type = 1
+          nt.tag_type = "category"
           nt.old_id = r[0]
           nt.tag = r[1]
           taglist.push(nt)
@@ -286,8 +284,8 @@ class MassImportTool
         r = connection.query("Select class_id, class_type, class_name from #{@source_table_prefix}classes; ")
         r.each do |r|
           nt = ImportTag.new()
-          if r[1] == @srcWarningClassTypeID
-            nt.tag_type = 6
+          if r[1] == @source_warning_class_id
+            nt.tag_type = "warning"
           else
             nt.tag_type = "freeform"
           end
@@ -346,77 +344,33 @@ class MassImportTool
   end
 =end
 
+  def get_create_child_collections(source_type)
 
-  def create_child_collection(name,parent_id,description)
+  end
+
+
+  def create_child_collection(name,parent_id,description,title)
 
     collect = Collection.new()
-      collect.name = @new_collection_name
-      collect.description = @new_collection_description
-      collect.title = new_collection_title
-
+      collect.name = name
+      collect.description = description
+      collect.title = title
+      collect.parent_id = parent_id
+    collection.save
   end
 
-  def set_work_attributes(work, location="", options = {})
-    raise Error, "Work could not be downloaded" if work.nil?
-    work.imported_from_url = location
-    work.expected_number_of_chapters = work.chapters.length
+  #takes the list of tags created earlier and if specified via options converts
+  ##categories to collections / subcollections
+ def create_sub_collections(tags)
+   tags.each do |t|
+     if t.old_parent_id = -1
+       t.new_parent_id = @new_collection_id
+       t.
+     end
+   end
 
-    # set authors for the works
-    pseuds = []
-    pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
-    pseuds << options[:archivist].default_pseud if options[:archivist]
-    pseuds += options[:pseuds] if options[:pseuds]
-    pseuds = pseuds.uniq
-    raise Error, "A work must have at least one author specified" if pseuds.empty?
-    pseuds.each do |pseud|
-      work.pseuds << pseud unless work.pseuds.include?(pseud)
-      work.chapters.each {|chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud)}
-    end
+ end
 
-    # handle importing works for others
-    # build an external creatorship for each author
-    if options[:importing_for_others]
-      external_author_names = options[:external_author_names] || parse_author(location)
-      external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
-      external_author_names.each do |external_author_name|
-        if external_author_name && external_author_name.external_author
-          if external_author_name.external_author.do_not_import
-            # we're not allowed to import works from this address
-            raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
-          end
-          ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
-        end
-      end
-    end
-
-    # lock to registered users if specified or importing for others
-    work.restricted = options[:restricted] || options[:importing_for_others] || false
-
-    # set default values for required tags for any works that don't have them
-    work.fandom_string = (options[:fandom].blank? ? ArchiveConfig.FANDOM_NO_TAG_NAME : options[:fandom]) if (options[:override_tags] || work.fandoms.empty?)
-    work.rating_string = (options[:rating].blank? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : options[:rating]) if (options[:override_tags] || work.ratings.empty?)
-    work.warning_strings = (options[:warning].blank? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : options[:warning]) if (options[:override_tags] || work.warnings.empty?)
-    work.category_string = options[:category] if !options[:category].blank? && (options[:override_tags] || work.categories.empty?)
-    work.character_string = options[:character] if !options[:character].blank? && (options[:override_tags] || work.characters.empty?)
-    work.relationship_string = options[:relationship] if !options[:relationship].blank? && (options[:override_tags] || work.relationships.empty?)
-    work.freeform_string = options[:freeform] if !options[:freeform].blank? && (options[:override_tags] || work.freeforms.empty?)
-
-    # set default value for title
-    work.title = "Untitled Imported Work" if work.title.blank?
-
-    work.posted = true if options[:post_without_preview]
-    work.chapters.each do |chapter|
-      if chapter.content.length > ArchiveConfig.CONTENT_MAX
-        # TODO: eventually: insert a new chapter
-        chapter.content.truncate(ArchiveConfig.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
-      end
-
-      chapter.posted = true
-      # ack! causing the chapters to exist even if work doesn't get created!
-      # chapter.save
-    end
-    return work
-  end
 
 =begin
   def check_for_previous_import(location)
@@ -435,6 +389,7 @@ class MassImportTool
     puts " Setting Import Values "
     self.set_import_strings()
 
+
     if @skip_rating_transform == false
       puts " Tranforming source ratings "
       self.transform_source_ratings()
@@ -446,6 +401,28 @@ class MassImportTool
     puts (" Updating Tags ")
     tag_list = Array.new()
     tag_list = self.fill_tag_list(tag_list)
+
+
+    if @categories_as_subcollections = true
+      connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
+      case
+        when 4
+
+        when 3
+          r = connection.query("SELECT catid, parentcatid,category,description,image,locked from #{@source_categories_table};")
+          r.each do |rr|
+            nc = ImportCategory.new
+            nc.old_id = rr[0]
+            nc.parent_id = rr[1]
+            nc.title = rr[2]
+            nc.description =
+          end
+          end
+      end
+
+    end
+
+
 
     connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
     r = connection.query("SELECT * FROM #{@source_stories_table} ;")
@@ -857,7 +834,7 @@ class MassImportTool
   new_creation.pseud_id = pseud_id
   new_creation.creation_id = chapter_id
   new_creation.save!
-  puts "New creatorship #{new_creation.id}")
+  puts "New creatorship #{new_creation.id}"
  end
 
 
