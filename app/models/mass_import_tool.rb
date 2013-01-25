@@ -26,6 +26,7 @@ class MassImportTool
 
    #temporary table prefix to be added to table names during import
     @temptableprefix = "ODimport"
+    @connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
     #####################################################
 
     @archivist_login = nil
@@ -168,33 +169,7 @@ class MassImportTool
     @skip_rating_transform = false
   end
 
-
-#below will be implemented when using config file, so its useless and hasnt been updated yet
 =begin
-  def ReadConfigValues()
-    @ImportArchiveID = @config.GetValue("General", "ImportArchiveID", 0)
-    @CollectionOwner = @config.GetValue("General", "CollectionOwner", "")
-    @_tgtRating1 = @config.GetValue("General", "_tgtRating1", "")
-    @_tgtRating2 = @config.GetValue("General", "_tgtRating2", "")
-    @_tgtRating3 = @config.GetValue("General", "_tgtRating3", "")
-    @_tgtRating4 = @config.GetValue("General", "_tgtRating4", "")
-    @_tgtRating5 = @config.GetValue("General", "_tgtRating5", "")
-    @useProperCategories = @config.GetValue("General", "useProperCategories", "")
-    @existingAuthorMessage = @config.GetValue("General", "existingAuthorMessage", "")
-    @newCollectionID = @config.GetValue("General", "newCollectionID", "")
-    @NotificationMessage = @config.GetValue("General", "NotificationMessage", "")
-    @CreateImportArchiveRecord = @config.GetValue("General", "CreateImportArchiveRecord", "")
-    @bypassInviteQueForImported = @config.GetValue("General", "bypassInviteQueForImported", "")
-    @NotifyImportedUsers = @config.GetValue("General", "NotifyImportedUsers", "")
-    @srcArchiveType = @config.GetValue("General", "srcArchiveType", "")
-    @srcWarningClassTypeID = @config.GetValue("General", "srcWarningClassTypeID", "")
-    @source_table_prefix = @config.GetValue("General", "srcTablePrefix", "")
-    @dbgSkipRatingTransform = @config.GetValue("General", "dbgSkipRatingTransform", "")
-    @targetDBhost = "localhost"
-  end
-=end
-
-
 # Convert Source DB Ratings to those of target archive in advance
   def transform_source_ratings()
     puts "transform source ratings"
@@ -219,11 +194,13 @@ class MassImportTool
   end
 
   #link up tags from source to target
-  def check_tag_presence(tl)
+  def fill_tag_list(tl)
     i = 0
     while i <= tl.length - 1
       temptag = tl[i]
-      connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
+      connection = Mysql.new('localhost','stephanies','Trustno1','stephanies_development')
+
+
       r = connection.query("Select id from tags where name = '#{temptag.tag}'; ")
       connection.close
       ##if not found add tag
@@ -247,74 +224,74 @@ class MassImportTool
     end
     return tl
   end
-
+=end
 
   #get all possible tags from source
   def get_tag_list(tl, at)
     taglist = tl
-
+    @connection.open()
 
     case at
       #storyline
       when 4
-        connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
-        r = connection.query("Select caid, caname from #{@source_table_prefix}category; ")
-        r.each do |r|
+        
+        r = @connection.query("Select caid, caname from #{@source_table_prefix}category; ")
+        r.each do |r1|
           nt = ImportTag.new()
-          nt.tag_type = "category"
-          nt.old_id = r[0]
-          nt.tag = r[1]
+          nt.tag_type = 1
+          nt.old_id = r1[0]
+          nt.tag = r1[1]
           taglist.push(nt)
         end
 
 
-        rr = connection.query("Select subid, subname from #{@source_table_prefix}subcategory; ")
+        rr = @connection.query("Select subid, subname from #{@source_table_prefix}subcategory; ")
         unless rr.num_rows.nil? || rr.num_rows == 0
-          rr.each do |rr|
+          rr.each do |r2|
             nt = ImportTag.new()
             nt.tag_type = 99
-            nt.old_id = rr[0]
-            nt.tag = rr[1]
+            nt.old_id = r2[0]
+            nt.tag = r2[1]
             taglist.push(nt)
           end
         end
-        connection.close
+        @connection.close
       #efiction 3
       when 3
-        r = connection.query("Select class_id, class_type, class_name from #{@source_table_prefix}classes; ")
-        r.each do |r|
+        r = @connection.query("Select class_id, class_type, class_name from #{@source_table_prefix}classes; ")
+        r.each do |r1|
           nt = ImportTag.new()
-          if r[1] == @source_warning_class_id
-            nt.tag_type = "warning"
+          if r1[1] == @source_warning_class_id
+            nt.tag_type = 6
           else
             nt.tag_type = "freeform"
           end
-          nt.old_id = r[0]
-          nt.tag = r[2]
+          nt.old_id = r1[0]
+          nt.tag = r1[2]
           taglist.push(nt)
         end
 
-        rr = connection.query("Select catid, category from #{@source_table_prefix}categories; ")
-        rr.each do |rr|
+        rr = @connection.query("Select catid, category from #{@source_table_prefix}categories; ")
+        rr.each do |r2|
           nt = ImportTag.new()
           nt.tag_type = "category"
-          nt.old_id = rr[0]
-          nt.tag = rr[1]
+          nt.old_id = r2[0]
+          nt.tag = r2[1]
           taglist.push(nt)
 
         end
 
-        rrr = connection.query("Select charid, charname from #{@source_table_prefix}characters; ")
-        rrr.each do |rrr|
+        rrr = @connection.query("Select charid, charname from #{@source_table_prefix}characters; ")
+        rrr.each do |r3|
           nt = ImportTag.new()
           nt.tag_type = "character"
-          nt.old_id = rrr[0]
-          nt.tag = rrr[1]
+          nt.old_id = r3[0]
+          nt.tag = r3[1]
           taglist.push(nt)
         end
       when ArchiveType.efiction2
     end
-    connection.close()
+    @connection.close()
     return taglist
   end
 
@@ -344,42 +321,79 @@ class MassImportTool
   end
 =end
 
-  def get_create_child_collections(source_type)
 
-  end
-
-
-  def create_child_collection(name,parent_id,description,title)
+  def create_child_collection(name,parent_id,description)
 
     collect = Collection.new()
-      collect.name = name
-      collect.description = description
-      collect.title = title
-      collect.parent_id = parent_id
-    collection.save
+      collect.name = @new_collection_name
+      collect.description = @new_collection_description
+      collect.title = new_collection_title
+
   end
 
-  #takes the list of tags created earlier and if specified via options converts
-  ##categories to collections / subcollections
- def create_sub_collections(tags)
-   tags.each do |t|
-     if t.old_parent_id = -1
-       t.new_parent_id = @new_collection_id
-       t.
-     end
-   end
+  def set_work_attributes(work, location="", options = {})
+    raise Error, "Work could not be downloaded" if work.nil?
+    work.imported_from_url = location
+    work.expected_number_of_chapters = work.chapters.length
 
- end
-
-
-=begin
-  def check_for_previous_import(location)
-    work = Work.find_by_imported_from_url(location)
-    if work
-      raise Error, "A work has already been imported from #{location}."
+    # set authors for the works
+    pseuds = []
+    pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
+    pseuds << options[:archivist].default_pseud if options[:archivist]
+    pseuds += options[:pseuds] if options[:pseuds]
+    pseuds = pseuds.uniq
+    raise Error, "A work must have at least one author specified" if pseuds.empty?
+    pseuds.each do |pseud|
+      work.pseuds << pseud unless work.pseuds.include?(pseud)
+      work.chapters.each {|chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud)}
     end
+
+    # handle importing works for others
+    # build an external creatorship for each author
+    if options[:importing_for_others]
+      external_author_names = options[:external_author_names] || parse_author(location)
+      external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
+      external_author_names.each do |external_author_name|
+        if external_author_name && external_author_name.external_author
+          if external_author_name.external_author.do_not_import
+            # we're not allowed to import works from this address
+            raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
+          end
+          ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
+        end
+      end
+    end
+
+    # lock to registered users if specified or importing for others
+    work.restricted = options[:restricted] || options[:importing_for_others] || false
+
+    # set default values for required tags for any works that don't have them
+    work.fandom_string = (options[:fandom].blank? ? ArchiveConfig.FANDOM_NO_TAG_NAME : options[:fandom]) if (options[:override_tags] || work.fandoms.empty?)
+    work.rating_string = (options[:rating].blank? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : options[:rating]) if (options[:override_tags] || work.ratings.empty?)
+    work.warning_strings = (options[:warning].blank? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : options[:warning]) if (options[:override_tags] || work.warnings.empty?)
+    work.category_string = options[:category] if !options[:category].blank? && (options[:override_tags] || work.categories.empty?)
+    work.character_string = options[:character] if !options[:character].blank? && (options[:override_tags] || work.characters.empty?)
+    work.relationship_string = options[:relationship] if !options[:relationship].blank? && (options[:override_tags] || work.relationships.empty?)
+    work.freeform_string = options[:freeform] if !options[:freeform].blank? && (options[:override_tags] || work.freeforms.empty?)
+
+    # set default value for title
+    work.title = "Untitled Imported Work" if work.title.blank?
+
+    work.posted = true if options[:post_without_preview]
+    work.chapters.each do |chapter|
+      if chapter.content.length > ArchiveConfig.CONTENT_MAX
+        # TODO: eventually: insert a new chapter
+        chapter.content.truncate(ArchiveConfig.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
+      end
+
+      chapter.posted = true
+      # ack! causing the chapters to exist even if work doesn't get created!
+      # chapter.save
+    end
+    return work
   end
-=end
+
+
   ##################################################################################################
   # Main Worker Sub
   def import_data()
@@ -389,7 +403,6 @@ class MassImportTool
     puts " Setting Import Values "
     self.set_import_strings()
 
-
     if @skip_rating_transform == false
       puts " Tranforming source ratings "
       self.transform_source_ratings()
@@ -398,36 +411,14 @@ class MassImportTool
     end
 
     #Update Tags and get Taglist
-    puts (" Updating Tags ")
+    puts "Updating Tags"
     tag_list = Array.new()
     tag_list = self.fill_tag_list(tag_list)
 
-
-    if @categories_as_subcollections = true
-      connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
-      case
-        when 4
-
-        when 3
-          r = connection.query("SELECT catid, parentcatid,category,description,image,locked from #{@source_categories_table};")
-          r.each do |rr|
-            nc = ImportCategory.new
-            nc.old_id = rr[0]
-            nc.parent_id = rr[1]
-            nc.title = rr[2]
-            nc.description =
-          end
-          end
-      end
-
-    end
-
-
-
-    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
-    r = connection.query("SELECT * FROM #{@source_stories_table} ;")
-    connection.close()
-    puts (" Importing Stories ")
+    @connection.open
+    r = @connection.query("SELECT * FROM #{@source_stories_table} ;")
+    @connection.close()
+    puts "Importing Stories"
     i = 0
     r.each do |row|
       puts " Importing Story #{i}"
@@ -492,20 +483,18 @@ class MassImportTool
             ns.hits = row[10]
 
         end
-#debug info
-
-        puts "attempting to get new user id, user: #{ns.old_user_id}, source: #{ns.source_archive_id}"
-#see if user / author exists for this import already
+        #debug info
+        puts "attempting to get new user id, user: #{ns.old_user_id}, source: #{ns.source_archive_id}"   
 
         a = ImportUser.new
+        #see if user / author exists for this import already
         ns.new_user_id = self.get_new_user_id_from_imported(ns.old_user_id, @import_archive_id)
         puts "The New user id!!!! ie value at this point #{ns.new_user_id}"
+
+          ##get import user object from source database
         a = self.get_import_user_object_from_source(ns.old_user_id)
         if ns.new_user_id == 0
           puts "didnt exist in this import"
-          ##get import user object from source database
-
-
           #see if user account exists in main archive by checking email,
           temp_author_id = get_user_id_from_email(a.email)
 
@@ -534,10 +523,8 @@ class MassImportTool
             #user exists, but is being imported
             #insert the mapping value
             puts "---existed"
-            #update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
-            #tempuser2 = User.find_by_id(ns.new_user_id)
-
             ns.penname = a.penname
+
             #check to see if penname exists as pseud for existing user
             temp_pseud_id = get_pseud_id_for_penname(temp_author_id,ns.penname)
             if temp_pseud_id == 0
@@ -565,16 +552,7 @@ class MassImportTool
               puts "Error: 777: #{e}"
             end
 
-
-
-
-
-              'update_record_target("insert into pseuds (user_id,name,is_default,description) values (#{},'#{}',1,'Imported'")
-
-              #return newly created pseud
-
              # 'temp_pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
-
 
               update_record_target("update user_imports set pseud_id = #{temp_pseud_id} where user_id = #{ns.new_user_id} and source_archive_id = #{@import_archive_id}")
               puts "====A"
@@ -584,8 +562,8 @@ class MassImportTool
           end
 
         else
-              ns.penname = a.penname
-              a.pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
+          ns.penname = a.penname
+          a.pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
           puts "#{a.pseud_id} this is the matching pseud id"
         end
 
@@ -607,8 +585,6 @@ class MassImportTool
           new_work.warning_strings = "None"
           new_work.errors.full_messages
           puts "old work id = #{ns.old_work_id}"
-
-
           new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
           new_work = add_chapters(new_work,ns.old_work_id)
           new_work.chapters.each do |chap|
@@ -627,10 +603,9 @@ class MassImportTool
             #cc.save!
             cc.errors.full_messages
           end
-           add_chapters2(ns,new_work.id)
-
+          add_chapters2(ns,new_work.id)
           my_tag_list.each do |t|
-             add_work_taggings(new_work.id,t)
+          add_work_taggings(new_work.id,t)
           end
           puts "new work created #{new_work.id}"
 
@@ -640,35 +615,6 @@ class MassImportTool
         end
 
 
-=begin
-
-        #self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, imported_from_url) values (
-        #'#{ns.title}','#{ns.summary}','#{ns.penname}','#{ns.title}','#{ns.updated}','#{ns.published}', '#{@import_archive_id}~~#{ns.old_work_id}'); ")
-        begin
-          new_wc = Creatorship.new
-          new_wc.creation_id = new_work.id
-          new_wc.creation_type = "work"
-          new_wc.pseud_id = ns.new_user_id
-          new_wc.save!
-          puts "new work creatorship #{new_wc.id}"
-
-
-        rescue Exception=>e
-          puts "Error: 333: #{e}"
-
-        end
-
-
-        new_wc = Creatorship.new
-        new_wc.creation_id = new_work.id
-        new_wc.creation_type = "work"
-        new_wc.pseud_id = ns.new_user_id
-        new_wc.save!
-        puts "new work creatorship #{new_wc.id}"
-
-=end
-
-
         begin
           new_wi = WorkImport.new
           new_wi.work_id = new_work.id
@@ -676,46 +622,30 @@ class MassImportTool
           new_wi.source_archive_id = @import_archive_id
           new_wi.source_work_id = ns.old_work_id
           new_wi.source_user_id = ns.old_user_id
-
           new_wi.save!
 
         rescue Exception=>e
           puts "Error: 888: #{e}"
         end
-
-
-
-      #return new work id
-      #ns.new_work_id =  get_new_work_id_fresh(ns.old_work_id,ns.source_archive_id)
-        #add creation
-        #self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{ns.new_work_id},#{ns.new_user_id}, 'work') ")
-        #                     puts "eee"
-        connection.close()
-
-
+        @connection.close()
+        
       rescue Exception => ex
         puts " Error : " + ex.message
-        connection.close()
+        @connection.close()
       ensure
       end
       i = i + 1
     end
-    connection.close()
+    @connection.close()
   end
 
-    def create_work_from_import_work(ns)
 
-    end
-  def add_work_tagging(work_id,tag)
-    new_tagging = Tagging.new
-
-  end
   def add_chapters2(ns,new_id)
-    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
-    case @source_archive_type
+     case
       when 4
         puts "1121 == Select * from #{@source_chapters_table} where csid = #{ns.old_work_id} order by id asc"
-        r = connection.query("Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}")
+        @connection.open
+        r = @connection.query("Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}")
         puts "333"
         ix = 1
         r.each do |rr|
@@ -732,7 +662,7 @@ class MassImportTool
 
     end
 
-    connection.close()
+    @connection.close()
 
 
   end
@@ -751,6 +681,7 @@ class MassImportTool
     unless u.is_archivist?
       u.roles << Role.find_by_name("archivist")
       u.save
+      
     end
     # make the collection if it doesn't exist already
     c = Collection.find_or_initialize_by_name(@new_collection_name)
@@ -773,32 +704,30 @@ class MassImportTool
   #Post Chapters Fix
   def post_chapters2(c, sourceType)
     case sourceType
-      when 4
-        new_c = Chapter.new
-        new_c.work_id =  c.new_work_id
-        new_c.created_at = c.date_posted
-        new_c.updated_at = c.date_posted
-        new_c.posted = 1
-        new_c.position = c.position
-        new_c.title = c.title
-        new_c.summary = c.summary
-        new_c.content = c.body
-        new_c.save!
-
-        puts "New chapter id #{new_c.id}"
-
-        add_new_creatorship(new_c.id,"chapter",c.pseud_id)
-
+    when 4 #storyline
+      new_c = Chapter.new
+      new_c.work_id =  c.new_work_id
+      new_c.created_at = c.date_posted
+      new_c.updated_at = c.date_posted
+      new_c.posted = 1
+      new_c.position = c.position
+      new_c.title = c.title
+      new_c.summary = c.summary
+      new_c.content = c.body
+      new_c.save!
+      puts "New chapter id #{new_c.id}"
+      add_new_creatorship(new_c.id,"chapter",c.pseud_id)
+    when 3 #efiction
+      #TODO Add efiction3 add chapters
     end
   end
 
   #add chapters    takes chapters and adds them to import work object
     def add_chapters(ns,old_work_id)
-      connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
       case @source_archive_type
-        when 4
+      when 4 #Storyline
           puts "1121 == Select * from #{@source_chapters_table} where csid = #{old_work_id}"
-          r = connection.query("Select * from #{@source_chapters_table} where csid = #{old_work_id}")
+          r = @connection.query("Select * from #{@source_chapters_table} where csid = #{old_work_id}")
           puts "333"
           ix = 1
           r.each do |rr|
@@ -813,15 +742,14 @@ class MassImportTool
             c.summary = ""
             c.posted = 1
             ns.chapters << c
-
             ix = ix + 1
             #self.post_chapters(c, @source_archive_type)
           end
-        when 3
-
+      when 3 #efiction 3
+          #TODO Add efiction3 add chapters
       end
 
-      connection.close()
+      @connection.close()
       return ns
 
   end
@@ -870,49 +798,49 @@ class MassImportTool
   def set_import_strings
     case @source_archive_type
       when 1
-        @source_chapters_table = "#{@source_table_prefix}chapters"
-        @source_reviews_table = "#{@source_table_prefix}reviews"
-        @source_stories_table = "#{@source_table_prefix}stories"
-        @source_categories_table = "#{@source_table_prefix}categories"
-        @source_users_table = "#{@source_table_prefix}authors"
+        @source_chapters_table = "#{@temp_table_prefix}#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@temp_table_prefix}#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@temp_table_prefix}#{@source_table_prefix}stories"
+        @source_categories_table = "#{@temp_table_prefix}#{@source_table_prefix}categories"
+        @source_users_table = "#{@temp_table_prefix}#{@source_table_prefix}authors"
         @get_author_from_source_query = " "
       when 2
-        @source_chapters_table = "#{@source_table_prefix}chapters"
-        @source_reviews_table = "#{@source_table_prefix}reviews"
-        @source_stories_table = "#{@source_table_prefix}stories"
-        @source_users_table = "#{@source_table_prefix}authors"
+        @source_chapters_table = "#{@temp_table_prefix}#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@temp_table_prefix}#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@temp_table_prefix}#{@source_table_prefix}stories"
+        @source_users_table = "#{@temp_table_prefix}#{@source_table_prefix}authors"
         @get_author_from_source_query = "Select realname, penname, email, bio, date, pass, website, aol, msn, yahoo, icq, ageconsent from  #{@source_users_table} where uid ="
       when 3
-        @source_chapters_table = "#{@source_table_prefix}chapters"
-        @source_reviews_table = "#{@source_table_prefix}reviews"
-        @source_stories_table = "#{@source_table_prefix}stories"
-        @source_users_table = "#{@source_table_prefix} authors"
+        @source_chapters_table = "#{@temp_table_prefix}#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@temp_table_prefix}#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@temp_table_prefix}#{@source_table_prefix}stories"
+        @source_users_table = "#{@temp_table_prefix}#{@source_table_prefix} authors"
         @get_author_from_source_query = "Select realname, penname, email, bio, date, pass from #{@source_users_table} where uid ="
       when 5
       when 4
-        @source_chapters_table = "#{@source_table_prefix}chapters"
-        @source_reviews_table = "#{@source_table_prefix}reviews"
-        @source_stories_table = "#{@source_table_prefix}stories"
-        @source_users_table = "#{@source_table_prefix}users"
-        @source_categories_table = "#{@source_table_prefix}category"
-        @source_subcategories_table = "#{@source_table_prefix}subcategory"
+        @source_chapters_table = "#{@temp_table_prefix}#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@temp_table_prefix}#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@temp_table_prefix}#{@source_table_prefix}stories"
+        @source_users_table = "#{@temp_table_prefix}#{@source_table_prefix}users"
+        @source_categories_table = "#{@temp_table_prefix}#{@source_table_prefix}category"
+        @source_subcategories_table = "#{@temp_table_prefix}#{@source_table_prefix}subcategory"
         @srcRatingsTable = "" #None
         @get_author_from_source_query = "SELECT urealname, upenname, uemail, ubio, ustart, upass, uurl, uaol, umsn, uicq from #{@source_users_table} where uid ="
     end
   end
 
-  ##get import user object, by source_user_id
+  ##get import user object, by source_user_id, 
+  ##return import user object
   def get_import_user_object_from_source(source_user_id)
     a = ImportUser.new()
-    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
-    r = connection.query("#{@get_author_from_source_query} #{source_user_id}")
-    connection.close
+    @connection.open
+    r = @connection.query("#{@get_author_from_source_query} #{source_user_id}")
+    @connection.close
 
     r.each  do |r|
       a.old_user_id = source_user_id
       a.realname = r[0]
       a.source_archive_id = @import_archive_id
-
       a.penname = r[1]
       a.email = r[2]
       a.bio = r[3]
@@ -930,11 +858,7 @@ class MassImportTool
           a.isadult = r[11]
         end
       end
-
     end
-
-
-
     return a
   end
 
@@ -949,19 +873,19 @@ class MassImportTool
       end
     end
     if a.aol.length > 1
-      a.bio << " <br /><b>AOL / AIM :</b><br /> #{a.aol} "
+      a.bio << " <br /><b>AOL / AIM :</b><br /> #{a.aol}"
     end
     if a.website.length > 1
-      a.bio << "<br /><b>Website:</ b><br /> #{a.website} "
+      a.bio << "<br /><b>Website:</ b><br /> #{a.website}"
     end
     if a.yahoo.length > 1
-      a.bio << "<br /><b>Yahoo :</b><br /> #{a.yahoo} "
+      a.bio << "<br /><b>Yahoo :</b><br /> #{a.yahoo}"
     end
     if a.msn.length > 1
-      a.bio << "<br /><b>Windows Live:</ b><br /> #{a.msn} "
+      a.bio << "<br /><b>Windows Live:</ b><br /> #{a.msn}"
     end
     if a.icq.length > 1
-      a.bio << "<br /><b>ICQ :</b><br /> #{a.icq} "
+      a.bio << "<br /><b>ICQ :</b><br /> #{a.icq}"
     end
     return a
   end
@@ -1007,9 +931,9 @@ class MassImportTool
   end
 
   def get_single_value_target(query)
-    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
-    r = connection.query(query)
-    connection.close
+    @connection.open
+    r = @connection.query(query)
+    @connection.close
     if r.num_rows == 0
       return 0
     else
@@ -1021,35 +945,20 @@ class MassImportTool
 
 # Update db record takes query as peram #
   def update_record_target(query)
-    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
+  @connection.open
     begin
       rowsEffected = 0
-      rowsEffected = connection.query(query)
+      rowsEffected = @connection.query(query)
 
-      connection.close()
+      @connection.close()
       return rowsEffected
     rescue Exception => ex
-      connection.close()
+      @connection.close()
       puts ex.message
     ensure
     end
   end
 
-# Update db record takes query as peram #
-  def update_record_source(query)
-    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
-    begin
-      rowsEffected = 0
 
-      rowsEffected = connection(query)
-      connection.close()
-      return rowsEffected
-    rescue Exception => ex
-
-      connection.close()
-
-      puts ex.message
-    end
-  end
 
 end
