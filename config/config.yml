@@ -69,6 +69,11 @@ MAX_USER_INVITE_REQUEST: 10
 # this determines how long we keep processed results like tag set nominations in redis
 DAYS_TO_SAVE_PROCESSED: 56
 
+#User Settings
+LOGIN_LENGTH_MIN: 3
+LOGIN_LENGTH_MAX: 40
+PASSWORD_LENGTH_MIN: 6
+PASSWORD_LENGTH_MAX: 40
 # validation values -- max/min lengths
 TITLE_MAX: 255
 TITLE_MIN: 1
