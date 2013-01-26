@@ -1,31 +1,5 @@
 class User < ActiveRecord::Base
-
   include WorksOwner
-
-#### used to be in acts_as_authentable
-## used in app/views/users/new.html.erb
-## TODO move to ArchiveConfig
-
-
-  validates_length_of :login, :within => ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-    :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => ArchiveConfig.LOGIN_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
-
-
-
-  # allow nil so can save existing users
-  validates_length_of :password, :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX, :allow_nil => true,
-    :too_short => ts("is too short (minimum is %{min_pwd} characters)", :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_pwd} characters)", :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
-
-####
-
-
-  # Allows other models to get the current user with User.current_user
-  cattr_accessor :current_user
-
-  # NO NO NO! BAD IDEA! AWOOOOGAH! attr_accessible should ONLY ever be used on NON-SECURE fields
-  # attr_accessible :suspended, :banned, :translation_admin, :tag_wrangler, :archivist, :recently_reset
 
   # Authlogic gem
   acts_as_authentic do |config|
@@ -35,47 +9,52 @@ class User < ActiveRecord::Base
     config.validates_length_of_password_confirmation_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
   end
 
-  def has_no_credentials?
-    self.crypted_password.blank? && self.identity_url.blank?
-  end
-
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
-  has_many :roles_users
-  has_many :roles, :through => :roles_users
 
+ #Triggers / Events
+ ##################
+  before_create :create_default_associateds
+  after_create :mark_invitation_redeemed, :remove_from_queue
+  after_update :log_change_if_login_was_edited
+  before_destroy :remove_pseud_from_kudos
+
+ #Attributes
+ ###########
   # OpenID plugin
   attr_accessible :identity_url
 
-  ### BETA INVITATIONS ###
-  has_many :invitations, :as => :creator
-  has_one :invitation, :as => :invitee
-  has_many :user_invite_requests, :dependent => :destroy
-
+  #Beta Invites
   attr_accessor :invitation_token
   attr_accessible :invitation_token
-  after_create :mark_invitation_redeemed, :remove_from_queue
 
-  has_many :external_authors, :dependent => :destroy
-  has_many :external_creatorships, :foreign_key => 'archivist_id'
+  # Allows other models to get the current user with User.current_user
+  cattr_accessor :current_user
 
-  has_many :pseuds, :dependent => :destroy
-  validates_associated :pseuds
+  # NO NO NO! BAD IDEA! AWOOOOGAH! attr_accessible should ONLY ever be used on NON-SECURE fields
+  # attr_accessible :suspended, :banned, :translation_admin, :tag_wrangler, :archivist, :recently_reset
 
+  # Virtual attribute for age check and terms of service
+  attr_accessor :age_over_13
+  attr_accessor :terms_of_service
+  attr_accessible :age_over_13, :terms_of_service
+
+  #Relations
+ ##########
   has_one :profile, :dependent => :destroy
-  validates_associated :profile
-
   has_one :preference, :dependent => :destroy
-  validates_associated :preference
+  has_one :invitation, :as => :invitee
 
+  has_many :roles_users
+  has_many :roles, :through => :roles_users
+  ### BETA INVITATIONS ###
+  has_many :invitations, :as => :creator
+  has_many :user_invite_requests, :dependent => :destroy
   has_many :skins, :foreign_key=> 'author_id', :dependent => :nullify
-  has_many :work_skins, :foreign_key=> 'author_id', :dependent => :nullify
-
-  before_create :create_default_associateds
-
-  after_update :log_change_if_login_was_edited
-
+  has_many :work_skins, :foreign_key=> 'author_id', :dependent => :nullify  has_many :external_authors, :dependent => :destroy
+  has_many :external_creatorships, :foreign_key => 'archivist_id'
+  has_many :pseuds, :dependent => :destroy
   has_many :collection_participants, :through => :pseuds
   has_many :collections, :through => :collection_participants
   has_many :invited_collections, :through => :collection_participants, :source => :collection,
@@ -86,14 +65,12 @@ class User < ActiveRecord::Base
       :conditions => ['collection_participants.participant_role IN (?)', [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR]]
   has_many :owned_collections, :through => :collection_participants, :source => :collection,
           :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
-
   has_many :challenge_signups, :through => :pseuds
   has_many :offer_assignments, :through => :pseuds
   has_many :pinch_hit_assignments, :through => :pseuds
   has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'claiming_user_id', :inverse_of => :claiming_user
   has_many :gifts, :through => :pseuds
   has_many :gift_works, :through => :pseuds, :uniq => true
-
   has_many :readings, :dependent => :destroy
   has_many :bookmarks, :through => :pseuds
   has_many :bookmark_collection_items, :through => :bookmarks, :source => :collection_items
@@ -104,19 +81,15 @@ class User < ActiveRecord::Base
   has_many :work_collection_items, :through => :works, :source => :collection_items, :uniq => true
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true
-
   has_many :related_works, :through => :works
   has_many :parent_work_relationships, :through => :works
-
   has_many :tags, :through => :works
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
   has_many :filters, :through => :works
   has_many :direct_filters, :through => :works
-
   has_many :translations, :foreign_key => 'translator_id'
   has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id'
   has_many :translation_notes
-
   has_many :subscriptions, :dependent => :destroy
   has_many :followings,
             :class_name => 'Subscription',
@@ -129,51 +102,46 @@ class User < ActiveRecord::Base
   has_many :subscribers,
             :through => :followings,
             :source => :user
-
   has_many :wrangling_assignments
   has_many :fandoms, :through => :wrangling_assignments
   has_many :wrangled_tags, :class_name => 'Tag', :as => :last_wrangler
-
   has_many :inbox_comments, :dependent => :destroy
   has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false, :approved => true}, :order => 'created_at DESC'
-
   has_many :log_items, :dependent => :destroy
-  validates_associated :log_items
 
-  before_destroy :remove_pseud_from_kudos
-  def remove_pseud_from_kudos
-    Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{self.pseuds.collect(&:id).join(',')})")
-  end
 
-  def read_inbox_comments
-    inbox_comments.find(:all, :conditions => {:read => true})
-  end
-  def unread_inbox_comments
-    inbox_comments.find(:all, :conditions => {:read => false})
-  end
-  def unread_inbox_comments_count
-    inbox_comments.count(:all, :conditions => {:read => false})
-  end
 
+ #Scopes
+ #######
   scope :alphabetical, :order => :login
   scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(login,1,1) = ?', letter]}}
   scope :valid, :conditions => {:banned => false, :suspended => false}
   scope :out_of_invites, :conditions => {:out_of_invites => true}
 
-  validates_format_of :login,
-    :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
-    :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  # done by authlogic
-  # validates_uniqueness_of :login, :message => ('login_already_used', :default => 'must be unique')
+ #Validations
+ ############
+  validates_associated :pseuds
+  validates_associated :profile
+  validates_associated :preference
+  validates_associated :profile
+  validates_length_of :login, :within => ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
+                      :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => ArchiveConfig.LOGIN_LENGTH_MIN),
+                      :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
 
-  validates :email, :email_veracity => true
+  validates_associated :log_items
 
-  # Virtual attribute for age check and terms of service
-  attr_accessor :age_over_13
-  attr_accessor :terms_of_service
-  attr_accessible :age_over_13, :terms_of_service
+  # allow nil so can save existing users
+  validates_length_of :password, :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX, :allow_nil => true,
+                      :too_short => ts("is too short (minimum is %{min_pwd} characters)", :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
+                      :too_long => ts("is too long (maximum is %{max_pwd} characters)", :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
+##
+#  validates_format_of :login,
+  :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
+      :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
 
-=begin
+# done by authlogic
+# validates_uniqueness_of :login, :message => ('login_already_used', :default => 'must be unique')
+  validates :email, :email_veracity => true##
   validates_acceptance_of :terms_of_service,
                          :allow_nil => false,
                          :message => ts('Sorry, you need to accept the Terms of Service in order to sign up.'),
@@ -183,12 +151,34 @@ class User < ActiveRecord::Base
                           :allow_nil => false,
                           :message => ts('Sorry, you have to be over 13!'),
                           :if => :first_save?
-=end
+
+  #Methods
+  #########
+
+  def has_no_credentials?
+    self.crypted_password.blank? && self.identity_url.blank?
+  end
+
+  def remove_pseud_from_kudos
+    Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{self.pseuds.collect(&:id).join(',')})")
+  end
+
+  def read_inbox_comments
+    inbox_comments.find(:all, :conditions => {:read => true})
+  end
+
+  def unread_inbox_comments
+    inbox_comments.find(:all, :conditions => {:read => false})
+  end
+
+  #return count of unread inbox comments
+  def unread_inbox_comments_count
+    inbox_comments.count(:all, :conditions => {:read => false})
+  end
 
   def to_param
     login
   end
-
 
   def self.for_claims(claims_ids)    
     joins(:request_claims).
@@ -265,6 +255,7 @@ class User < ActiveRecord::Base
     @unposted_work = works.find(:first, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
 
+  # Get all unposted works for user
   def unposted_works
     return @unposted_works if @unposted_works
     @unposted_works = works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
