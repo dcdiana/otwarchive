@@ -52,7 +52,8 @@ class User < ActiveRecord::Base
   has_many :invitations, :as => :creator
   has_many :user_invite_requests, :dependent => :destroy
   has_many :skins, :foreign_key=> 'author_id', :dependent => :nullify
-  has_many :work_skins, :foreign_key=> 'author_id', :dependent => :nullify  has_many :external_authors, :dependent => :destroy
+  has_many :work_skins, :foreign_key=> 'author_id', :dependent => :nullify
+  has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
   has_many :pseuds, :dependent => :destroy
   has_many :collection_participants, :through => :pseuds

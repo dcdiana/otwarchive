@@ -18,8 +18,8 @@ ABUSE_ADDRESS: 'abuse@example.org'
 ADMIN_ADDRESS: 'admin@example.org'
 QUESTION_ADDRESS: 'questions@example.org'
 WEBMASTER_ADDRESS: 'webmaster@example.org'
-ERROR_ADDRESS: errors@example.org
-FEEDBACK_ADDRESS: feedback@example.org
+ERROR_ADDRESS: 'errors@example.org'
+FEEDBACK_ADDRESS: 'feedback@example.org'
 ERROR_PREFIX: "[ERROR] "
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
@@ -31,9 +31,9 @@ ERROR_PREFIX: "[ERROR] "
 PERFORM_DELIVERIES: false
 
 # email server
-SMTP_SERVER: localhost
+SMTP_SERVER: 'localhost'
 SMTP_PORT: 25
-SMTP_DOMAIN: localhost
+SMTP_DOMAIN: 'localhost'
 # if required for email authentication
 #SMTP_USER:
 #SMTP_PASSWORD:
