@@ -11,7 +11,7 @@ class MassImportTool
   def initialize
     #Import Class Version Number
     @version = 1
-    @ih = ImportHelper.new
+    #@ih = ImportHelper.new
     @post_url = "http://stephanies.archiveofourown.org/works/import"
     @use_new_mysql = 0
     #################################################
