@@ -255,14 +255,7 @@ end
 
     end
 
-    unless @import_mode == 1
-    puts "3) Updating Tags"
-      source_archive_tag_list = Array.new()
-      ## create list of all tags used in source
-      source_archive_tag_list = get_tag_list(source_archive_tag_list)
-      ## check for tag existance on target archive
-      source_archive_tag_list = self.fill_tag_list(source_archive_tag_list)
-    end
+
 
     ## pull source stories from database to array of rows
     r = @connection.query("SELECT * FROM #{@source_stories_table} ;")
