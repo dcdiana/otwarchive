@@ -173,6 +173,8 @@ def assign_tag_strings(import_work)
 
   tl = import_work.tag_list
   tl.each do |t|
+    puts "type" + t.tag_type
+    puts "tag" + t.tag
     if t.tag_type = "Character"
       unless @character_string == nil
         @character_string += "," + t.tag
