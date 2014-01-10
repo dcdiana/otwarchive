@@ -175,8 +175,7 @@ def assign_tag_strings(import_work)
   @freeform_string = String.new
 
  import_work.tag_list.each do |t|
-    puts "type" + t.tag_type
-    puts "tag" + t.tag
+
     if t.tag_type = "Character"
       @character_array << t.tag
     else
