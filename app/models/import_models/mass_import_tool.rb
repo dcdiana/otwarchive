@@ -174,14 +174,14 @@ def assign_tag_strings(import_work)
   tl = import_work.tag_list
   tl.each do |t|
     if t.tag_type = "Character"
-      if @character_string.length > 1
+      unless @character_string == nil
         @character_string += "," + t.tag
       else
         @character_string = t.tag
       end
 
     else
-      if @freeform_string.length > 1
+      unless @freeform_string == nil
         @freeform_string += "," + t.tag
       else
         @freeform_string = t.tag
