@@ -2,6 +2,7 @@
 # Mass Import Tool
 # Questions? Ask Stephanie =)
 class MassImportTool
+  require 'pry'
   require 'httparty'
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::TagHelper #tag_options needed by auto_link
@@ -167,6 +168,7 @@ class MassImportTool
 
   #convert the import tags to a comma delimited list to submit to story parser
 def assign_tag_strings(import_work)
+  binding.pry
   @character_string = String.new
 
   @freeform_string = String.new
