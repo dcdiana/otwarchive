@@ -26,7 +26,7 @@ class MassImportTool
     @apply_temp_prefix = 1
     #if want to restrict imported works to members onjly
     @import_restricted = 1
-
+    @extract_and_import = 0
     #TODO NOTE! change to nil for final version, as there will be no default
     @connection = nil
     if @use_new_mysql == 0 then
@@ -238,11 +238,22 @@ end
   def import_data
     puts "1) Setting Import Values"
     self.set_import_strings(@source_archive_type)
-    self.create_archivist_and_collection
-    self.create_import_record
-    @import_files_path = "#{Rails.root.to_s}/imports/#{@archive_import_id}"
-    puts "2) Running File Operations"
-    run_file_operations
+
+    unless @create_archivist_account == false
+      self.create_archivist_and_collection
+    end
+
+
+    if @create_archive_import_record = true
+      self.create_import_record
+    end
+
+    if @extract_and_import == 1
+      @import_files_path = "#{Rails.root.to_s}/imports/#{@archive_import_id}"
+      puts "2) Running File Operations"
+      run_file_operations
+
+    end
 
     unless @import_mode == 1
     puts "3) Updating Tags"
