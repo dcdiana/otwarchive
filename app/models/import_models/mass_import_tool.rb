@@ -167,18 +167,18 @@ class MassImportTool
 
   #convert the import tags to a comma delimited list to submit to story parser
 def assign_tag_strings(import_work)
-  character_string = ""
-  freeform_string = ""
+  @character_string = ""
+  @freeform_string = ""
   tl = import_work.tag_list
   tl.each do |t|
     if t.tag_type = "Character"
-      character_string = characters_string + "," + t.tag
+      @character_string = characters_string + "," + t.tag
     else
-      freeform_string = freeform_string + "," + t.tag
+      @freeform_string = freeform_string + "," + t.tag
     end
   end
-  import_work.freeform = freeform_string
-  import_work.characters = character_string
+  import_work.freeform = @freeform_string
+  import_work.characters = @character_string
   return import_work
 end
 
