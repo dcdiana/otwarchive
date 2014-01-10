@@ -262,11 +262,11 @@ end
     puts "4) Importing Stories"
     i = 0
     r.each do |row|
-      if @import_mode == 1
+      #if @import_mode == 1
         row_import_post(row)
-      else
-        row_import(row)
-      end
+     # else
+      #  row_import(row)
+     # end
     end
     ## import series
     import_series
