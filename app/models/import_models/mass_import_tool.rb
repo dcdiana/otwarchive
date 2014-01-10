@@ -127,10 +127,15 @@ class MassImportTool
 
     #Destination otwarchive Ratings (1 being NR if NR Is conservative, 5 if not)
     @target_rating_1 = 9 #not rated
+    @target_rating_1_string = "Not Rated"
     @target_rating_2 = 10 #general
+    @target_rating_2_string = "General+Audiences"
     @target_rating_3 = 11 #Teen
+    @target_rating_3_string = "Teen+And+Up+Audiences"
     @target_rating_4 = 12 #Mature
+    @target_rating_4_string = "Mature"
     @target_rating_5 = 13 #Explicit
+    @target_rating_5_string = "Explicit"
 
     #========================
     #Source Variables
@@ -168,22 +173,27 @@ class MassImportTool
 
   #convert the import tags to a comma delimited list to submit to story parser
 def assign_tag_strings(import_work)
-  binding.pry
+
   @character_array
   @freeform_array
   @character_string = String.new
-
+  @rating_string = String.new
   @freeform_string = String.new
 
  import_work.tag_list.each do |t|
+    case t.tag_type
+      when "Character"
+        @character_array << t.tag
 
-    if t.tag_type = "Character"
-      @character_array << t.tag
-    else
-      @freeform_array << t.tag
+      when "Rating"
+        @rating_string = t.tag
+
+      else
+        @freeform_array << t.tag
+
     end
   end
-
+  import_work.rating_string = @rating_string
   import_work.freeform = @freeform_array.join(",")
   import_work.characters = @character_array.join(",")
   return import_work
@@ -613,7 +623,23 @@ end
     end
   end
 
-
+   def efiction_rating_tag_assignment(t)
+     case t.new_id
+       when 1
+         t.tag = @target_rating_1_string
+       when 2
+         t.tag = @target_rating_2_string
+       when 3
+         t.tag = @target_rating_3_string
+       when 4
+         t.tag = @target_rating_4_string
+       when 5
+         t.tag = @target_rating_5_string
+       else
+         t.tag = @target_rating_5_string
+     end
+     return t
+   end
   ##############################################################
   ## Work
   ##############################################################
@@ -636,6 +662,10 @@ end
         rating_tag = ImportTag.new()
         rating_tag.tag_type = "Freeform"
         rating_tag.new_id = ns.rating_integer
+
+        unless @skip_rating_transform == true
+
+        end
         ns.tag_list.push(rating_tag)
         ns.published = row[5]
         cattag = ImportTag.new()
@@ -665,8 +695,17 @@ end
         ns.characters = row[6]
         ns.rating_integer = row[7]
         rating_tag = ImportTag.new()
-        rating_tag.tag_type = "Freeform"
-        rating_tag.new_id = ns.rating_integer
+        #okay wth not sure but going to insert actual string value
+        #found it! there was a todo... might have been finished in different branch
+        unless @skip_rating_transform == true
+          rating_tag.tag_type = "Rating"
+
+          rating_tag.new_id = ns.rating_integer
+          efiction_rating_tag_assignment(rating_tag)
+        else
+          rating_tag.tag_type = "Freeform"
+        end
+
         ns.tag_list.push(rating_tag)
         ns.published = row[8]
         ns.updated = row[9]
@@ -760,6 +799,7 @@ end
     new_work.fandom_string = @import_fandom
 
     #todo finish rating code assignment, steph, 9-15-2013
+    #still need to finish well adjust if doing non posting import, 1-1-14
     new_work.rating_string = "Not Rated"
     new_work.warning_strings = "None"
     puts "old work id = #{import_work.old_work_id}"
