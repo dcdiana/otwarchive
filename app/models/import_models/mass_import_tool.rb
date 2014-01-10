@@ -701,7 +701,7 @@ end
           rating_tag.tag_type = "Rating"
 
           rating_tag.new_id = ns.rating_integer
-          efiction_rating_tag_assignment(rating_tag)
+         rating_tag = efiction_rating_tag_assignment(rating_tag)
         else
           rating_tag.tag_type = "Freeform"
         end
