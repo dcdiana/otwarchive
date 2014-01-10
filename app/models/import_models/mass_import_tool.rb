@@ -181,7 +181,7 @@ def assign_tag_strings(import_work)
   @freeform_string = String.new
 
  import_work.tag_list.each do |t|
-   unless t.tag.nil?
+   unless t.tag.blank?
      case t.tag_type
        when "Character"
          @character_array << t.tag
