@@ -172,11 +172,13 @@ def assign_tag_strings(import_work)
   tl = import_work.tag_list
   tl.each do |t|
     if t.tag_type = "Character"
-      @character_string += + "," + t.tag
+      @character_string += "," + t.tag
     else
       @freeform_string += "," + t.tag
     end
   end
+  @freeform_string = @freeform_string.sub(",","")
+  @character_string = @freeform_string.sub(",","")
   import_work.freeform = @freeform_string
   import_work.characters = @character_string
   return import_work
