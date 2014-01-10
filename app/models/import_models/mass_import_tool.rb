@@ -181,17 +181,20 @@ def assign_tag_strings(import_work)
   @freeform_string = String.new
 
  import_work.tag_list.each do |t|
-    case t.tag_type
-      when "Character"
-        @character_array << t.tag
+   unless t.tag.nil?
+     case t.tag_type
+       when "Character"
+         @character_array << t.tag
 
-      when "Rating"
-        @rating_string = t.tag
+       when "Rating"
+         @rating_string = t.tag
 
-      else
-        @freeform_array << t.tag
+       else
+         @freeform_array << t.tag
 
+     end
     end
+
   end
   import_work.rating_string = @rating_string
   import_work.freeform = @freeform_array.join(",")
