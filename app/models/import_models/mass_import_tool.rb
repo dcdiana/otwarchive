@@ -173,7 +173,7 @@ class MassImportTool
 
   #convert the import tags to a comma delimited list to submit to story parser
 def assign_tag_strings(import_work)
-
+      binding.pry
   @character_array
   @freeform_array
   @character_string = String.new
