@@ -206,7 +206,9 @@ end
 
 
   def post_story(story,import_user,first_chapter)
+    s = Importwork.new
     s = story
+
     u = import_user
     c = first_chapter
 
