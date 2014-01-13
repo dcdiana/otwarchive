@@ -32,5 +32,6 @@ class ImportWork
   attr_accessor :rating
   attr_accessor :generes
   attr_accessor :freeform
+  attr_accessor :rating_string
 
 end
