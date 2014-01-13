@@ -174,8 +174,10 @@ class MassImportTool
   #convert the import tags to a comma delimited list to submit to story parser
 def assign_tag_strings(import_work)
       binding.pry
-  @character_array
-  @freeform_array
+  @character_array = Array.new
+
+  @freeform_array = Array.new
+
   @character_string = String.new
   @rating_string = String.new
   @freeform_string = String.new
