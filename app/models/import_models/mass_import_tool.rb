@@ -448,15 +448,15 @@ end
  def row_import_post(row)
    puts " Importing Story ID#{row[0]}"
 
-   ns = ImportWork.new()
-   import_user = ImportUser.new()
-   ic = ImportChapter.new()
+   new_import_work = ImportWork.new()
+   new_import_user = ImportUser.new()
+   new_import_chapter = ImportChapter.new()
 
    ## Create Taglisit for this story
-   ns.tag_list =  Array.new()
+   new_import_work.tag_list =  Array.new()
 
    ## assign data to import work object
-   ns = assign_row_import_work(ns, row)
+   new_import_work = assign_row_import_work(new_import_work, row)
 
    ## goto next if no chapters
 =begin
@@ -466,15 +466,15 @@ end
 =end
 
    ## get import user object from source database
-   import_user = self.get_import_user_object_from_source(ns.old_user_id)
-   ns.penname = import_user.penname
+   new_import_user = self.get_import_user_object_from_source(new_import_work.old_user_id)
+   new_import_work.penname = new_import_user.penname
 
 
    #assign tag strings
-   ns = assign_tag_strings(ns)
+   new_import_work = assign_tag_strings(new_import_work)
 
-   ic = add_chapters(0,0,true)
-   post_story(new_work,import_user,ic)
+   new_import_chapter = add_chapters(0,0,true)
+   post_story(new_import_work,new_import_user,new_import_chapter)
    #new_work.save!
 
    #todo unhandeled for post method
