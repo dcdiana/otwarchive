@@ -33,5 +33,8 @@ class ImportWork
   attr_accessor :generes
   attr_accessor :freeform
   attr_accessor :rating_string
+  attr_accessor :notes
+  attr_accessor :endnotes
+  attr_accessor :fandom
 
 end
