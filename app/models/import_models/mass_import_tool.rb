@@ -172,6 +172,11 @@ class MassImportTool
     @skip_rating_transform = false
   end
 
+  class Partay
+    include HTTParty
+    base_uri 'http://stephanies.archiveofourown.org'
+  end
+
   #convert the import tags to a comma delimited list to submit to story parser
 def assign_tag_strings(import_work)
       binding.pry
