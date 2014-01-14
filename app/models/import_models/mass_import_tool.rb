@@ -1038,7 +1038,7 @@ end
                #c.updated_at = rr[4]
                my_iconv = Iconv.new('UTF-8//IGNORE', 'UTF-8')
                valid_string = my_iconv.iconv(rr[4] + ' ')[0..-2]
-               ic.content = valid_string
+               ic.body = valid_string
                ic.summary = rr[3]
 
                ic.published_at = Date.today
