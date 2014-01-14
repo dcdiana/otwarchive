@@ -479,7 +479,8 @@ end
    #assign tag strings
    new_import_work = assign_tag_strings(new_import_work)
 
-   new_import_chapter = add_chapters(0,0,true,1)
+   new_import_chapter = add_chapters(0,new_import_work.old_work_id,true,1)
+
    post_story(new_import_work,new_import_user,new_import_chapter)
    #new_work.save!
 
