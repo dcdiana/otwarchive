@@ -228,26 +228,27 @@ end
           :external_author_name => u.penname,
           :external_coauthor_name => "",
           :external_coauthor_email => "",
+          :work => {
+            :title => s.title,
+            :summary => s.summary,
+            :notes => s.notes,
+            :endnotes => s.endnotes,
+            :collection_names => @new_collection_name,
+            :fandom_string => "HP",
+            :freeform_string => s.freeform,
+            :character_string => s.characters,
+            :relationship_string => "",
+            :category_string[] => "Gen",
+            :warning_strings[] => s.warnings,
+          },
 
-          :work[title] => s.title,
-          :work[summary] => s.summary,
-          :work[notes] => s.notes,
-          :work[endnotes] => s.endnotes,
-          :work[collection_names] => @new_collection_name,
 
-          :work[category_string][] => "Gen",
-          :work[fandom_string] => "HP",
-          :work[warning_strings][] => "",
-          :work[freeform_string] => s.freeform,
-          :work[character_string] => s.characters,
-          :work[relationship_string] => "",
 
           :chapter_title => c.title,
           :chapter_body => c.body,
           :chapter_notes => c.notes,
           :chapter_summary => c.summary,
           :chapter_endnotes => c.endnotes
-
       },
 
       :headers => {
