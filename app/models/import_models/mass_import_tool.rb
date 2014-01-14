@@ -1045,7 +1045,7 @@ end
                ic.created_at = Date.today
                #unless first
                #  c.save!
-                 new_work.save
+                # new_work.save
                  ## get reviews for all chapters but chapter 1, all chapter 1 reviews done in separate step post work import
                  ## due to the chapter not having an id until the work gets saved for the first time
                #  import_chapter_reviews(rr[0], c.id)
