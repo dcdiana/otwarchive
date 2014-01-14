@@ -9,6 +9,7 @@ gem 'rails', '3.2.13'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 gem 'pry'
+gem 'pry-debugger'
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
