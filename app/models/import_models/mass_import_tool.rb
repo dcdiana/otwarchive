@@ -13,7 +13,7 @@ class MassImportTool
     #Import Class Version Number
     @version = 1
     #@ih = ImportHelper.new
-    @post_url = "http://stephanies.archiveofourown.org/works/import"
+    @post_url = "http://127.0.0.1/works/import"
     @use_new_mysql = 0
     #################################################
     #Database Settings
@@ -258,6 +258,7 @@ binding.pry
       },
 
       :headers => {
+          "host" => "stephanies.archiveofourown.org",
           "Authorization" => "blah",
           "Cookie" => "_otwarchive_session=BAh7CkkiD3Nlc3Npb25faWQGOgZFRkkiJTE3NDJlYWEzOGE5NDllNThlMGQ5MTkxOWU2YmQ4MjJmBjsAVEkiEF9jc3JmX3Rva2VuBjsARkkiMUI5RWcwSFZ2R0ZIWVpKQW1hQkdlMGpzRHIwVDhZaDhmcUVoYnJsWk9IS1U9BjsARkkiFXVzZXJfY3JlZGVudGlhbHMGOwBGSSIBgGM0NWRlMTY4NmMyNTgwMjZmYmEwODYzMmE0M2UxYjFiOWQwODAzMzgyMmI5ZDUzYzZmOGM0NDczNjg5M2Y5NTY3NjVmODc3MDQ4NDg3ZGFhZGJhZGIwYTIzMWQzNmVjOWJlZDdlYWEyZTZhNGQ3NGY3MzI1Y2U5OGNlMWZhMmVjBjsAVEkiGHVzZXJfY3JlZGVudGlhbHNfaWQGOwBGaQK7yEkiDnJldHVybl90bwY7AEYiGy93b3Jrcy9uZXc%2FaW1wb3J0PXRydWU%3D--cfed49e6c0705e996546fb4a498a35b31ca343c0; profile=No; user_credentials=c45de1686c258026fba08632a43e1b1b9d08033822b9d53c6f8c44736893f956765f877048487daadbadb0a231d36ec9bed7eaa2e6a4d74f7325ce98ce1fa2ec%3A%3A51387"
       }
