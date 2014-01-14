@@ -18,4 +18,6 @@ class ImportChapter
   attr_accessor :position
   attr_accessor :date_posted
   attr_accessor :endnotes
+  attr_accessor :published_at
+  attr_accessor :created_at
 end
