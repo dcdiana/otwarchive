@@ -479,7 +479,7 @@ end
    #assign tag strings
    new_import_work = assign_tag_strings(new_import_work)
 
-   new_import_chapter = add_chapters(0,0,true)
+   new_import_chapter = add_chapters(0,0,true,1)
    post_story(new_import_work,new_import_user,new_import_chapter)
    #new_work.save!
 
@@ -984,7 +984,9 @@ end
   # @param [integer] old_work_id
   # @param [true/false] first if is first call ie, add first chapter only
   # @return [work] returns work object with chapters added, already saved if first = false
-  def add_chapters(new_work, old_work_id, first)
+  def add_chapters(new_work, old_work_id, first, ac_mode)
+    @ac_mode = ac_mode
+
     begin
       case @source_archive_type
         when 4 #Storyline
@@ -1017,7 +1019,7 @@ end
           puts " chaptercount #{get_row_count(r)} "
           position_holder = 2
           r.each do |rr|
-            if @import_mode = 1
+            if @ac_mode == 1
                ic = ImportChapter.new
 
                if first
