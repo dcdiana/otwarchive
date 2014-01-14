@@ -1,4 +1,4 @@
 class ImportParty
     include HTTParty
-    base_uri 'http://stephanies.archiveofourown.org'
+    base_uri 'http://127.0.0.1'
 end
