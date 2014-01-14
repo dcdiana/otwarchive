@@ -478,7 +478,7 @@ end
 
    #assign tag strings
    new_import_work = assign_tag_strings(new_import_work)
-
+    binding.pry
    new_import_chapter = add_chapters(0,new_import_work.old_work_id,true,1)
 
    post_story(new_import_work,new_import_user,new_import_chapter)
@@ -987,7 +987,7 @@ end
   # @return [work] returns work object with chapters added, already saved if first = false
   def add_chapters(new_work, old_work_id, first, ac_mode)
     @ac_mode = ac_mode
-
+    binding.pry
     begin
       case @source_archive_type
         when 4 #Storyline
