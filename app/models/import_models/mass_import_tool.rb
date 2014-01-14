@@ -495,7 +495,7 @@ end
 
    #create_new_work_import(new_work, ns, @archive_import_id)
    #format_chapters(new_work.id)
-   i = i + 1
+   #i = i + 1
  end
 
 
