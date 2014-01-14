@@ -1036,8 +1036,8 @@ end
                ic.title = rr[1]
                #c.created_at  = rr[4]
                #c.updated_at = rr[4]
-               ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
-               valid_string = ic.iconv(rr[4] + ' ')[0..-2]
+               my_iconv = Iconv.new('UTF-8//IGNORE', 'UTF-8')
+               valid_string = my_iconv.iconv(rr[4] + ' ')[0..-2]
                ic.content = valid_string
                ic.summary = rr[3]
 
