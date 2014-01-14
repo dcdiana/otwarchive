@@ -36,6 +36,7 @@ class MassImportTool
       @connection = Mysql2::Client.new(:host => @database_host, :username => @database_username, :password => @database_password, :database => @database_name)
     end
 
+    @connection.reconnect = true
 
     #####################################################
 
