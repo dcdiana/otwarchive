@@ -206,7 +206,7 @@ end
 
 
   def post_story(story,import_user,first_chapter)
-    s = Importwork.new
+    s = ImportWork.new
     s = story
 
     u = import_user
@@ -238,8 +238,8 @@ end
             :freeform_string => s.freeform,
             :character_string => s.characters,
             :relationship_string => "",
-            :category_string[] => "Gen",
-            :warning_strings[] => s.warnings,
+            :category_string=> "Gen",
+            :warning_strings => s.warnings,
           },
 
 
