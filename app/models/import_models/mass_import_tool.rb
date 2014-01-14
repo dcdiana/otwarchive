@@ -205,12 +205,14 @@ def assign_tag_strings(import_work)
 end
 
 
-  def post_story(story,import_user,first_chapter)
-    s = ImportWork.new
-    s = story
+  def post_story(import_work,import_user,first_chapter)
+    iw = ImportWork.new
+    ic = ImportChapter.new
+    iu = ImportUser.new
 
-    u = import_user
-    c = first_chapter
+    iw = import_work
+    iu = import_user
+    ic = first_chapter
 
     HTTParty.post(@post_url,
       :query => {
@@ -224,31 +226,31 @@ end
           :data_provided => 1,
 
           :urls => "",
-          :external_author_email => u.email,
-          :external_author_name => u.penname,
+          :external_author_email => iu.email,
+          :external_author_name => iu.penname,
           :external_coauthor_name => "",
           :external_coauthor_email => "",
           :work => {
-            :title => s.title,
-            :summary => s.summary,
-            :notes => s.notes,
-            :endnotes => s.endnotes,
+            :title => iw.title,
+            :summary => iw.summary,
+            :notes => iw.notes,
+            :endnotes => iw.endnotes,
             :collection_names => @new_collection_name,
             :fandom_string => "HP",
-            :freeform_string => s.freeform,
-            :character_string => s.characters,
+            :freeform_string => iw.freeform,
+            :character_string => iw.characters,
             :relationship_string => "",
             :category_string=> "Gen",
-            :warning_strings => s.warnings,
+            :warning_strings => iw.warnings,
           },
 
 
 
-          :chapter_title => c.title,
-          :chapter_body => c.body,
-          :chapter_notes => c.notes,
-          :chapter_summary => c.summary,
-          :chapter_endnotes => c.endnotes
+          :chapter_title => ic.title,
+          :chapter_body => ic.body,
+          :chapter_notes => ic.notes,
+          :chapter_summary => ic.summary,
+          :chapter_endnotes => ic.endnotes
       },
 
       :headers => {
