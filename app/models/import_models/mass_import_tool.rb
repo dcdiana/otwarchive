@@ -544,10 +544,10 @@ end
 
    ## Create Taglisit for this story
    new_import_work.tag_list =  Array.new()
-
-   new_import_work.chapter_count = get_single_value_target("Select inorder from #{@source_chapters_table} where sid = #{ns.old_work_id} order by 'inorder' desc limit 1")
    ## assign data to import work object
    new_import_work = assign_row_import_work(new_import_work, row)
+
+   new_import_work.chapter_count = get_single_value_target("Select inorder from #{@source_chapters_table} where sid = #{new_import_work.old_work_id} order by 'inorder' desc limit 1")
 
    ## goto next if no chapters
    #num_source_chapters = 0
