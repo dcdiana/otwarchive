@@ -1174,7 +1174,7 @@ end
           if import_work.chapter_count > 1
             return add_chapters(new_work,old_work_id,false,1)
           else
-            return nework
+            return new_work
           end
 
         else
