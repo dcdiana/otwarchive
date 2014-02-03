@@ -239,33 +239,84 @@ end
         end
         importwork.collection 'Whispers'
         importwork.work do |work|
-          work.source_url 'test.'
-          work.title iw.title
-          work.summary iw.summary
-          work.note iw.notes
-          work.end_note iw.endnotes
+          #testvalue
+          testurl = "test.com/" + iw.old_work_id
+          work.source_url testurl
+
+          if iw.title
+            work.title iw.title
+          else
+            work.title  "Untitled Work"
+          end
+
+
+          if iw,summary
+            work.summary iw.summary
+          end
+
+
+          if iw.notes
+            work.note iw.notes
+          end
+
+          if iw.endnotes
+            work.end_note iw.endnotes
+          end
+
           work.restricted @import_restricted
           work.posted true
-          work.date_updated
-          work.date_posted
-          work.completed
+
+          if iw.updated_at
+            work.date_updated iw.updated_at
+          else
+            work.date_updated "1/1/2000"
+          end
+
+          work.date_posted  iw.posted_at
+
+          if iw.completed
+            work.completed iw.completed
+          else
+            work.completed false
+          end
+
+
           work.admin_hidden false
           work.tags do |tags|
-            character_array = iw.characters.split(",")
-            freeform_array = iw.freeform.split(",")
-            warnings_array = iw.warnings.split(",")
 
-            character_array.each do |c|
-              tags.character c
+            if iw.characters
+              if iw.warnings.include? ","
+                character_array = iw.characters.split(",")
+                character_array.each do |c|
+                  tags.character c
+                end
+              else
+                tags.character iw.characters
+              end
             end
 
-            freeform_array.each do |f|
-              tags.freeform f
+            if iw.freeform
+              if iw.warnings.include? ","
+                freeform_array = iw.freeform.split(",")
+                freeform_array.each do |f|
+                  tags.freeform f
+                end
+              else
+                tags.freeform iw.freform
+              end
             end
 
-            warnings_array.each do |f|
-              tags.warning w
+            if iw.warnings
+              if iw.warnings.include? ","
+                warnings_array = iw.warnings.split(",")
+                warning_array.each do |w|
+                  tags.warning w
+                end
+              else
+                tags.warning iw.warnings
+              end
             end
+
             tags.fandom @import_fandom
             tags.category = @import_default_category
             tags.rating = "General Audiences"
@@ -273,13 +324,25 @@ end
           end
           iw.chapters.each do |ch|
             work.chapter do |chapter|
-              chapter.title ch.title
-              chapter.summary ch.summary
+              if ch.title
+                chapter.title ch.title
+              else
+                chapter.title "Untitled Chapter"
+              end
+
+              if ch.summary
+                chapter.summary ch.summary
+              end
+
               chapter.date_posted ch.created_at
               chapter.date_updated ch.updated_at
               chapter.content ch.body
               chapter.position ch.position
-              chapter.notes ch.notes
+
+              if ch.notes
+                chapter.notes ch.notes
+              end
+
             end
           end
 
