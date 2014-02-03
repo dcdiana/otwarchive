@@ -38,6 +38,10 @@ class MassImportTool
 
     @connection.reconnect = true
 
+
+
+
+
     #####################################################
 
     #Archivist Settings
@@ -54,7 +58,6 @@ class MassImportTool
 
     #Import Job Name
     @import_name = "New Import"
-    @import_fandom = "Harry Potter"
 
     #Create record for imported archive (false if already exists)
     @create_archive_import_record = false
@@ -62,12 +65,17 @@ class MassImportTool
     #will error if not unique, just let it automatically create it and assign it if you are unsure
     #Import Archive ID
     @archive_import_id = 1063
+    @import_fandom = "Harry Potter"
+    @import_default_category = "Gen"
 
     #Default Language for imported works
     @default_language = Language.find_by_short("en")
 
     #Import Reviews (true / false)
     @import_reviews = false
+
+    #fixed vars import settings
+
 
     #Match Existing Authors by Email-Address
     @match_existing_authors = false
@@ -208,6 +216,79 @@ def assign_tag_strings(import_work)
 end
 
 
+  def create_xml(import_work,import_user)
+    iw = ImportWork.new
+    iu = ImportUser.new
+    binding.pry
+
+    iw = import_work
+    iu = import_user
+    require 'builder'
+
+    file = File.new("#{Rails.root}/" + iw.old_work_id + ".xml", "w")
+
+    xml = Builder::XmlMarkup.new(:target=>file, :indent => 2)
+
+    xml.instruct! :xml, :encoding => "UTF-8",  :version => "1.0"
+
+    xml.importworks do |importworks|
+      importworks.importwork do |importwork|
+        importwork.author do |author|
+          author.name iu.penname
+          author.email iu.email
+        end
+        importwork.collection 'Whispers'
+        importwork.work do |work|
+          work.source_url 'test.'
+          work.title iw.title
+          work.summary iw.summary
+          work.note iw.notes
+          work.end_note iw.endnotes
+          work.restricted @import_restricted
+          work.posted true
+          work.date_updated
+          work.date_posted
+          work.completed
+          work.admin_hidden false
+          work.tags do |tags|
+            character_array = iw.characters.split(",")
+            freeform_array = iw.freeform.split(",")
+            warnings_array = iw.warnings.split(",")
+
+            character_array.each do |c|
+              tags.character c
+            end
+
+            freeform_array.each do |f|
+              tags.freeform f
+            end
+
+            warnings_array.each do |f|
+              tags.warning w
+            end
+            tags.fandom @import_fandom
+            tags.category = @import_default_category
+            tags.rating = "General Audiences"
+
+          end
+          iw.chapters.each do |ch|
+            work.chapter do |chapter|
+              chapter.title ch.title
+              chapter.summary ch.summary
+              chapter.date_posted ch.created_at
+              chapter.date_updated ch.updated_at
+              chapter.content ch.body
+              chapter.position ch.position
+              chapter.notes ch.notes
+            end
+          end
+
+        end
+      end
+    end
+
+
+  end
   def post_story(import_work,import_user,first_chapter)
     iw = ImportWork.new
     ic = ImportChapter.new
@@ -460,20 +541,19 @@ end
 
    new_import_work = ImportWork.new()
    new_import_user = ImportUser.new()
-   new_import_chapter = ImportChapter.new()
 
    ## Create Taglisit for this story
    new_import_work.tag_list =  Array.new()
 
+   new_import_work.chapter_count = get_single_value_target("Select inorder from #{@source_chapters_table} where sid = #{ns.old_work_id} order by 'inorder' desc limit 1")
    ## assign data to import work object
    new_import_work = assign_row_import_work(new_import_work, row)
 
    ## goto next if no chapters
-=begin
-   num_source_chapters = 0
-   num_source_chapters = get_single_value_target("Select chapid  from #{@source_chapters_table} where sid = #{ns.old_work_id} limit 1")
-   next if num_source_chapters == 0
-=end
+   #num_source_chapters = 0
+
+
+
 
    ## get import user object from source database
    new_import_user = self.get_import_user_object_from_source(new_import_work.old_user_id)
@@ -482,10 +562,10 @@ end
 
    #assign tag strings
    new_import_work = assign_tag_strings(new_import_work)
-    binding.pry
-   new_import_chapter = add_chapters(0,new_import_work.old_work_id,true,1)
 
-   post_story(new_import_work,new_import_user,new_import_chapter)
+   new_import_work = add_chapters(new_import_work,new_import_work.old_work_id,true,1)
+
+   create_xml(new_import_work,new_import_user)
    #new_work.save!
 
    #todo unhandeled for post method
@@ -985,11 +1065,13 @@ end
   end
 
   #add chapters    takes chapters and adds them to import work object  , takes Work, old_work_id
-  # @param [Work]  new_work
+
   # @param [integer] old_work_id
   # @param [true/false] first if is first call ie, add first chapter only
   # @return [work] returns work object with chapters added, already saved if first = false
   def add_chapters(new_work, old_work_id, first, ac_mode)
+    chapter_array = []
+
     @ac_mode = ac_mode
     binding.pry
     begin
@@ -1033,8 +1115,10 @@ end
                else
                  #c = new_work.chapters.new
                  #c.work_id = new_work.id
-                 ic.authors = new_work.authors
-                 ic.position = position_holder
+                 #ic.authors = new_work.authors
+                 ic.position = rr[2]
+
+
                end
                ic.title = rr[1]
                #c.created_at  = rr[4]
@@ -1053,7 +1137,9 @@ end
                  ## due to the chapter not having an id until the work gets saved for the first time
                #  import_chapter_reviews(rr[0], c.id)
                #end
-              return ic
+              chapter_array << ic
+              new_work.chapters = chapter_array
+
             else
               if first
                 c = new_work.chapters.build()
@@ -1085,6 +1171,12 @@ end
 
 
           end
+          if import_work.chapter_count > 1
+            return add_chapters(new_work,old_work_id,false,1)
+          else
+            return nework
+          end
+
         else
           puts "Error: (add_chapters): Invalid source archive type"
       end

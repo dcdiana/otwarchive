@@ -36,5 +36,6 @@ class ImportWork
   attr_accessor :notes
   attr_accessor :endnotes
   attr_accessor :fandom
+  attr_accessor :chapters
 
 end

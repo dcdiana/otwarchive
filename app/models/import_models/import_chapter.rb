@@ -20,4 +20,5 @@ class ImportChapter
   attr_accessor :endnotes
   attr_accessor :published_at
   attr_accessor :created_at
+  attr_accessor :updated_at
 end
