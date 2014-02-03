@@ -38,5 +38,6 @@ class ImportWork
   attr_accessor :fandom
   attr_accessor :chapters
   attr_accessor :updated_at
+  attr_accessor :posted_at
 
 end
