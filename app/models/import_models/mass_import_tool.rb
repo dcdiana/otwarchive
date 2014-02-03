@@ -420,7 +420,7 @@ binding.pry
     end
 
 
-    if @create_archive_import_record = true
+    if @create_archive_import_record == true
       self.create_import_record
     end
 
@@ -929,6 +929,7 @@ end
   end
 
 
+=begin
   #Create work and return once saved, takes ImportWork
   # @return [Work] returns newly created work object
   # @param [ImportWork]  import_work
@@ -973,6 +974,7 @@ end
 
     return new_work
   end
+=end
 
   #Create new work import, takes Work , ImportWork
   # @param [work] new_work
@@ -1013,6 +1015,7 @@ end
     end
   end
 
+=begin
   #import works into new series
   # @param [integer] old_series_id
   # @param [integer] new_series_id
@@ -1026,6 +1029,7 @@ end
       work.save
     end
   end
+=end
 
 
   #copied and modified from mass import rake, stephanies 1/22/2012
@@ -1110,6 +1114,7 @@ end
     end
   end
 
+=begin
   #save chapters, takes Work
   # @param [Work]  new_work
   def save_chapters(new_work)
@@ -1126,6 +1131,7 @@ end
       puts error "3318: saving chapter - error in function save_chapters #{ex}"
     end
   end
+=end
 
   #add chapters    takes chapters and adds them to import work object  , takes Work, old_work_id
 
