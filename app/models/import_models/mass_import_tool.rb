@@ -272,7 +272,12 @@ end
             work.date_updated "1/1/2000"
           end
 
-          work.date_posted  iw.posted_at
+          if iw.posted_at
+            work.date_posted  iw.posted_at
+          else
+            work.date_posted "2/2/2001"
+          end
+
 
           if iw.completed
             work.completed iw.completed
@@ -285,7 +290,7 @@ end
           work.tags do |tags|
 
             if iw.characters
-              if iw.warnings.include? ","
+              if iw.characters.include? ","
                 character_array = iw.characters.split(",")
                 character_array.each do |c|
                   tags.character c
@@ -296,7 +301,7 @@ end
             end
 
             if iw.freeform
-              if iw.warnings.include? ","
+              if iw.freeform.include? ","
                 freeform_array = iw.freeform.split(",")
                 freeform_array.each do |f|
                   tags.freeform f
