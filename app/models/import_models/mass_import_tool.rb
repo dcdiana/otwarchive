@@ -250,7 +250,7 @@ end
           end
 
 
-          if iw,summary
+          if iw.summary
             work.summary iw.summary
           end
 
