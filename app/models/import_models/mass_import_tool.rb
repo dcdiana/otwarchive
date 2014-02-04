@@ -184,7 +184,6 @@ class MassImportTool
 
   #convert the import tags to a comma delimited list to submit to story parser
 def assign_tag_strings(import_work)
-      binding.pry
   @character_array = Array.new
 
   @freeform_array = Array.new
@@ -361,7 +360,6 @@ end
     iw = ImportWork.new
     ic = ImportChapter.new
     iu = ImportUser.new
-binding.pry
 
     iw = import_work
     iu = import_user
@@ -1147,7 +1145,6 @@ end
     chapter_array = []
 
     @ac_mode = ac_mode
-    binding.pry
     begin
       case @source_archive_type
         when 4 #Storyline
