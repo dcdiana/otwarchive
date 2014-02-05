@@ -8,7 +8,7 @@ class MassImportTool
   include ActionView::Helpers::TagHelper #tag_options needed by auto_link
   require 'mysql2'
   require 'mysql'
-
+  require 'rchardet'
   def initialize
     #Import Class Version Number
     @version = 1
@@ -1689,18 +1689,13 @@ end
         #chapter_content = Nokogiri::HTML.parse(chapter_content, nil, encoding) rescue ""
         #chapter_content = simple_format(chapter_content)
         if chapter_content != nil
-          s = Iconv.conv('UTF-8//IGNORE', 'UTF-8', chapter_content)
 
-          s = chapter_content
-          s = s.gsub("\xe2\x80\x9c", '"')
-          s = s.gsub("\xe2\x80\x9d", '"')
-          s = s.gsub("\xe2\x80\x98", "'")
-          s = s.gsub("\xe2\x80\x99", "'")
-          s = s.gsub("\xe2\x80\x93", "-")
-          s = s.gsub("\xe2\x80\x94", "--")
-          s = s.gsub("\xe2\x80\xa6", "...")
-          s = Iconv.conv('UTF-8//IGNORE', 'UTF-8', s)
-          chapter_content = s
+          cd = CharDet.detect(chapter_content)
+          encoding = cd['encoding']
+
+          converted_string = Iconv.conv('UTF-8', encoding, chapter_content)
+
+
 
           if @use_new_mysql == 0
             #tmp = Mysql2::Client.new(:host => @database_host, :username => @database_username, :password => @database_password, :database => @database_name)
