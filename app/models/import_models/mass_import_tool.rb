@@ -1696,7 +1696,7 @@ end
           #encoding = cd['encoding']
 
           #chapter_content = Iconv.conv('UTF-8', encoding, chapter_content)
-          good_string = chapter_content.tidy_bytes(true)
+          good_string = chapter_content.tidy_bytes
           chapter_content = good_string
 
           if @use_new_mysql == 0
