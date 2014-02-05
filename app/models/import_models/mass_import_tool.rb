@@ -1704,6 +1704,9 @@ end
         #ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
         # chapter_content = ic.iconv(chapter_content + ' ')[0..-2]
         ## update the source chapter record
+        #for dir for each
+        # chapter_id = f.gsub(".txt", "")
+        chapter_id = f.gsub(pathname + "/",'')
         chapter_id = f.gsub(".txt", "")
         puts "reading chapter: #{chapter_id}"
         update_record_target("update #{@source_chapters_table} set storytext = \"#{chapter_content}\" where chapid = #{chapter_id}")
