@@ -1689,8 +1689,16 @@ end
         #chapter_content = Nokogiri::HTML.parse(chapter_content, nil, encoding) rescue ""
         #chapter_content = simple_format(chapter_content)
         if chapter_content != nil
-          ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
-          chapter_content = ic.iconv(chapter_content + ' ')[0..-2]
+          s = chapter_content
+          s = s.gsub("\xe2\x80\x9c", '"')
+          s = s.gsub("\xe2\x80\x9d", '"')
+          s = s.gsub("\xe2\x80\x98", "'")
+          s = s.gsub("\xe2\x80\x99", "'")
+          s = s.gsub("\xe2\x80\x93", "-")
+          s = s.gsub("\xe2\x80\x94", "--")
+          s = s.gsub("\xe2\x80\xa6", "...")
+          s = Iconv.conv('UTF-8//IGNORE', 'UTF-8', s)
+          chapter_content = s
 
           if @use_new_mysql == 0
             #tmp = Mysql2::Client.new(:host => @database_host, :username => @database_username, :password => @database_password, :database => @database_name)
