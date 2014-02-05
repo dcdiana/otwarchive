@@ -1690,7 +1690,7 @@ end
         #chapter_content = simple_format(chapter_content)
         if chapter_content != nil
           if @use_new_mysql == 0
-            tmp = = Mysql2::Client.new(:host => @database_host, :username => @database_username, :password => @database_password, :database => @database_name)
+            tmp = Mysql2::Client.new(:host => @database_host, :username => @database_username, :password => @database_password, :database => @database_name)
             chapter_content = tmp.escape(chapter_content)
             #chapter_content = @connection.escape_string(chapter_content)
           else
