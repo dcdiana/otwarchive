@@ -1689,6 +1689,8 @@ end
         #chapter_content = Nokogiri::HTML.parse(chapter_content, nil, encoding) rescue ""
         #chapter_content = simple_format(chapter_content)
         if chapter_content != nil
+          s = Iconv.conv('UTF-8//IGNORE', 'UTF-8', chapter_content)
+
           s = chapter_content
           s = s.gsub("\xe2\x80\x9c", '"')
           s = s.gsub("\xe2\x80\x9d", '"')
