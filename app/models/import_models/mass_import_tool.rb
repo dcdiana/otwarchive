@@ -9,6 +9,8 @@ class MassImportTool
   require 'mysql2'
   require 'mysql'
   require 'rchardet'
+  require "utf8_utils"
+
   def initialize
     #Import Class Version Number
     @version = 1
@@ -1690,12 +1692,12 @@ end
         #chapter_content = simple_format(chapter_content)
         if chapter_content != nil
 
-          cd = CharDet.detect(chapter_content)
-          encoding = cd['encoding']
+          #cd = CharDet.detect(chapter_content)
+          #encoding = cd['encoding']
 
-          chapter_content = Iconv.conv('UTF-8', encoding, chapter_content)
-
-
+          #chapter_content = Iconv.conv('UTF-8', encoding, chapter_content)
+          good_string = chapter_content.tidy_bytes(true)
+          chapter_content = good_string
 
           if @use_new_mysql == 0
             #tmp = Mysql2::Client.new(:host => @database_host, :username => @database_username, :password => @database_password, :database => @database_name)
@@ -1705,7 +1707,8 @@ end
 
             chapter_content = @connection.escape(chapter_content)
           end
-
+        else
+          next
         end
 
 
