@@ -1688,7 +1688,6 @@ end
         chapter_content = read_file_to_string("#{@import_files_path}/stories/#{r3[0]}/#{f}")
         #chapter_content = Nokogiri::HTML.parse(chapter_content, nil, encoding) rescue ""
         #chapter_content = simple_format(chapter_content)
-        chapter_content = ""
         if chapter_content != nil
           if @use_new_mysql == 0
             chapter_content = @connection.escape_string(chapter_content)
