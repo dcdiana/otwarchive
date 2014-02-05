@@ -1693,7 +1693,7 @@ end
           cd = CharDet.detect(chapter_content)
           encoding = cd['encoding']
 
-          converted_string = Iconv.conv('UTF-8', encoding, chapter_content)
+          chapter_content = Iconv.conv('UTF-8', encoding, chapter_content)
 
 
 
