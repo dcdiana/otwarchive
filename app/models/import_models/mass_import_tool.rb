@@ -1682,8 +1682,8 @@ end
       pathname = "#{@import_files_path}/stories/#{r3[0]}"
       Dir.glob(pathname + "/*.txt") do
       |f|
-        next if f == ".."
-        next if f == "."
+        #next if f == ".."
+        #next if f == "."
         chapter_content = read_file_to_string("#{@import_files_path}/stories/#{r3[0]}/#{f}")
         #chapter_content = Nokogiri::HTML.parse(chapter_content, nil, encoding) rescue ""
         #chapter_content = simple_format(chapter_content)
