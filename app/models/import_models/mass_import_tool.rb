@@ -1692,7 +1692,7 @@ end
           if @use_new_mysql == 0
             tmp = Mysql2::Client.new(:host => @database_host, :username => @database_username, :password => @database_password, :database => @database_name)
             chapter_content = tmp.escape(chapter_content)
-            #chapter_content = @connection.escape_string(chapter_content)
+            chapter_content = @connection.escape_string(chapter_content)
           else
 
             chapter_content = @connection.escape(chapter_content)
