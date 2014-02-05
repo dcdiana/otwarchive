@@ -428,7 +428,7 @@ end
     end
 
     if @extract_and_import == 1
-      @import_files_path = "#{Rails.root.to_s}/imports/#{@archive_import_id}"
+      @import_files_path = "#{Rails.root.to_s}/imports/#{@archive_import_id}""#{Rails.root.to_s}/imports/#{@archive_import_id}"
       puts "2) Running File Operations"
       run_file_operations
 
@@ -1680,7 +1680,7 @@ end
     rr = @connection.query("Select distinct uid from #{@source_chapters_table}")
     rr.each do |r3|
       pathname = "#{@import_files_path}/stories/#{r3[0]}"
-      Dir.foreach(pathname) do
+      Dir.glob(pathname + "/*.txt") do
       |f|
         next if f == ".."
         next if f == "."
