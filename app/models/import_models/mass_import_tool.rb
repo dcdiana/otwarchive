@@ -1689,9 +1689,12 @@ end
         #chapter_content = Nokogiri::HTML.parse(chapter_content, nil, encoding) rescue ""
         #chapter_content = simple_format(chapter_content)
         if chapter_content != nil
+          ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
+          chapter_content = ic.iconv(chapter_content + ' ')[0..-2]
+
           if @use_new_mysql == 0
-            tmp = Mysql2::Client.new(:host => @database_host, :username => @database_username, :password => @database_password, :database => @database_name)
-            chapter_content = tmp.escape(chapter_content)
+            #tmp = Mysql2::Client.new(:host => @database_host, :username => @database_username, :password => @database_password, :database => @database_name)
+            #chapter_content = tmp.escape(chapter_content)
             chapter_content = @connection.escape_string(chapter_content)
           else
 
@@ -1700,8 +1703,7 @@ end
 
         end
 
-        #ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
-        # chapter_content = ic.iconv(chapter_content + ' ')[0..-2]
+
         ## update the source chapter record
         chapter_id = f.gsub(".txt", "")
         puts "reading chapter: #{chapter_id}"
