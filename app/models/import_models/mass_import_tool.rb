@@ -64,7 +64,7 @@ class MassImportTool
 
     #will error if not unique, just let it automatically create it and assign it if you are unsure
     #Import Archive ID
-    @archive_import_id = 1063
+    @archive_import_id = 106
     @import_fandom = "Harry Potter"
     @import_default_category = "Gen"
 
@@ -1675,6 +1675,7 @@ end
 
   #update each record in source db reading the chapter text file importing it into content field
   def update_source_chapters
+    binding.pry
     ## select source chapters from database
     rr = @connection.query("Select distinct uid from #{@source_chapters_table}")
     rr.each do |r3|
