@@ -317,8 +317,8 @@ class MassImportTool
             end
 
             tags.fandom @import_fandom
-            tags.category = @import_default_category
-            tags.rating = "General Audiences"
+            tags.category @import_default_category
+            tags.rating "General Audiences"
 
           end
           iw.chapters.each do |ch|
