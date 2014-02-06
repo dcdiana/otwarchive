@@ -1160,9 +1160,11 @@ class MassImportTool
     if new_work.chapters
       if new_work.chapters.class.to_s = "Array"
         chapter_array = new_work.chapters
-      else
-        chapter_array = []
+
+
       end
+    else
+      chapter_array = []
     end
 
      binding.pry
