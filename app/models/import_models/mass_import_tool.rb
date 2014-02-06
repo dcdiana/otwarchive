@@ -1158,7 +1158,7 @@ class MassImportTool
   def add_chapters(new_work, old_work_id, first, ac_mode)
     chapter_array = []
 
-
+     binding.pry
 
     old_chapter_count = get_single_value_target("SELECT COUNT(sid) AS chapters FROM " + @source_chapters_table + " where sid = #{old_work_id}")
     @ac_mode = ac_mode
