@@ -41,9 +41,6 @@ class MassImportTool
     @connection.reconnect = true
 
 
-
-
-
     #####################################################
 
     #Archivist Settings
@@ -183,41 +180,40 @@ class MassImportTool
   end
 
 
-
   #convert the import tags to a comma delimited list to submit to story parser
-def assign_tag_strings(import_work)
-  @character_array = Array.new
+  def assign_tag_strings(import_work)
+    @character_array = Array.new
 
-  @freeform_array = Array.new
+    @freeform_array = Array.new
 
-  @character_string = String.new
-  @rating_string = String.new
-  @freeform_string = String.new
+    @character_string = String.new
+    @rating_string = String.new
+    @freeform_string = String.new
 
- import_work.tag_list.each do |t|
-   unless t.tag.blank?
-     case t.tag_type
-       when "Character"
-         @character_array << t.tag
+    import_work.tag_list.each do |t|
+      unless t.tag.blank?
+        case t.tag_type
+          when "Character"
+            @character_array << t.tag
 
-       when "Rating"
-         @rating_string = t.tag
+          when "Rating"
+            @rating_string = t.tag
 
-       else
-         @freeform_array << t.tag
+          else
+            @freeform_array << t.tag
 
-     end
+        end
+      end
+
     end
-
+    import_work.rating_string = @rating_string
+    import_work.freeform = @freeform_array.join(",")
+    import_work.characters = @character_array.join(",")
+    return import_work
   end
-  import_work.rating_string = @rating_string
-  import_work.freeform = @freeform_array.join(",")
-  import_work.characters = @character_array.join(",")
-  return import_work
-end
 
 
-  def create_xml(import_work,import_user)
+  def create_xml(import_work, import_user)
     iw = ImportWork.new
     iu = ImportUser.new
     binding.pry
@@ -228,9 +224,9 @@ end
 
     file = File.new("#{Rails.root}/" + iw.old_work_id + ".xml", "w")
 
-    xml = Builder::XmlMarkup.new(:target=>file, :indent => 2)
+    xml = Builder::XmlMarkup.new(:target => file, :indent => 2)
 
-    xml.instruct! :xml, :encoding => "UTF-8",  :version => "1.0"
+    xml.instruct! :xml, :encoding => "UTF-8", :version => "1.0"
 
     xml.importworks do |importworks|
       importworks.importwork do |importwork|
@@ -247,14 +243,12 @@ end
           if iw.title
             work.title iw.title
           else
-            work.title  "Untitled Work"
+            work.title "Untitled Work"
           end
-
 
           if iw.summary
             work.summary iw.summary
           end
-
 
           if iw.notes
             work.note iw.notes
@@ -270,15 +264,14 @@ end
           if iw.updated_at
             work.date_updated iw.updated_at
           else
-            work.date_updated "1/1/2000"
+            work.date_updated Date.today.to_s
           end
 
           if iw.posted_at
-            work.date_posted  iw.posted_at
+            work.date_posted iw.posted_at
           else
-            work.date_posted "2/2/2001"
+            work.date_posted Date.today.to_s
           end
-
 
           if iw.completed
             work.completed iw.completed
@@ -358,7 +351,8 @@ end
 
 
   end
-  def post_story(import_work,import_user,first_chapter)
+
+  def post_story(import_work, import_user, first_chapter)
     iw = ImportWork.new
     ic = ImportChapter.new
     iu = ImportUser.new
@@ -368,49 +362,48 @@ end
     ic = first_chapter
 
     HTTParty.post(@post_url,
-      :query => {
+                  :query => {
 
-          :utf8 => "%E2%9C%93",
-          :encoding => "",
-          :import_multiple => "works",
-          :restricted => @import_restricted,
-          :importing_for_others => 1,
-          :post_without_preview => 1,
-          :data_provided => 1,
+                      :utf8 => "%E2%9C%93",
+                      :encoding => "",
+                      :import_multiple => "works",
+                      :restricted => @import_restricted,
+                      :importing_for_others => 1,
+                      :post_without_preview => 1,
+                      :data_provided => 1,
 
-          :urls => "",
-          :external_author_email => iu.email,
-          :external_author_name => iu.penname,
-          :external_coauthor_name => "",
-          :external_coauthor_email => "",
-          :work => {
-            :title => iw.title,
-            :summary => iw.summary,
-            :notes => iw.notes,
-            :endnotes => iw.endnotes,
-            :collection_names => @new_collection_name,
-            :fandom_string => "HP",
-            :freeform_string => iw.freeform,
-            :character_string => iw.characters,
-            :relationship_string => "",
-            :category_string=> "Gen",
-            :warning_strings => iw.warnings,
-          },
+                      :urls => "",
+                      :external_author_email => iu.email,
+                      :external_author_name => iu.penname,
+                      :external_coauthor_name => "",
+                      :external_coauthor_email => "",
+                      :work => {
+                          :title => iw.title,
+                          :summary => iw.summary,
+                          :notes => iw.notes,
+                          :endnotes => iw.endnotes,
+                          :collection_names => @new_collection_name,
+                          :fandom_string => "HP",
+                          :freeform_string => iw.freeform,
+                          :character_string => iw.characters,
+                          :relationship_string => "",
+                          :category_string => "Gen",
+                          :warning_strings => iw.warnings,
+                      },
 
 
+                      :chapter_title => ic.title,
+                      :chapter_body => ic.body,
+                      :chapter_notes => ic.notes,
+                      :chapter_summary => ic.summary,
+                      :chapter_endnotes => ic.endnotes
+                  },
 
-          :chapter_title => ic.title,
-          :chapter_body => ic.body,
-          :chapter_notes => ic.notes,
-          :chapter_summary => ic.summary,
-          :chapter_endnotes => ic.endnotes
-      },
-
-      :headers => {
-          "Host" => "stephanies.archiveofourown.org",
-          "Authorization" => "blah",
-          "Cookie" => "_otwarchive_session=BAh7CkkiD3Nlc3Npb25faWQGOgZFRkkiJTE3NDJlYWEzOGE5NDllNThlMGQ5MTkxOWU2YmQ4MjJmBjsAVEkiEF9jc3JmX3Rva2VuBjsARkkiMUI5RWcwSFZ2R0ZIWVpKQW1hQkdlMGpzRHIwVDhZaDhmcUVoYnJsWk9IS1U9BjsARkkiFXVzZXJfY3JlZGVudGlhbHMGOwBGSSIBgGM0NWRlMTY4NmMyNTgwMjZmYmEwODYzMmE0M2UxYjFiOWQwODAzMzgyMmI5ZDUzYzZmOGM0NDczNjg5M2Y5NTY3NjVmODc3MDQ4NDg3ZGFhZGJhZGIwYTIzMWQzNmVjOWJlZDdlYWEyZTZhNGQ3NGY3MzI1Y2U5OGNlMWZhMmVjBjsAVEkiGHVzZXJfY3JlZGVudGlhbHNfaWQGOwBGaQK7yEkiDnJldHVybl90bwY7AEYiGy93b3Jrcy9uZXc%2FaW1wb3J0PXRydWU%3D--cfed49e6c0705e996546fb4a498a35b31ca343c0; profile=No; user_credentials=c45de1686c258026fba08632a43e1b1b9d08033822b9d53c6f8c44736893f956765f877048487daadbadb0a231d36ec9bed7eaa2e6a4d74f7325ce98ce1fa2ec%3A%3A51387"
-      }
+                  :headers => {
+                      "Host" => "stephanies.archiveofourown.org",
+                      "Authorization" => "blah",
+                      "Cookie" => "_otwarchive_session=BAh7CkkiD3Nlc3Npb25faWQGOgZFRkkiJTE3NDJlYWEzOGE5NDllNThlMGQ5MTkxOWU2YmQ4MjJmBjsAVEkiEF9jc3JmX3Rva2VuBjsARkkiMUI5RWcwSFZ2R0ZIWVpKQW1hQkdlMGpzRHIwVDhZaDhmcUVoYnJsWk9IS1U9BjsARkkiFXVzZXJfY3JlZGVudGlhbHMGOwBGSSIBgGM0NWRlMTY4NmMyNTgwMjZmYmEwODYzMmE0M2UxYjFiOWQwODAzMzgyMmI5ZDUzYzZmOGM0NDczNjg5M2Y5NTY3NjVmODc3MDQ4NDg3ZGFhZGJhZGIwYTIzMWQzNmVjOWJlZDdlYWEyZTZhNGQ3NGY3MzI1Y2U5OGNlMWZhMmVjBjsAVEkiGHVzZXJfY3JlZGVudGlhbHNfaWQGOwBGaQK7yEkiDnJldHVybl90bwY7AEYiGy93b3Jrcy9uZXc%2FaW1wb3J0PXRydWU%3D--cfed49e6c0705e996546fb4a498a35b31ca343c0; profile=No; user_credentials=c45de1686c258026fba08632a43e1b1b9d08033822b9d53c6f8c44736893f956765f877048487daadbadb0a231d36ec9bed7eaa2e6a4d74f7325ce98ce1fa2ec%3A%3A51387"
+                  }
     )
   end
 
@@ -430,12 +423,11 @@ end
     end
 
     if @extract_and_import == 1
-      @import_files_path = "#{Rails.root.to_s}/imports/#{@archive_import_id}""#{Rails.root.to_s}/imports/#{@archive_import_id}"
+      @import_files_path = "#{Rails.root.to_s}/imports/#{@archive_import_id}" "#{Rails.root.to_s}/imports/#{@archive_import_id}"
       puts "2) Running File Operations"
       run_file_operations
 
     end
-
 
 
     ## pull source stories from database to array of rows
@@ -444,10 +436,10 @@ end
     i = 0
     r.each do |row|
       #if @import_mode == 1
-        row_import_post(row)
-     # else
+      row_import_post(row)
+      # else
       #  row_import(row)
-     # end
+      # end
     end
     ## import series
     import_series
@@ -574,77 +566,75 @@ end
 ##return import user object
 # @param [integer]  source_user_id
 # @return [ImportUser]  ImportUser Object
-def get_import_user_object_from_source(source_user_id)
-  a = ImportUser.new()
-  r = @connection.query("#{@source_author_query} #{source_user_id}")
-  @connection
+  def get_import_user_object_from_source(source_user_id)
+    a = ImportUser.new()
+    r = @connection.query("#{@source_author_query} #{source_user_id}")
+    @connection
 
-  r.each do |row|
-    a.old_user_id = source_user_id
-    a.realname = row[0]
-    a.source_archive_id = @archive_import_id
-    a.penname = row[1]
-    a.email = row[2]
-    a.bio = row[3]
-    a.joindate = row[4]
-    a.password = row[5]
-    if @source_archive_type == 2 || @source_archive_type == 4
-      a.website = row[6]
-      a.aol = row[7]
-      a.msn = row[8]
-      a.icq = row[9]
-      a.bio = self.build_bio(a).bio
-      a.yahoo = ""
-      if @source_archive_type == 2
-        a.yahoo = row[10]
-        a.is_adult = row[11]
+    r.each do |row|
+      a.old_user_id = source_user_id
+      a.realname = row[0]
+      a.source_archive_id = @archive_import_id
+      a.penname = row[1]
+      a.email = row[2]
+      a.bio = row[3]
+      a.joindate = row[4]
+      a.password = row[5]
+      if @source_archive_type == 2 || @source_archive_type == 4
+        a.website = row[6]
+        a.aol = row[7]
+        a.msn = row[8]
+        a.icq = row[9]
+        a.bio = self.build_bio(a).bio
+        a.yahoo = ""
+        if @source_archive_type == 2
+          a.yahoo = row[10]
+          a.is_adult = row[11]
+        end
       end
     end
+    return a
   end
-  return a
-end
 
- def row_import_post(row)
-   puts " Importing Story ID#{row[0]}"
+  def row_import_post(row)
+    puts " Importing Story ID#{row[0]}"
 
-   new_import_work = ImportWork.new()
-   new_import_user = ImportUser.new()
+    new_import_work = ImportWork.new()
+    new_import_user = ImportUser.new()
 
-   ## Create Taglisit for this story
-   new_import_work.tag_list =  Array.new()
-   ## assign data to import work object
-   new_import_work = assign_row_import_work(new_import_work, row)
+    ## Create Taglisit for this story
+    new_import_work.tag_list = Array.new()
+    ## assign data to import work object
+    new_import_work = assign_row_import_work(new_import_work, row)
 
-   new_import_work.chapter_count = get_single_value_target("Select inorder from #{@source_chapters_table} where sid = #{new_import_work.old_work_id} order by 'inorder' desc limit 1")
+    new_import_work.chapter_count = get_single_value_target("Select inorder from #{@source_chapters_table} where sid = #{new_import_work.old_work_id} order by 'inorder' desc limit 1")
 
-   ## goto next if no chapters
-   #num_source_chapters = 0
+    ## goto next if no chapters
+    #num_source_chapters = 0
 
 
+    ## get import user object from source database
+    new_import_user = self.get_import_user_object_from_source(new_import_work.old_user_id)
+    new_import_work.penname = new_import_user.penname
 
 
-   ## get import user object from source database
-   new_import_user = self.get_import_user_object_from_source(new_import_work.old_user_id)
-   new_import_work.penname = new_import_user.penname
+    #assign tag strings
+    new_import_work = assign_tag_strings(new_import_work)
 
+    new_import_work = add_chapters(new_import_work, new_import_work.old_work_id, true, 1)
 
-   #assign tag strings
-   new_import_work = assign_tag_strings(new_import_work)
+    create_xml(new_import_work, new_import_user)
+    #new_work.save!
 
-   new_import_work = add_chapters(new_import_work,new_import_work.old_work_id,true,1)
+    #todo unhandeled for post method
+    ## save first chapter reviews since cand do it in addchapters like rest
+    #old_first_chapter_id = get_single_value_target("Select chapid from  #{@source_chapters_table} where sid = #{ns.old_work_id} order by inorder asc Limit 1")
+    #import_chapter_reviews(old_first_chapter_id, new_work.chapters.first.id)
 
-   create_xml(new_import_work,new_import_user)
-   #new_work.save!
-
-   #todo unhandeled for post method
-   ## save first chapter reviews since cand do it in addchapters like rest
-   #old_first_chapter_id = get_single_value_target("Select chapid from  #{@source_chapters_table} where sid = #{ns.old_work_id} order by inorder asc Limit 1")
-   #import_chapter_reviews(old_first_chapter_id, new_work.chapters.first.id)
-
-   #create_new_work_import(new_work, ns, @archive_import_id)
-   #format_chapters(new_work.id)
-   #i = i + 1
- end
+    #create_new_work_import(new_work, ns, @archive_import_id)
+    #format_chapters(new_work.id)
+    #i = i + 1
+  end
 
 
   ##############################################################
@@ -709,7 +699,6 @@ end
   end
 
 
-
   ##############################################################
   ## collections
   ##############################################################
@@ -731,13 +720,9 @@ end
   end
 
 
-
-
-
   ##############################################################
   ## Users
   ##############################################################
-
 
 
   #Add User, takes ImportUser
@@ -787,23 +772,24 @@ end
     end
   end
 
-   def efiction_rating_tag_assignment(t)
-     case t.new_id
-       when 1
-         t.tag = @target_rating_1_string
-       when 2
-         t.tag = @target_rating_2_string
-       when 3
-         t.tag = @target_rating_3_string
-       when 4
-         t.tag = @target_rating_4_string
-       when 5
-         t.tag = @target_rating_5_string
-       else
-         t.tag = @target_rating_5_string
-     end
-     return t
-   end
+  def efiction_rating_tag_assignment(t)
+    case t.new_id
+      when 1
+        t.tag = @target_rating_1_string
+      when 2
+        t.tag = @target_rating_2_string
+      when 3
+        t.tag = @target_rating_3_string
+      when 4
+        t.tag = @target_rating_4_string
+      when 5
+        t.tag = @target_rating_5_string
+      else
+        t.tag = @target_rating_5_string
+    end
+    return t
+  end
+
   ##############################################################
   ## Work
   ##############################################################
@@ -812,7 +798,7 @@ end
   # @param [mysql_row] row
   def assign_row_import_work(ns, row)
     case @source_archive_type
-      when 4   ## storyline
+      when 4 ## storyline
         ns.source_archive_id = @archive_import_id
         ns.old_work_id = row[0]
         #puts ns.old_work_id
@@ -849,7 +835,7 @@ end
         ns.completed = row[12]
         ns.hits = row[10]
 
-      when 3    ## efiction 3
+      when 3 ## efiction 3
         ns.old_work_id = row[0]
         ns.title = row[1]
         ns.summary = row[2]
@@ -865,7 +851,7 @@ end
           rating_tag.tag_type = "Rating"
 
           rating_tag.new_id = ns.rating_integer
-         rating_tag = efiction_rating_tag_assignment(rating_tag)
+          rating_tag = efiction_rating_tag_assignment(rating_tag)
         else
           rating_tag.tag_type = "Freeform"
         end
@@ -1180,36 +1166,36 @@ end
           position_holder = 2
           r.each do |rr|
             if @ac_mode == 1
-               ic = ImportChapter.new
+              ic = ImportChapter.new
 
-               if first
+              if first
 
-                 ic.position = 1
-               else
-                 #c = new_work.chapters.new
-                 #c.work_id = new_work.id
-                 #ic.authors = new_work.authors
-                 ic.position = rr[2]
+                ic.position = 1
+              else
+                #c = new_work.chapters.new
+                #c.work_id = new_work.id
+                #ic.authors = new_work.authors
+                ic.position = rr[2]
 
 
-               end
-               ic.title = rr[1]
-               #c.created_at  = rr[4]
-               #c.updated_at = rr[4]
-               my_iconv = Iconv.new('UTF-8//IGNORE', 'UTF-8')
-               valid_string = my_iconv.iconv(rr[4] + ' ')[0..-2]
-               ic.body = valid_string
-               ic.summary = rr[3]
+              end
+              ic.title = rr[1]
+              #c.created_at  = rr[4]
+              #c.updated_at = rr[4]
+              my_iconv = Iconv.new('UTF-8//IGNORE', 'UTF-8')
+              valid_string = my_iconv.iconv(rr[4] + ' ')[0..-2]
+              ic.body = valid_string
+              ic.summary = rr[3]
 
-               ic.published_at = Date.today
-               ic.created_at = Date.today
-               #unless first
-               #  c.save!
-                # new_work.save
-                 ## get reviews for all chapters but chapter 1, all chapter 1 reviews done in separate step post work import
-                 ## due to the chapter not having an id until the work gets saved for the first time
-               #  import_chapter_reviews(rr[0], c.id)
-               #end
+              ic.published_at = Date.today
+              ic.created_at = Date.today
+              #unless first
+              #  c.save!
+              # new_work.save
+              ## get reviews for all chapters but chapter 1, all chapter 1 reviews done in separate step post work import
+              ## due to the chapter not having an id until the work gets saved for the first time
+              #  import_chapter_reviews(rr[0], c.id)
+              #end
               chapter_array << ic
               new_work.chapters = chapter_array
 
@@ -1245,7 +1231,7 @@ end
 
           end
           if new_work.chapter_count.to_i > 1
-            return add_chapters(new_work,old_work_id,false,1)
+            return add_chapters(new_work, old_work_id, false, 1)
           else
             return new_work
           end
@@ -1446,7 +1432,6 @@ end
   end
 
 
-
   #get default pseud given userid
   #changed to ar 9-23-2013
   # @param [integer]  user_id
@@ -1473,12 +1458,12 @@ end
     puts "12-#{source_archive_id}-#{old_work_id}"
     work_import = WorkImport.find_by_old_wok_id_and_source_archive_id(old_work_id, source_archive_id)
     return work_import.work_id
-    #return get_single_value_target(" select work_id from work_imports where source_archive_id #{source_archive_id} and old_work_id=#{old_work_id}")
+                                                                  #return get_single_value_target(" select work_id from work_imports where source_archive_id #{source_archive_id} and old_work_id=#{old_work_id}")
   end
 
   # Get New Author ID from old User ID & old archive ID
   def get_new_author_id_from_old(old_archive_id, old_user_id)
-    user_import = UserImport.find_by_old_user_id_and_source_archive_id(old_user_id,old_archive_id)
+    user_import = UserImport.find_by_old_user_id_and_source_archive_id(old_user_id, old_archive_id)
     return user_import.user_id
     #return get_single_value_target(" Select user_id from user_imports where source_archive_id = #{old_archive_id} and source_user_id = #{old_user_id} ")
   end
@@ -1507,7 +1492,7 @@ end
         r = connection.query(query)
 
       end
-        count_value = get_row_count(r)
+      count_value = get_row_count(r)
 
       if count_value == 0
         return 0
@@ -1762,9 +1747,6 @@ end
   def load_source_db
     `mysql -u #{@database_username} -p#{@database_password} #{@database_name} < #{@import_files_path}/data_clean.sql`
   end
-
-
-
 
 
 end
