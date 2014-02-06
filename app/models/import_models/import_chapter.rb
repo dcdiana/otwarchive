@@ -21,4 +21,5 @@ class ImportChapter
   attr_accessor :published_at
   attr_accessor :created_at
   attr_accessor :updated_at
+  attr_accessor :date_updated
 end

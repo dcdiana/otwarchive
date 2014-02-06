@@ -343,7 +343,26 @@ class MassImportTool
                 chapter.summary ch.summary
               end
 
-              chapter.date_posted ch.created_at
+              if ch.date_posted
+                chapter.date_posted ch.date_posted
+              else
+                if ch.created_at
+                  chapter.date_posted ch.created_at
+                else
+                  chapter.date_posted Date.today.to_s
+                end
+              end
+
+
+              if ch.updated_at
+                chapter.date_updated ch.updated_at
+              else
+                if ch.date_updated
+                  chapter.date_updated ch.date_updated
+                else
+                  chapter.date_updated Date.today.to_s
+                end
+              end
               chapter.date_updated ch.updated_at
               chapter.content ch.body
               chapter.position ch.position
