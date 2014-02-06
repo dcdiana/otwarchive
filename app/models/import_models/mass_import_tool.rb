@@ -309,7 +309,7 @@ class MassImportTool
                   tags.freeform f
                 end
               else
-                tags.freeform iw.freform
+                tags.freeform iw.freeform
               end
             end
 
