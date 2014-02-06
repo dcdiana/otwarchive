@@ -1158,6 +1158,9 @@ class MassImportTool
   def add_chapters(new_work, old_work_id, first, ac_mode)
     chapter_array = []
 
+
+
+    old_chapter_count = get_single_value_target(""SELECT COUNT(sid) AS chapters FROM @source_chapters_table} where sid = #{old_work_id}"")
     @ac_mode = ac_mode
     begin
       case @source_archive_type
@@ -1223,7 +1226,7 @@ class MassImportTool
               #  import_chapter_reviews(rr[0], c.id)
               #end
               chapter_array << ic
-              new_work.chapters = chapter_array
+
 
             else
               if first
@@ -1253,10 +1256,10 @@ class MassImportTool
                 import_chapter_reviews(rr[0], c.id)
               end
             end
-
+            new_work.chapters = chapter_array
 
           end
-          if new_work.chapter_count.to_i > 1
+          if old_chapter_count.to_i > 1
             return add_chapters(new_work, old_work_id, false, 1)
           else
             return new_work
