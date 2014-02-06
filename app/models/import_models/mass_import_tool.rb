@@ -216,8 +216,6 @@ class MassImportTool
   def create_xml(import_work, import_user)
     iw = ImportWork.new
     iu = ImportUser.new
-    binding.pry
-
     iw = import_work
     iu = import_user
     require 'builder'
