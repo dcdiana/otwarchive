@@ -261,17 +261,27 @@ class MassImportTool
           work.restricted @import_restricted
           work.posted true
 
-          if iw.updated_at
-            work.date_updated iw.updated_at
+          if iw.updated
+            work.date_update iw.updated
           else
-            work.date_updated Date.today.to_s
+            if iw.updated_at
+              work.date_updated iw.updated_at
+            else
+              work.date_updated Date.today.to_s
+            end
           end
 
-          if iw.posted_at
-            work.date_posted iw.posted_at
+
+          if iw.published
+            work.date_posted iw.published
           else
-            work.date_posted Date.today.to_s
+            if iw.posted_at
+              work.date_posted iw.posted_at
+            else
+              work.date_posted Date.today.to_s
+            end
           end
+
 
           if iw.completed
             work.completed iw.completed
