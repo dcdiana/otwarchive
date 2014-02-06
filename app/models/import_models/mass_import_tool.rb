@@ -363,7 +363,6 @@ class MassImportTool
                   chapter.date_updated Date.today.to_s
                 end
               end
-              chapter.date_updated ch.updated_at
               chapter.content ch.body
               chapter.position ch.position
 
