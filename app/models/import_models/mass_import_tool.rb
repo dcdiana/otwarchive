@@ -220,7 +220,7 @@ class MassImportTool
     iu = import_user
     require 'builder'
 
-    file = File.new("#{Rails.root}/" + iw.old_work_id + ".xml", "w")
+    file = File.new("#{Rails.root}/xml/" + iw.old_work_id + ".xml", "w")
 
     xml = Builder::XmlMarkup.new(:target => file, :indent => 2)
 
