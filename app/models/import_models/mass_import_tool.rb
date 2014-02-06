@@ -1160,7 +1160,7 @@ class MassImportTool
 
 
 
-    old_chapter_count = get_single_value_target(""SELECT COUNT(sid) AS chapters FROM @source_chapters_table} where sid = #{old_work_id}"")
+    old_chapter_count = get_single_value_target("SELECT COUNT(sid) AS chapters FROM @source_chapters_table} where sid = #{old_work_id}")
     @ac_mode = ac_mode
     begin
       case @source_archive_type
