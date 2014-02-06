@@ -1156,7 +1156,14 @@ class MassImportTool
   # @param [true/false] first if is first call ie, add first chapter only
   # @return [work] returns work object with chapters added, already saved if first = false
   def add_chapters(new_work, old_work_id, first, ac_mode)
-    chapter_array = []
+
+    if new_work.chapters
+      if new_work.chapters.class.to_s = "Array"
+        chapter_array = new_work.chapters
+      else
+        chapter_array = []
+      end
+    end
 
      binding.pry
 
