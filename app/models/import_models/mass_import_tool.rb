@@ -626,7 +626,7 @@ class MassImportTool
       results.each do |row|
         oldid = row[0]
         puts " Importing Story ID #{oldid}"
-       if oldid == 930
+       if oldid.to_i == 930
          break
        end
 
