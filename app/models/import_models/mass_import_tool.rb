@@ -1334,7 +1334,6 @@ class MassImportTool
     end
 
     if old_chapter_count.to_i > 1
-      binding.pry
       if new_work.chapters.length != old_chapter_count.to_i
         return add_chapters(new_work, old_work_id, false)
       else
@@ -1752,6 +1751,7 @@ class MassImportTool
     start_tag = tag('p', html_options, true)
     text = sanitize(text) unless !options[:sanitize]
     text = text.to_str
+    text = text.to_str
     text.gsub!(/\r\n?/, "\n") # \r\n and \r -> \n
     text.gsub!(/\n\n+/, "</p>\n\n#{start_tag}") # 2+ newline  -> paragraph
     text.gsub!(/([^\n]\n)(?=[^\n])/, '\1<br />') # 1 newline   -> br
@@ -1761,7 +1761,6 @@ class MassImportTool
 
   #update each record in source db reading the chapter text file importing it into content field
   def update_source_chapters
-    binding.pry
     ## select source chapters from database
     rr = @connection.query("Select distinct uid from #{@source_chapters_table}")
     rr.each do |r3|
