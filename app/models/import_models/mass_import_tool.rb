@@ -614,8 +614,7 @@ class MassImportTool
   end
 
   def results_to_xml(results)
-    iw = import_work
-    iu = import_user
+
     require 'builder'
 
     file = File.new("#{Rails.root}/xml/" + "combined" + ".xml", "w")
