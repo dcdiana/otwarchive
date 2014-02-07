@@ -221,9 +221,7 @@ class MassImportTool
     require 'builder'
 
     file = File.new("#{Rails.root}/xml/" + iw.old_work_id + ".xml", "w")
-
     xml = Builder::XmlMarkup.new(:target => file, :indent => 2)
-
     xml.instruct! :xml, :encoding => "UTF-8", :version => "1.0"
 
     xml.importworks do |importworks|
@@ -458,17 +456,10 @@ class MassImportTool
 
     ## pull source stories from database to array of rows
     r = @connection.query("SELECT * FROM #{@source_stories_table} ;")
-    puts "4) Importing Stories"
-    i = 0
-    r.each do |row|
-      #if @import_mode == 1
-      row_import_post(row)
-      # else
-      #  row_import(row)
-      # end
-    end
+    puts "4) Creating XML for Stories"
+    results_to_xml(r)
     ## import series
-    import_series
+    #import_series
     @connection.close()
 
   end
@@ -622,44 +613,184 @@ class MassImportTool
     return a
   end
 
+  def results_to_xml(results)
+    iw = import_work
+    iu = import_user
+    require 'builder'
+
+    file = File.new("#{Rails.root}/xml/" + "combined" + ".xml", "w")
+    xml = Builder::XmlMarkup.new(:target => file, :indent => 2)
+    xml.instruct! :xml, :encoding => "UTF-8", :version => "1.0"
+
+    xml.importworks do |importworks|
+      results.each do |row|
+        puts " Importing Story ID#{row[0]}"
+        new_import_work = ImportWork.new()
+        new_import_user = ImportUser.new()
+        new_import_work.tag_list = Array.new()
+        new_import_work = assign_row_import_work(new_import_work, row)
+        new_import_work.chapter_count = get_single_value_target("Select inorder from #{@source_chapters_table} where sid = #{new_import_work.old_work_id} order by 'inorder' desc limit 1")
+        new_import_user = self.get_import_user_object_from_source(new_import_work.old_user_id)
+        new_import_work.penname = new_import_user.penname
+        new_import_work = assign_tag_strings(new_import_work)
+        new_import_work = add_chapters(new_import_work, new_import_work.old_work_id, true)
+
+        iw = new_import_work
+        iu = new_import_user
+
+        importworks.importwork do |importwork|
+          importwork.author do |author|
+            author.name iu.penname
+            author.email iu.email
+          end
+          importwork.collection 'Whispers'
+          importwork.work do |work|
+            #testvalue
+            testurl = "test.com/" + iw.old_work_id
+            work.source_url testurl
+
+            if iw.title
+              work.title iw.title
+            else
+              work.title "Untitled Work"
+            end
+
+            if iw.summary
+              work.summary iw.summary
+            end
+
+            if iw.notes
+              work.note iw.notes
+            end
+
+            if iw.endnotes
+              work.end_note iw.endnotes
+            end
+
+            work.restricted @import_restricted
+            work.posted true
+
+            if iw.updated
+              work.date_update iw.updated
+            else
+              if iw.updated_at
+                work.date_updated iw.updated_at
+              else
+                work.date_updated Date.today.to_s
+              end
+            end
+
+
+            if iw.published
+              work.date_posted iw.published
+            else
+              if iw.posted_at
+                work.date_posted iw.posted_at
+              else
+                work.date_posted Date.today.to_s
+              end
+            end
+
+
+            if iw.completed
+              work.completed iw.completed
+            else
+              work.completed false
+            end
+
+
+            work.admin_hidden false
+            work.tags do |tags|
+
+              if iw.characters
+                if iw.characters.include? ","
+                  character_array = iw.characters.split(",")
+                  character_array.each do |c|
+                    tags.character c
+                  end
+                else
+                  tags.character iw.characters
+                end
+              end
+
+              if iw.freeform
+                if iw.freeform.include? ","
+                  freeform_array = iw.freeform.split(",")
+                  freeform_array.each do |f|
+                    tags.freeform f
+                  end
+                else
+                  tags.freeform iw.freeform
+                end
+              end
+
+              if iw.warnings
+                if iw.warnings.include? ","
+                  warnings_array = iw.warnings.split(",")
+                  warning_array.each do |w|
+                    tags.warning w
+                  end
+                else
+                  tags.warning iw.warnings
+                end
+              end
+
+              tags.fandom @import_fandom
+              tags.category @import_default_category
+              tags.rating "General Audiences"
+
+            end
+            iw.chapters.each do |ch|
+              work.chapter do |chapter|
+                if ch.title
+                  chapter.title ch.title
+                else
+                  chapter.title "Untitled Chapter"
+                end
+
+                if ch.summary
+                  chapter.summary ch.summary
+                end
+
+                if ch.date_posted
+                  chapter.date_posted ch.date_posted
+                else
+                  if ch.created_at
+                    chapter.date_posted ch.created_at
+                  else
+                    chapter.date_posted Date.today.to_s
+                  end
+                end
+
+
+                if ch.updated_at
+                  chapter.date_updated ch.updated_at
+                else
+                  if ch.date_updated
+                    chapter.date_updated ch.date_updated
+                  else
+                    chapter.date_updated Date.today.to_s
+                  end
+                end
+                chapter.content ch.body
+                chapter.position ch.position
+
+                if ch.notes
+                  chapter.notes ch.notes
+                end
+
+              end
+            end
+
+          end
+        end
+        end
+    end
+  end
   def row_import_post(row)
-    puts " Importing Story ID#{row[0]}"
 
-    new_import_work = ImportWork.new()
-    new_import_user = ImportUser.new()
-
-    ## Create Taglisit for this story
-    new_import_work.tag_list = Array.new()
-    ## assign data to import work object
-    new_import_work = assign_row_import_work(new_import_work, row)
-
-    new_import_work.chapter_count = get_single_value_target("Select inorder from #{@source_chapters_table} where sid = #{new_import_work.old_work_id} order by 'inorder' desc limit 1")
-
-    ## goto next if no chapters
-    #num_source_chapters = 0
-
-
-    ## get import user object from source database
-    new_import_user = self.get_import_user_object_from_source(new_import_work.old_user_id)
-    new_import_work.penname = new_import_user.penname
-
-
-    #assign tag strings
-    new_import_work = assign_tag_strings(new_import_work)
-
-    new_import_work = add_chapters(new_import_work, new_import_work.old_work_id, true)
 
     create_xml(new_import_work, new_import_user)
-    #new_work.save!
-
-    #todo unhandeled for post method
-    ## save first chapter reviews since cand do it in addchapters like rest
-    #old_first_chapter_id = get_single_value_target("Select chapid from  #{@source_chapters_table} where sid = #{ns.old_work_id} order by inorder asc Limit 1")
-    #import_chapter_reviews(old_first_chapter_id, new_work.chapters.first.id)
-
-    #create_new_work_import(new_work, ns, @archive_import_id)
-    #format_chapters(new_work.id)
-    #i = i + 1
   end
 
 
