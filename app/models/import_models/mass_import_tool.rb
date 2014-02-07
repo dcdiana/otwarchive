@@ -1203,6 +1203,7 @@ class MassImportTool
     end
 
     if old_chapter_count.to_i > 1
+      binding.pry
       if new_work.chapters.length != old_chapter_count
         return add_chapters(new_work, old_work_id, false)
       else
