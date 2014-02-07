@@ -1160,7 +1160,7 @@ class MassImportTool
 
     if new_work.chapters
 
-        chapter_array = new_work.chapters
+    #chapter_array = new_work.chapters
 
     else
       chapter_array = []
@@ -1173,7 +1173,6 @@ class MassImportTool
     begin
       case @source_archive_type
         when 4 #Storyline
-               #TODO Update to follow syntax of condition 3 below
           puts "1121 == Select * from #{@source_chapters_table} where csid = #{old_work_id}"
           r = @connection.query("Select * from #{@source_chapters_table} where csid = #{old_work_id}")
           puts "333"
@@ -1238,6 +1237,7 @@ class MassImportTool
 
 
             else
+=begin
               if first
                 c = new_work.chapters.build()
                 c.position = 1
@@ -1264,8 +1264,14 @@ class MassImportTool
                 ## due to the chapter not having an id until the work gets saved for the first time
                 import_chapter_reviews(rr[0], c.id)
               end
+=end
             end
-            new_work.chapters = chapter_array
+            if new_work.chapters
+              new_work.chapters = new_work.chapter + chapter_array
+            else
+              new_work.chapters = chapter_array
+            end
+
 
           end
           binding.pry
