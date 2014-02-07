@@ -1158,7 +1158,7 @@ class MassImportTool
   def add_chapters(new_work, old_work_id, first, ac_mode)
 
     if new_work.chapters
-      if new_work.chapters.class.to_s = "Array"
+      if new_work.chapters.class.name = "Array"
         chapter_array = new_work.chapters
 
 
