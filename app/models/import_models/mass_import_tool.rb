@@ -68,7 +68,7 @@ class MassImportTool
     @import_default_category = "Gen"
 
     #Default Language for imported works
-    @default_language = Language.find_by_short("en")
+    #@default_language = Language.find_by_short("en")
 
     #Import Reviews (true / false)
     @import_reviews = false
