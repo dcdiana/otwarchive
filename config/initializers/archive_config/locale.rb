@@ -1,3 +1,4 @@
+=begin
 begin
   ActiveRecord::Base.connection
   # try to set language and locale using models (which use Archive Config)
@@ -12,3 +13,4 @@ rescue
     Locale.set_base_locale(:iso => "en", :name => "English (US)", :language_id => language.id)
   end
 end
+=end
