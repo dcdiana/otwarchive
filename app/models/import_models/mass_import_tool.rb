@@ -624,7 +624,12 @@ class MassImportTool
 
     xml.importworks do |importworks|
       results.each do |row|
-        puts " Importing Story ID#{row[0]}"
+        oldid = row[0]
+        puts " Importing Story ID #{oldid}"
+       if oldid == 930
+         break
+       end
+
         new_import_work = ImportWork.new()
         new_import_user = ImportUser.new()
         new_import_work.tag_list = Array.new()
