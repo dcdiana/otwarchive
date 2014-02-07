@@ -1,3 +1,4 @@
+=begin
 begin
   ActiveRecord::Base.connection  # if we have no database fall through to rescue
   if AdminSetting.table_exists? && !AdminSetting.first
@@ -10,3 +11,4 @@ begin
   end
 rescue ActiveRecord::ConnectionNotEstablished
 end
+=end

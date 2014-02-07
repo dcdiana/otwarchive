@@ -1,3 +1,4 @@
+=begin
 # Email settings
 module Otwarchive
   class Application < Rails::Application
@@ -24,3 +25,4 @@ module Otwarchive
     end
   end
 end
+=end
