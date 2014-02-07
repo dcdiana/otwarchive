@@ -10,6 +10,7 @@ class MassImportTool
   require 'mysql'
   require 'rchardet'
   require "utf8_utils"
+  require "iconv"
 
   def initialize
     #Import Class Version Number
