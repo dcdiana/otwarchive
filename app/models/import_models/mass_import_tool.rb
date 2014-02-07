@@ -1268,7 +1268,7 @@ class MassImportTool
 =end
             end
             if new_work.chapters
-              new_work.chapters = new_work.chapter + chapter_array
+              new_work.chapters = new_work.chapters + chapter_array
             else
               new_work.chapters = chapter_array
             end
