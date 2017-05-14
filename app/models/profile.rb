@@ -4,7 +4,7 @@ class Profile < ActiveRecord::Base
   belongs_to :user
 
   validates_length_of :location, :allow_blank => true, :maximum => ArchiveConfig.PROFILE_LOCATION_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchivceConfig.PROFILE_LOCATION_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.PROFILE_LOCATION_MAX)
   validates_length_of :title, :allow_blank => true, :maximum => ArchiveConfig.PROFILE_TITLE_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.PROFILE_TITLE_MAX)
   validates_length_of :about_me, :allow_blank => true, :maximum => ArchiveConfig.PROFILE_ABOUT_ME_MAX,
