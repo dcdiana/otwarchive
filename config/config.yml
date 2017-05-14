@@ -97,6 +97,20 @@ LOGIN_LENGTH_MAX: 40
 PASSWORD_LENGTH_MIN: 6
 PASSWORD_LENGTH_MAX: 40
 
+
+#Used in External Authors, Pseud, Gift
+NAME_LENGTH_MIN: 1
+NAME_LENGTH_MAX: 100
+#Used in Profiles
+PROFILE_TITLE_MAX: 255
+PROFILE_LOCATION_MAX: 255
+PROFILE_ABOUT_ME_MAX: 2000
+#Used in Pseud
+DESCRIPTION_MAX: 500
+
+#Cached Count Expiration
+COUNT_EXPIRATION: 40.minutes
+
 # max number of tags of each type allowed in challenge prompts (requests/offers)
 # increasing this number can lead to slower automated matching
 PROMPT_TAGS_MAX: 20
@@ -191,6 +205,15 @@ CHARACTER_CATEGORY_NAME: 'Character'
 FREEFORM_CATEGORY_NAME: 'Additional Tags'
 COMMON_CATEGORY_NAME: 'Common'
 BANNED_CATEGORY_NAME: 'Banned'
+
+#More Tag Settings
+
+# these are tags which have been created by users
+# the order is important, and it is the order in which they appear in the tag wrangling interface
+USER_DEFINED_TAG_TYPES: ['Fandom', 'Character', 'Relationship', 'Freeform']
+
+TAG_TYPES: ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Relationship', 'Character', 'Freeform', 'Banned' ]
+
 
 # DATE TIME FORMAT see http://ruby-doc.org/core/classes/Time.html#M000392
 DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
@@ -330,6 +353,13 @@ HELP_DIRECTORY: '/help'
 
 # only use if you are running your app completely in a subfolder of your domain
 #PRODUCTION_URL_ROOT: "/archive"
+
+
+#Indexing
+INDEX_BATCH_SIZE: 1000
+
+#Caching
+CACHED_CLASSES: ['Work', 'Tag', 'User', 'Pseud', 'Collection']
 
 # production caching
 #PRODUCTION_CACHE: "memory"

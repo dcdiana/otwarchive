@@ -3,9 +3,6 @@ class ExternalAuthor < ActiveRecord::Base
 
   # send :include, Activation # eventually we will let users create new identities
 
-  EMAIL_LENGTH_MIN = 3
-  EMAIL_LENGTH_MAX = 300
-
   belongs_to :user
 
   has_many :external_author_names, :dependent => :destroy

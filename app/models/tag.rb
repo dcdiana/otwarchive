@@ -12,7 +12,7 @@ class Tag < ActiveRecord::Base
   # Note: the order of this array is important.
   # It is the order that tags are shown in the header of a work
   # (banned tags are not shown)
-  TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Relationship', 'Character', 'Freeform', 'Banned' ]
+  TYPES = ArchiveConfig.TAG_TYPES
 
   # these tags can be filtered on
   FILTERS = TYPES - ['Banned', 'Media']
@@ -20,9 +20,8 @@ class Tag < ActiveRecord::Base
   # these tags show up on works
   VISIBLE = TYPES - ['Media', 'Banned']
 
-  # these are tags which have been created by users
-  # the order is important, and it is the order in which they appear in the tag wrangling interface
-  USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
+
+  USER_DEFINED = ArchiveConfig.USER_DEFINED_TAG_TYPES
 
   def self.write_redis_to_database
     REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
