@@ -1,16 +1,18 @@
 class Homepage
+  COUNT_EXPIRATION = 40.minutes
+
   def initialize(user)
     @user = user
   end
 
   def rounded_counts
-    @user_count = Rails.cache.fetch("/v1/home/counts/user", expires_in: 40.minutes) do
+    @user_count = Rails.cache.fetch("/v1/home/counts/user", expires_in: COUNT_EXPIRATION) do
       estimate_number(User.count)
     end
-    @work_count = Rails.cache.fetch("/v1/home/counts/works", expires_in: 40.minutes) do
+    @work_count = Rails.cache.fetch("/v1/home/counts/works", expires_in: COUNT_EXPIRATION) do
       estimate_number(Work.posted.count)
     end
-    @fandom_count = Rails.cache.fetch("/v1/home/counts/fandom", expires_in: 40.minutes) do
+    @fandom_count = Rails.cache.fetch("/v1/home/counts/fandom", expires_in: COUNT_EXPIRATION) do
       estimate_number(Fandom.canonical.count)
     end
     return @user_count, @work_count, @fandom_count

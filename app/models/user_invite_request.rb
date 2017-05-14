@@ -1,12 +1,10 @@
 class UserInviteRequest < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
 
-  MAX_USER_INVITE_REQUEST = ArchiveConfig.MAX_USER_INVITE_REQUEST
-
   belongs_to :user
   validates_presence_of :quantity
   validates_presence_of :reason
-  validates :quantity, :numericality => {:less_than_or_equal_to => MAX_USER_INVITE_REQUEST}
+  validates :quantity, :numericality => {:less_than_or_equal_to => ArchiveConfig.MAX_USER_INVITE_REQUEST}
 
   before_update :check_status, :grant_request
 

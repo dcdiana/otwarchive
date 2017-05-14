@@ -18,9 +18,6 @@ class Pseud < ActiveRecord::Base
   validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
   validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
 
-  NAME_LENGTH_MIN = 1
-  NAME_LENGTH_MAX = 40
-  DESCRIPTION_MAX = 500
 
   belongs_to :user
   delegate :login, to: :user, prefix: true
@@ -55,9 +52,9 @@ class Pseud < ActiveRecord::Base
 
   validates_presence_of :name
   validates_length_of :name,
-    within: NAME_LENGTH_MIN..NAME_LENGTH_MAX,
-    too_short: ts("is too short (minimum is %{min} characters)", min: NAME_LENGTH_MIN),
-    too_long: ts("is too long (maximum is %{max} characters)", max: NAME_LENGTH_MAX)
+    within: ArchiveConfig.NAME_LENGTH_MIN..ArchiveConfig.NAME_LENGTH_MAX,
+    too_short: ts("is too short (minimum is %{min} characters)", min: ArchiveConfig.NAME_LENGTH_MIN),
+    too_long: ts("is too long (maximum is %{max} characters)", max: ArchiveConfig.NAME_LENGTH_MAX)
   validates_uniqueness_of :name, scope: :user_id, case_sensitive: false
   validates_format_of :name,
     message: ts('can contain letters, numbers, spaces, underscores, and dashes.'),
@@ -65,8 +62,8 @@ class Pseud < ActiveRecord::Base
   validates_format_of :name,
     message: ts('must contain at least one letter or number.'),
     with: /\p{Alnum}/u
-  validates_length_of :description, allow_blank: true, maximum: DESCRIPTION_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: DESCRIPTION_MAX)
+  validates_length_of :description, allow_blank: true, maximum: ArchiveConfig.DESCRIPTION_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.DESCRIPTION_MAX)
   validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
   validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,

@@ -1,13 +1,12 @@
 class Gift < ActiveRecord::Base
-  NAME_LENGTH_MAX = 100
 
   belongs_to :work, touch: true
   belongs_to :pseud
   has_one :user, through: :pseud
 
   validates_length_of :recipient_name,
-    :maximum => NAME_LENGTH_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => NAME_LENGTH_MAX),
+    :maximum => ArchiveConfig.NAME_LENGTH_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NAME_LENGTH_MAX),
     :allow_blank => true
 
   validates_format_of :recipient_name, 
