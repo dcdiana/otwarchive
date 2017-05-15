@@ -8,7 +8,7 @@
     <% else %>
       <%= f.text_field :name, class: "observe_textlength" %>
     <% end %>
-    <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name %>
+    <%= generate_countdown_html("pseud_name", ArchiveConfig.NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name %>
   </dd>
   
   <dt><%= f.label :is_default, ts('Make this name default') %></dt>
@@ -18,7 +18,7 @@
   <dd>
     <p><%= allowed_html_instructions %></p>
     <%= f.text_area :description, class: "observe_textlength" %>
-    <%= generate_countdown_html("pseud_description", Pseud::DESCRIPTION_MAX) %>
+    <%= generate_countdown_html("pseud_description", ArchiveConfig.DESCRIPTION_MAX) %>
   </dd>
  
   <dt><%= ts("Icon") %></dt>
