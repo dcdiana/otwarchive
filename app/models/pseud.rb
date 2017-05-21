@@ -51,9 +51,9 @@ class Pseud < ActiveRecord::Base
 
   validates_presence_of :name
   validates_length_of :name,
-    within: ArchiveConfig.NAME_LENGTH_MIN..ArchiveConfig.NAME_LENGTH_MAX,
-    too_short: ts("is too short (minimum is %{min} characters)", min: ArchiveConfig.NAME_LENGTH_MIN),
-    too_long: ts("is too long (maximum is %{max} characters)", max: ArchiveConfig.NAME_LENGTH_MAX)
+    within: Configurable.NAME_LENGTH_MIN..Configurable.NAME_LENGTH_MAX,
+    too_short: ts("is too short (minimum is %{min} characters)", min: Configurable.NAME_LENGTH_MIN),
+    too_long: ts("is too long (maximum is %{max} characters)", max: Configurable.NAME_LENGTH_MAX)
   validates_uniqueness_of :name, scope: :user_id, case_sensitive: false
   validates_format_of :name,
     message: ts('can contain letters, numbers, spaces, underscores, and dashes.'),
@@ -61,12 +61,12 @@ class Pseud < ActiveRecord::Base
   validates_format_of :name,
     message: ts('must contain at least one letter or number.'),
     with: /\p{Alnum}/u
-  validates_length_of :description, allow_blank: true, maximum: ArchiveConfig.DESCRIPTION_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.DESCRIPTION_MAX)
-  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
-  validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
+  validates_length_of :description, allow_blank: true, maximum: Configurable.DESCRIPTION_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.DESCRIPTION_MAX)
+  validates_length_of :icon_alt_text, allow_blank: true, maximum: Configurable.ICON_ALT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.ICON_ALT_MAX)
+  validates_length_of :icon_comment_text, allow_blank: true, maximum: Configurable.ICON_COMMENT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.ICON_COMMENT_MAX)
 
   after_update :check_default_pseud
   after_update :expire_caches
@@ -430,7 +430,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def self.search(options={})
-    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
+    tire.search(page: options[:page], per_page: Configurable.ITEMS_PER_PAGE, load: true) do
       query do
         boolean do
           must { string options[:query], default_operator: "AND" } if options[:query].present?

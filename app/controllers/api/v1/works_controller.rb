@@ -11,8 +11,8 @@ class Api::V1::WorksController < Api::V1::BaseController
     results = []
     if original_urls.nil? || original_urls.blank? || original_urls.size == 0
       results << { error: "Please provide a list of URLs to find." }
-    elsif original_urls.size >= ArchiveConfig.IMPORT_MAX_CHAPTERS
-      results << { error: "Please provide no more than #{ ArchiveConfig.IMPORT_MAX_CHAPTERS } URLs to find." }
+    elsif original_urls.size >= Configurable.IMPORT_MAX_CHAPTERS
+      results << { error: "Please provide no more than #{ Configurable.IMPORT_MAX_CHAPTERS } URLs to find." }
     else
       status = :ok
       results = process_batch_url(original_urls)
@@ -113,8 +113,8 @@ class Api::V1::WorksController < Api::V1::BaseController
     urls = work[:chapter_urls]
     if urls.nil? || urls.empty?
       errors << "This work doesn't contain chapter_urls. Works can only be imported from publicly-accessible URLs."
-    elsif urls.length >= ArchiveConfig.IMPORT_MAX_CHAPTERS
-      errors << "This work contains too many chapter URLs. A maximum of #{ArchiveConfig.IMPORT_MAX_CHAPTERS} " \
+    elsif urls.length >= Configurable.IMPORT_MAX_CHAPTERS
+      errors << "This work contains too many chapter URLs. A maximum of #{Configurable.IMPORT_MAX_CHAPTERS} " \
                 "chapters can be imported per work."
     end
     status = :ok if errors.empty?

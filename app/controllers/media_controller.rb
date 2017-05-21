@@ -4,7 +4,7 @@ class MediaController < ApplicationController
 
   def index
     uncategorized = Media.uncategorized
-    @media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+    @media = Media.by_name - [Media.find_by_name(Configurable.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
     @fandom_listing = {}
     @media.each do |medium|
       if medium == uncategorized

@@ -38,7 +38,7 @@
       <ul class="index group">
         <% @tags[tag_type].each_with_index do |tag, i| %>
           <% if !params["expand_#{tag_type.downcase.pluralize}"] && 
-              i > (ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD - 1) %>
+              i > (Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD - 1) %>
             <li class='hidden'>
           <% else %>
             <li>
@@ -52,7 +52,7 @@
           <% end %>
           </li>
        <% end %>
-       <% if @tags[tag_type].length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
+       <% if @tags[tag_type].length > Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
           <li class="actions" role="button">
             <% if params["expand_#{tag_type.downcase.pluralize}"] %>
             <%= link_to "Hide full list", [@user, @pseud], :id => "expandable-#{tag_type.downcase}-link" %>

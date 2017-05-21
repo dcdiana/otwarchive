@@ -18,12 +18,12 @@ class Series < ActiveRecord::Base
 
   validates_presence_of :title
   validates_length_of :title,
-    :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> ts("must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
+    :minimum => Configurable.TITLE_MIN,
+    :too_short=> ts("must be at least %{min} letters long.", :min => Configurable.TITLE_MIN)
 
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
+    :maximum => Configurable.TITLE_MAX,
+    :too_long=> ts("must be less than %{max} letters long.", :max => Configurable.TITLE_MAX)
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -32,13 +32,13 @@ class Series < ActiveRecord::Base
 
   validates_length_of :summary,
     :allow_blank => true,
-    :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :maximum => Configurable.SUMMARY_MAX,
+    :too_long => ts("must be less than %{max} letters long.", :max => Configurable.SUMMARY_MAX)
 
   validates_length_of :notes,
     :allow_blank => true,
-    :maximum => ArchiveConfig.NOTES_MAX,
-    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    :maximum => Configurable.NOTES_MAX,
+    :too_long => ts("must be less than %{max} letters long.", :max => Configurable.NOTES_MAX)
 
   after_save :adjust_restricted
 

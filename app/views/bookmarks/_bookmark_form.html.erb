@@ -75,7 +75,7 @@
             </p>
             <%= f.text_area :notes, rows: 4, id: notes_id, class: "observe_textlength",
                 "aria-describedby" => "notes-field-description" %>
-            <%= generate_countdown_html(notes_id, ArchiveConfig.NOTES_MAX) %>
+            <%= generate_countdown_html(notes_id, Configurable.NOTES_MAX) %>
           </dd>
 
           <dt><%= f.label :tag_string, ts("Your tags") %></dt>
@@ -87,7 +87,7 @@
             <% end %>
             <%= f.text_field :tag_string, autocomplete_options('tag?type=all', size: (in_page ? 60 : 80), "aria-describedby" => "tag-string-description") %>
             <p class="character_counter">
-              <%= ts("Comma separated, %{max} characters per tag", max: ArchiveConfig.TAG_MAX) %>
+              <%= ts("Comma separated, %{max} characters per tag", max: Configurable.TAG_MAX) %>
             </p>
           </dd>
 

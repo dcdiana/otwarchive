@@ -1,6 +1,6 @@
 class Category < Tag
 
-  NAME = ArchiveConfig.CATEGORY_CATEGORY_NAME
+  NAME = Configurable.CATEGORY_CATEGORY_NAME
   index_name Tag.index_name
 
 end

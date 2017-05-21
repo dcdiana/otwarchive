@@ -69,7 +69,7 @@ module ShareHelper
     else
       pseud = work.pseuds.map {|pseud| (pseud.name)}.join(', ')
     end
-    "#{title} #{ts("by")} #{pseud} #{ts("[#{ArchiveConfig.APP_SHORT_NAME}]")}"
+    "#{title} #{ts("by")} #{pseud} #{ts("[#{Configurable.APP_SHORT_NAME}]")}"
   end
 
   # combine work information and bookmark information to make body of link post for Tumblr sharing

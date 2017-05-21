@@ -19,12 +19,12 @@ describe UserMailer do
 
     # Test the headers
     it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      text = "Archive of Our Own <#{Configurable.RETURN_ADDRESS}>"
       expect(email.header['From'].to_s).to eq(text)
     end
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
+      text = "[#{Configurable.APP_SHORT_NAME}] Works uploaded"
       expect(email.subject).to eq(text)
     end
 
@@ -109,12 +109,12 @@ describe UserMailer do
 
     # Test the headers
     it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      text = "Archive of Our Own <#{Configurable.RETURN_ADDRESS}>"
       expect(email.header['From'].to_s).to eq(text)
     end
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
+      text = "[#{Configurable.APP_SHORT_NAME}] Invitation to claim works"
       expect(email.subject).to eq(text)
     end
 
@@ -165,12 +165,12 @@ describe UserMailer do
 
     # Test the headers
     it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      text = "Archive of Our Own <#{Configurable.RETURN_ADDRESS}>"
       expect(email.header['From'].to_s).to eq(text)
     end
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      text = "[#{Configurable.APP_SHORT_NAME}] Invitation"
       expect(email.subject).to eq(text)
     end
 
@@ -209,12 +209,12 @@ describe UserMailer do
 
     # Test the headers
     it 'should have a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      text = "Archive of Our Own <#{Configurable.RETURN_ADDRESS}>"
       expect(email.header['From'].to_s).to eq(text)
     end
 
     it 'should have the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      text = "[#{Configurable.APP_SHORT_NAME}] Invitation"
       expect(email.subject).to eq(text)
     end
 
@@ -257,12 +257,12 @@ describe UserMailer do
 
     # Test the headers
     it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      text = "Archive of Our Own <#{Configurable.RETURN_ADDRESS}>"
       expect(email.header['From'].to_s).to eq(text)
     end
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
+      text = "[#{Configurable.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
       expect(email.subject).to eq(text)
     end
 

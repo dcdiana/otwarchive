@@ -8,7 +8,7 @@
     <% else %>
       <%= f.text_field :name, class: "observe_textlength" %>
     <% end %>
-    <%= generate_countdown_html("pseud_name", ArchiveConfig.NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name %>
+    <%= generate_countdown_html("pseud_name", Configurable.NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name %>
   </dd>
   
   <dt><%= f.label :is_default, ts('Make this name default') %></dt>
@@ -18,7 +18,7 @@
   <dd>
     <p><%= allowed_html_instructions %></p>
     <%= f.text_area :description, class: "observe_textlength" %>
-    <%= generate_countdown_html("pseud_description", ArchiveConfig.DESCRIPTION_MAX) %>
+    <%= generate_countdown_html("pseud_description", Configurable.DESCRIPTION_MAX) %>
   </dd>
  
   <dt><%= ts("Icon") %></dt>
@@ -46,7 +46,7 @@
   </dt>
   <dd>
     <%= f.text_field :icon_alt_text, class: "observe_textlength" %>
-    <%= generate_countdown_html("pseud_icon_alt_text", ArchiveConfig.ICON_ALT_MAX) %>
+    <%= generate_countdown_html("pseud_icon_alt_text", Configurable.ICON_ALT_MAX) %>
   </dd>
 
   <dt>
@@ -55,7 +55,7 @@
   </dt>
   <dd>
     <%= f.text_field :icon_comment_text, class: "observe_textlength" %>
-    <%= generate_countdown_html("pseud_icon_comment_text", ArchiveConfig.ICON_COMMENT_MAX) %>
+    <%= generate_countdown_html("pseud_icon_comment_text", Configurable.ICON_COMMENT_MAX) %>
   </dd>
 
  <dt class="landmark"><%= ts("Submit") %></dt>

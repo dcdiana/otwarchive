@@ -126,7 +126,7 @@ class Admin::AdminUsersController < ApplicationController
 
         # create warning
         if params[:admin_action] == "warn"
-          @user.create_log_item(action: ArchiveConfig.ACTION_WARN, note: @admin_note, admin_id: current_admin.id)
+          @user.create_log_item(action: Configurable.ACTION_WARN, note: @admin_note, admin_id: current_admin.id)
           success_message << ts("Warning was recorded.")
         end
 
@@ -135,14 +135,14 @@ class Admin::AdminUsersController < ApplicationController
           @user.suspended = true
           @suspension_days = params[:suspend_days].to_i
           @user.suspended_until = @suspension_days.days.from_now
-          @user.create_log_item(action: ArchiveConfig.ACTION_SUSPEND, note: @admin_note, admin_id: current_admin.id, enddate: @user.suspended_until)
+          @user.create_log_item(action: Configurable.ACTION_SUSPEND, note: @admin_note, admin_id: current_admin.id, enddate: @user.suspended_until)
           success_message << ts("User has been temporarily suspended.")
         end
 
         # create ban
         if params[:admin_action] == "ban" || params[:admin_action] == "spamban"
           @user.banned = true
-          @user.create_log_item(action: ArchiveConfig.ACTION_BAN, note: @admin_note, admin_id: current_admin.id)
+          @user.create_log_item(action: Configurable.ACTION_BAN, note: @admin_note, admin_id: current_admin.id)
           success_message << ts("User has been permanently suspended.")
         end
 
@@ -151,7 +151,7 @@ class Admin::AdminUsersController < ApplicationController
           @user.suspended = false
           @user.suspended_until = nil
           if !@user.suspended && @user.suspended_until.blank?
-            @user.create_log_item(action: ArchiveConfig.ACTION_UNSUSPEND, note: @admin_note, admin_id: current_admin.id)
+            @user.create_log_item(action: Configurable.ACTION_UNSUSPEND, note: @admin_note, admin_id: current_admin.id)
             success_message << ts("Suspension has been lifted.")
           end
         end
@@ -160,7 +160,7 @@ class Admin::AdminUsersController < ApplicationController
         if params[:admin_action] == "unban" && @user.banned?
           @user.banned = false
           if !@user.banned?
-            @user.create_log_item(action: ArchiveConfig.ACTION_UNSUSPEND, note: @admin_note, admin_id: current_admin.id)
+            @user.create_log_item(action: Configurable.ACTION_UNSUSPEND, note: @admin_note, admin_id: current_admin.id)
             success_message << ts("Suspension has been lifted.")
           end
         end
@@ -265,7 +265,7 @@ class Admin::AdminUsersController < ApplicationController
     @user.reindex_user_works
     @user.set_user_work_dates
     @user.reindex_user_bookmarks
-    @user.create_log_item(options = { action: ArchiveConfig.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
+    @user.create_log_item(options = {action: Configurable.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
     flash[:notice] = ts("User account troubleshooting complete.")
     redirect_to(request.env["HTTP_REFERER"] || root_path) && return
   end
@@ -275,7 +275,7 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by(login: params[:id])
     @user.activate
     if @user.active?
-      @user.create_log_item( options = { action: ArchiveConfig.ACTION_ACTIVATE, note: "Manually Activated", admin_id: current_admin.id })
+      @user.create_log_item( options = {action: Configurable.ACTION_ACTIVATE, note: "Manually Activated", admin_id: current_admin.id })
       flash[:notice] = ts("User Account Activated")
       redirect_to action: :show
     else

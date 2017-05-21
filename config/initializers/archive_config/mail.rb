@@ -3,7 +3,7 @@ module Otwarchive
   class Application < Rails::Application
     unless %w(test cucumber).include?(Rails.env)
       config.action_mailer.delivery_method = :smtp
-  #    config.action_mailer.default_url_options = {:host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')}
+  #    config.action_mailer.default_url_options = {:host => Configurable.APP_URL.gsub(/http:\/\//, '')}
       ActionMailer::Base.default_url_options = {:host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')}
   ## TODO: Setting ActionMailer::Base.default_url_options directly is now deprecated, use the configuration option mentioned above to set the default host.
   ## except... it doesn't work. setting it directly does work.

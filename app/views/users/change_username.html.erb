@@ -24,8 +24,8 @@
       <%= text_field_tag :new_login, @new_login, autocomplete: 'off', "aria-describedby" => "new-login-field-description" %>
       <p class="footnote" id="new-login-field-description">
         <%= ts("%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)",
-               minimum: ArchiveConfig.LOGIN_LENGTH_MIN,
-               maximum: ArchiveConfig.LOGIN_LENGTH_MAX) %>
+               minimum: Configurable.LOGIN_LENGTH_MIN,
+               maximum: Configurable.LOGIN_LENGTH_MAX) %>
       </p>
     </dd>
     <dt><%= label_tag :password, ts("Password") %></dt>

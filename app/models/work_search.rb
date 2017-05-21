@@ -109,7 +109,7 @@ class WorkSearch < Search
     facet_collections = self.collected
     work_search = self
 
-    response = Work.tire.search(page: search_opts[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE) do
+    response = Work.tire.search(page: search_opts[:page], per_page: Configurable.ITEMS_PER_PAGE) do
       query do
         boolean do
           must { string search_text, default_operator: "AND" } if search_text.present?

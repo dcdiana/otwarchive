@@ -1,6 +1,6 @@
 class Fandom < Tag
 
-  NAME = ArchiveConfig.FANDOM_CATEGORY_NAME
+  NAME = Configurable.FANDOM_CATEGORY_NAME
   index_name Tag.index_name
 
   has_many :wrangling_assignments

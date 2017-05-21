@@ -1,0 +1,913 @@
+DEFAULT_LANGUAGE_SHORT:
+ name: title
+ default: en
+
+PERFORM_DELIVERIES:
+ name: Deliver Emails
+ default: false
+ type: boolean
+
+BCRYPT_COST:
+ name: cost
+ default: 14
+
+SESSION_SECRET:
+ name: Session Secret
+ default: 898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672fb852380050e52c03a0401175d909c09dba48512a119d46b126a84c2dd05716eb5
+
+SMTP_SERVER:
+ name: SMTP Server
+ default: localhost
+
+SMTP_PORT:
+ name: SMTP Port
+ default: 25
+ type: integer
+
+USE_SMTP_AUTH:
+ name: Use SMTP Authentication
+ default: false
+
+SMTP_DOMAIN:
+ name: SMTP Domain
+ default: localhost
+
+SMTP_AUTHENTICATION:
+ name: SMTP Autentication Type
+ default: plain
+
+RETURN_ADDRESS:
+ name: Return Email Address
+ default: do-not-reply@example.org
+
+SUPPORT_ADDRESS:
+ name: Support Email Address
+ default: do-not-reply@example.org
+
+ABUSE_ADDRESS:
+ name: Abuse Email Address
+ default: abuse@example.org
+
+SPAM_ALERT_ADDRESS:
+ name: Spam Alert Email Address
+ default: spam@example.org
+
+SPAM_THRESHOLD:
+ name: Spam Threshold
+ default: 15
+ type: integer
+
+ADMIN_ADDRESS:
+ name: Admin Email Address
+ default: admin@example.org
+
+QUESTION_ADDRESS:
+ name: Question Email Address
+ default: question@example.org
+ type: string
+
+WEBMASTER_ADDRESS:
+ name: Webmaster Email Address
+ default: webmaster@example.org
+
+ERROR_ADDRESS:
+ name: Error Email Address
+ default: errors@example.org
+
+
+session_key:
+ name: Session Key
+ default: _otwarchive_session
+
+
+# email addresses
+RETURN_ADDRESS:
+ name: Return Email Address
+ default: do-not-reply@example.org
+
+SUPPORT_ADDRESS:
+ name: Support Email Address
+ default: do-not-reply@example.org
+
+ABUSE_ADDRESS:
+ name: Abuse Email Address
+ default: abuse@example.org
+
+SPAM_ALERT_ADDRESS:
+ name: Spam Alert Email Address
+ default: spam@example.org
+
+SPAM_THRESHOLD:
+ name: Spam Threshold
+ default: 15
+ type: integer
+
+ADMIN_ADDRESS:
+ name: Admin Email Address
+ default: admin@example.org
+
+QUESTION_ADDRESS:
+ name: Question Email Address
+ default: question@example.org
+ type: string
+
+WEBMASTER_ADDRESS:
+ name: Webmaster Email Address
+ default: webmaster@example.org
+
+ERROR_ADDRESS:
+ name: Error Email Address
+ default: errors@example.org
+
+ERROR_PREFIX:
+ name: Error Email Address
+ default: [ERROR]
+
+FEEDBACK_ADDRESS:
+ name: Feedback Email Address
+ default: feedback@example.org
+
+
+# accounts and invitations
+# these can be overridden in the admin controller
+INVITE_FROM_QUEUE_ENABLED:
+ name: Enable Invite From Queue
+ default: true
+ type: boolean
+
+INVITE_FROM_QUEUE_NUMBER:
+ name: Number to Invite From Queue
+ default: 10
+ type: integer
+
+# SANITIZER VERSION
+SANITIZER_VERSION:
+ name: Sanitizer Version
+ default: 1
+ type: integer
+
+# Allow orphaninig
+ORPHANING_ALLOWED:
+ name: Allow Orphaning
+ default: true
+ type: boolean
+
+# Turn this off in local.yml to keep the development footer/profiling code from running
+DEVELOPMENT_PROFILING_ENABLED:
+ name: Enable Development Profiling
+ default: true
+ type: boolean
+
+INVITE_FROM_QUEUE_FREQUENCY:
+ name: Frequency to Invite From Queue
+ default: 7
+ type: integer
+
+# this is whether or not people without invitations can create accounts
+ACCOUNT_CREATION_ENABLED:
+ name: Enable Account Creation
+ default: false
+ type: boolean
+
+app_url:
+ name: Application URL
+ default: http://www.example.org
+ type: string
+
+ELASTICSEARCH_URL:
+ name: Primary Elastic Search URL
+ default: http://localhost:9200
+ type: string
+
+ELASTICSEARCH_1_URL:
+ name: Secondary Elastic Search URL
+ default: http://localhost:9200
+ type: string
+
+MEMCACHED_URL:
+ name: Memcached URL
+ default: 127.0.0.1
+ type: string
+
+APP_NAME:
+ name: Application Name
+ default: Example Archive
+ type: string
+
+APP_HOST:
+ name: Application Host
+ default: archiveofourown.org
+ type: string
+
+APP_SHORT_NAME:
+ name: Application Short Name
+ default: AO3
+ type: string
+
+LOGO:
+ name: Logo Graphic Filename
+ default: logo.png
+ type: string
+
+ALT_LOGO:
+ name: ALT Logo Text
+ default: Example Logo ALT Text
+ type: string
+
+OTWLOGO:
+ name: ORG Logo Filename
+ default: OTWLogo.png
+ type: string
+
+OTWALT_LOGO:
+ name: ORG Logo ALT Text
+ default: Example ORG Logo ALT Text
+ type: string
+
+REVISION:
+ name: Archive Revision
+ default: Sample String
+ type: string
+
+
+
+DAYS_TO_PURGE_UNACTIVATED:
+ name: Purge Inactive Accounts After X Days
+ default: 7
+ type: integer
+
+# number of invites users can request
+MAX_USER_INVITE_REQUEST:
+ name: Maximum Number of Invites Requestable
+ default: 10
+ type: integer
+
+# this determines how long we keep processed results like tag set nominations in redis
+DAYS_TO_SAVE_PROCESSED:
+ name: Days to save redis results
+ default: 56
+ type: integer
+
+# validation values -- max/min lengths
+TITLE_MAX:
+ name: Title Maximum Length
+ default: 255
+ type: integer
+
+TITLE_MIN:
+ name: Title Minimum Length
+ default: 1
+ type: integer
+
+SUMMARY_MAX:
+ name: Summary Maximum Length
+ default: 1250
+ type: integer
+
+NOTES_MAX:
+ name: Notes Maximum Length
+ default: 5000
+ type: integer
+
+comment_max:
+ name: Comment Maximum Length
+ default: 4300
+ type: integer
+
+TAG_MAX:
+ name: Tag Maximum Length
+ default: 100
+ type: integer
+
+CONTENT_MIN:
+ name: Content Minimum Length
+ default: 10
+ type: integer
+
+CONTENT_MAX:
+ name: Content Maximum Length
+ default: 510000
+ type: integer
+
+CONTENT_MAX_DISPLAYED:
+ name: Content Maximum Displayed Length
+ default: 500000
+ type: integer
+
+LOGNOTE_MIN:
+ name: Log Note Minimum Length
+ default: 5
+ type: integer
+
+LOGNOTE_MAX:
+ name: Log Note Maximum Length
+ default: 1250
+ type: integer
+
+FEEDBACK_SUMMARY_MAX_DISPLAYED:
+ name: Feedback Summary Maximum Displayed Length
+ default: 100
+ type: integer
+
+FEEDBACK_SUMMARY_MAX:
+ name: Feedback Summary Maximum Length
+ default: 107
+ type: integer
+
+INFO_MAX:
+ name: Information Maximum Length
+ default: 100000
+ type: integer
+
+FAQ_MAX:
+ name: FAQ Maximum Length
+ default: 200000
+ type: integer
+
+ICON_ALT_MAX:
+ name: Icon ALT Maximum Length
+ default: 250
+ type: integer
+
+ICON_COMMENT_MAX:
+ name: Icon Comment Maximum Length
+ default: 50
+ type: integer
+
+LOGIN_LENGTH_MIN:
+ name: Login Minimum Length
+ default: 3
+ type: integer
+
+LOGIN_LENGTH_MAX:
+ name: Login Maximum Length
+ default: 40
+ type: integer
+
+PASSWORD_LENGTH_MIN:
+ name: Password Minimum Length
+ default: 6
+ type: integer
+
+PASSWORD_LENGTH_MAX:
+ name: Password Maximum Length
+ default: 40
+ type: integer
+
+#Used in External Authors, Pseud, Gift
+NAME_LENGTH_MIN:
+ name: Name Minimum Length
+ default: 1
+ type: integer
+
+NAME_LENGTH_MAX:
+ name: Name Maximum Length
+ default: 100
+ type: integer
+
+#Used in Profiles
+PROFILE_TITLE_MAX:
+ name: Profile Title Maximum Length
+ default: 255
+ type: integer
+
+PROFILE_LOCATION_MAX:
+ name: Profile Location Maximum Length
+ default: 255
+ type: integer
+
+PROFILE_ABOUT_ME_MAX:
+ name: Profile About Me Maximum Length
+ default: 2000
+ type: integer
+
+#Used in Pseud
+DESCRIPTION_MAX:
+ name: Pseud Description Maximum Length
+ default: 500
+ type: integer
+
+
+
+# max number of tags of each type allowed in challenge prompts (requests/offers)
+# increasing this number can lead to slower automated matching
+PROMPT_TAGS_MAX:
+ name: Maximum Number of Tags in Prompts
+ default: 20
+ type: integer
+
+# max number of potential matches to generate
+POTENTIAL_MATCHES_MAX:
+ name: Maximum Potential Matches
+ default: 50
+ type: integer
+
+# min number of potential matches to allow
+POTENTIAL_MATCHES_MIN:
+ name: Minimum Potential Matches
+ default: 10
+ type: integer
+
+# max percentage of participants to match
+POTENTIAL_MATCHES_PERCENT:
+ name: Maximum Percentage of Participants to Match
+ default: 10
+ type: integer
+
+# These options control the number of tags we'd ideally like to see in each tag
+# type in a gift exchange, in order to ensure that indexing on that type (to
+# speed up matching) will yield good results. The number scales with the number
+# of signups (using the divisor), but is capped at the maximum. Increasing the
+# maximum (and decreasing the divisor) will cause the preprocessing step to
+# take somewhat longer.
+PREPROCESS_COUNT_TAGS_DIVISOR:
+ name: Preprocess Count Tags Divisor
+ default: 10
+ type: integer
+
+PREPROCESS_COUNT_TAGS_MAX:
+ name: Preprocess Tags MAX
+ default: 10
+ type: integer
+
+# These options control how many prompts with "any_#{type}" an exchange can
+# have before we consider that tag type to be difficult to index on.
+PREPROCESS_COUNT_ANY_DIVISOR:
+ name: Preprocess Count Any Divisor
+ default: 10
+ type: integer
+
+PREPROCESS_COUNT_ANY_MIN:
+ name: Preprocess Count Any Minimum
+ default: 10
+ type: integer
+
+# max number of prompts of each type (offer, request) allowed
+PROMPTS_MAX:
+ name: Maximum Prompts Allowed
+ default: 10
+ type: integer
+
+# max for prompt memes (can be much higher than for gift exchanges, as there is no matching)
+PROMPT_MEME_PROMPTS_MAX:
+ name: Maximum Prompt MEME Allowed
+ default: 50
+ type: integer
+
+# max number of works/chapters that can be imported
+IMPORT_MAX_WORKS:
+ name: Maximum Number of Works Importable
+ default: 25
+ type: integer
+
+IMPORT_MAX_CHAPTERS:
+ name: Maximum Number of Chapters Importable
+ default: 200
+ type: integer
+
+IMPORT_MAX_WORKS_BY_ARCHIVIST:
+ name: Maximum Number of Works Importable By Archivist
+ default: 500
+ type: integer
+
+# max number of abuse reports to accept for a given work URL
+ABUSE_REPORTS_PER_WORK_MAX:
+ name: Maximum Abuse Reports Per Work
+ default: 5
+ type: integer
+
+# number of items in various displays
+ITEMS_PER_PAGE:
+ name: Items Displayed Per Page
+ default: 25
+ type: integer
+
+# must be less than ITEMS_PER_PAGE above
+NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD:
+ name: Items Visible On Dashboard
+ default: 5
+ type: integer
+
+NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE:
+ name: Items Displayed On HomePage
+ default: 3
+ type: integer
+
+COMMENT_THREAD_MAX_DEPTH:
+ name: Maximum Comment Thread Depth
+ default: 5
+ type: integer
+
+TAGS_PER_LINE:
+ name: Tags Per Line
+ default: 12
+ type: integer
+
+TAGS_IN_CLOUD:
+ name: Tag Cloud Limit
+ default: 200
+ type: integer
+
+TAG_LIST_LIMIT:
+ name: Tag List Limit
+ default: 300
+ type: integer
+
+# how many options there should be before we show a scrollable window, and how many there
+# can be before we just use an autocomplete instead
+OPTIONS_TO_SHOW:
+ name: Options to Show
+ default: 3
+ type: integer
+
+MAX_OPTIONS_TO_SHOW:
+ name: Maximum Options To Show
+ default: 20
+ type: integer
+
+MAX_KUDOS_TO_SHOW:
+ name: Maximum Kudos To Show
+ default: 50
+ type: integer
+
+MAX_FAVORITE_TAGS:
+ name: Maximum Favorite Tags To Show
+ default: 20
+ type: integer
+
+# how many signups in a challenge before we move to static summaries generated hourly
+MAX_SIGNUPS_FOR_LIVE_SUMMARY:
+ name: Maximum Live Challenge Summary Signup
+ default: 20
+ type: integer
+
+# Tag kinds and default tags
+WARNING_CATEGORY_NAME:
+ name: Warning Category Name
+ default: Archive Warning
+ type: string
+
+WARNING_DEFAULT_TAG_NAME:
+ name: Warning Default Tag Name
+ default: Choose Not To Use Archive Warnings
+ type: string
+
+WARNING_DEFAULT_TAG_DISPLAY_NAME:
+ name: Warning Default Tag Name
+ default: Choose Not To Use Archive Warnings
+ type: string
+
+WARNING_NONE_TAG_NAME:
+ name: No Warnings Tag Name
+ default: No Archive Warnings Apply
+ type: string
+
+WARNING_NONE_TAG_DISPLAY_NAME:
+ name: No Warning Display Tag Name
+ default: No Archive Warnings Apply
+ type: string
+
+WARNING_VIOLENCE_TAG_NAME:
+ name: Violence Warning Tag Name
+ default: Graphic Depictions Of Violence
+ type: string
+
+WARNING_DEATH_TAG_NAME:
+ name: Death Warning Tag Name
+ default: Major Character Death
+ type: string
+
+WARNING_NONCON_TAG_NAME:
+ name: Rape/Non-Con Warning Tag Name
+ default: Rape/Non-Con
+ type: string
+
+WARNING_CHAN_TAG_NAME:
+ name: Underage Warning Name
+ default: Underage
+ type: string
+
+
+# This is used to determine how many recent items
+# to cache for recent lookups -- eg if we want to
+# provide a "ten most recent" items to browse.
+# used in CacheFinds module -- include CacheFinds in a model
+# and the methods Model.recent and Model.last(#) will be
+# enabled, cached on production/test environments.
+MAX_RECENT:
+ name: Maximum Recent Cached
+ default: 20
+ type: integer
+
+# This is used to determine how many works or how many authors have to be
+# present in order for anonymous or mystery works to begin being displayed
+ANONYMOUS_THRESHOLD_COUNT:
+ name: Anonymous Threshold
+ default: 10
+ type: integer
+
+# This is used to determine how tolerant of changes to be when determining
+# whether a comment should go back into moderation after editing or not
+COMMENT_MODERATION_THRESHOLD:
+ name: Content Moderation Threshold
+ default: 10
+ type: integer
+
+
+
+# variables for Askimet http://akismet.com/
+AKISMET_KEY:
+ name: Askimet Key
+ default: 6833ee7298cf
+ type: string
+
+AKISMET_NAME:
+ name: Askimet Name (URL)
+ default: http://transformativeworks.org
+ type: string
+
+DEFENSIO_KEY:
+ name: Defensio Key
+ default: 521476c0edf3ac96eab7e297f6fb92c8
+ type: string
+
+DEFENSIO_NAME:
+ name: Defensio Name (URL)
+ default: http://archiveofourown.org
+ type: string
+
+
+DEFAULT_LANGUAGE_SHORT:
+ name: Default Language Short Name
+ default: en
+ type: string
+
+DEFAULT_LANGUAGE_NAME:
+ name: Default Language Name
+ default: English
+ type: string
+
+DEFAULT_LOCALE_ISO:
+ name: Default Locale ISO
+ default: en
+ type: string
+
+DEFAULT_LOCALE_NAME:
+ name: Default Locale Name
+ default: English (US)
+ type: string
+
+
+# These fields are query fields and are allowed to contain "less than" values
+FIELDS_ALLOWING_LESS_THAN:
+ name: Fields Allowing Less Than
+ default: ["query", "words", "kudos", "hits", "date", "bookmarkable_date", "word_count", "bookmarks_count", "comments_count", "kudos_count", "revised_at"]
+ type: list
+
+
+
+# Only the following fields are allowed to have HTML. In all others,
+# all HTML tags will be stripped.
+#
+# NOTE: the exact HTML tags and attributes and protocols allowed are defined in
+#  initializers/sanitizer_config.rb
+#
+# If you add a new field to this list, you need to:
+# - make sure that every model that contains the field also has a matching field "[fieldname]_sanitizer_version"
+#  Example:
+#   add_column :chapters, :content_sanitizer_version, :integer, :default => 0, :null => false, :limit => 2
+#
+# - make sure in the model that this field is NOT accessible (eg "attr_protected :content_sanitizer_version")
+#
+# - when you load the field you should use sanitize_field(object, :fieldname)
+#
+# This will ensure that the field has been sanitized with the latest version of the sanitizer.
+#
+FIELDS_ALLOWING_HTML:
+ name: Fields Allowing HTML
+ default: ["about_me", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
+       "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary", "screencast"]
+ type: list
+
+FIELDS_ALLOWING_HTML_ENTITIES:
+ name: Fields Allowing HTML Entities
+ default: ["title"]
+ type: list
+
+FIELDS_ALLOWING_VIDEO_EMBEDS:
+ name: Fields Allowing Video Embedding
+ default: ["content"]
+ type: list
+
+FIELDS_ALLOWING_CSS:
+ name: Fields Allowing CSS
+ default: ["content", "endnotes", "notes"]
+ type: list
+
+SUPPORTED_CSS_SHORTHAND_PROPERTIES:
+ name: Supported Shorthand CSS Properties
+ default: ["background", "border", "column", "cue", "font", "layer-background",
+      "layout-grid", "list-style", "margin", "marker", "outline", "overflow", "padding", "page-break", "pause",
+      "scrollbar", "text", "transform", "transition"]
+ type: list
+
+SUPPORTED_CSS_PROPERTIES:
+ name: Supported CSS Properties
+ default: ["-replace", "-use-link-source",
+       "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth",
+       "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction",
+       "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-shadow", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile",
+       "content", "counter-increment", "counter-reset", "crop", "cue", "cue-after", "cue-before",
+       "cursor", "direction", "display", "dominant-baseline", "drop-initial-after-adjust", "drop-initial-after-align", "drop-initial-before-adjust",
+       "drop-initial-before-align", "drop-initial-size", "drop-initial-value", "elevation", "empty-cells", "filter", "fit", "fit-position", "float",
+       "float-offset", "font", "font-effect", "font-emphasize", "font-emphasize-position", "font-emphasize-style", "font-family", "font-size", "font-size-adjust",
+       "font-smooth", "font-stretch", "font-style", "font-variant", "font-weight", "grid-columns", "grid-rows", "hanging-punctuation", "height", "hyphenate-after",
+       "hyphenate-before", "hyphenate-character", "hyphenate-lines", "hyphenate-resource", "hyphens", "icon", "image-orientation", "image-resolution", "ime-mode",
+       "include-source", "inline-box-align", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "line-stacking", "line-stacking-ruby",
+       "line-stacking-shift", "line-stacking-strategy", "mark", "mark-after", "mark-before", "marks", "marquee-direction", "marquee-play-count",
+       "marquee-speed", "marquee-style", "max-height", "max-width", "min-height", "min-width", "move-to", "nav-down", "nav-index", "nav-left", "nav-right",
+       "nav-up", "opacity", "orphans", "page",
+       "page-policy", "phonemes", "pitch", "pitch-range", "play-during", "position", "presentation-level", "punctuation-trim",
+       "quotes", "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness", "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang",
+       "ruby-position", "ruby-span", "size", "speak", "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set", "tab-side",
+       "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", "user-select",
+       "vertical-align", "visibility", "voice-balance", "voice-duration", "voice-family", "voice-pitch", "voice-pitch-range", "voice-rate", "voice-stress",
+       "voice-volume", "volume", "white-space", "white-space-collapse", "widows", "width", "word-break", "word-spacing", "word-wrap", "writing-mode", "z-index"]
+ type: list
+
+# we allow through any string that is just a-z plus dashes (no spaces), so the only keywords you need to specify would
+# be ones that have something else or url, if you want to allow url values
+SUPPORTED_CSS_KEYWORDS:
+ name: Supported CSS Keywords
+ default: ["!important", "url"]
+ type: list
+
+# if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this kind of
+# resource will be allowed
+SUPPORTED_EXTERNAL_URLS:
+ name: Supported External URLS
+ default: ["jpg", "png", "gif"]
+ type: list
+
+#More Tag Settings
+
+# these are tags which have been created by users
+# the order is important, and it is the order in which they appear in the tag wrangling interface
+USER_DEFINED_TAG_TYPES:
+ name: User Defined Tag Types
+ default: ['Fandom', 'Character', 'Relationship', 'Freeform']
+ type: list
+
+TAG_TYPES:
+ name: Tag Types
+ default: ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Relationship', 'Character', 'Freeform', 'Banned' ]
+ type: list
+
+# DATE TIME FORMAT see http://ruby-doc.org/core/classes/Time.html#M000392
+
+# SEARCH TIPS
+SEARCH_TIPS:
+ name: Search Tips
+ default: ['arthur merlin words>1000 sort:hits', 'words:100', 'buffy gen teen AND "no archive warnings apply"', 'lex m/m (mature OR explicit)',
+        'hetalia f/f sort:kudos', '"sherlock (tv)" m/m NOT "sherlock holmes/john watson"', 'austen words:10000-50000 sort:title',
+        'katekyou "alternate universe" sort:>words', '"uchiha sasuke/uzumaki naruto" angst kudos>10']
+ type: list
+
+#Indexing
+INDEX_BATCH_SIZE:
+ name: Index Batch Size
+ default: 1000
+ type: integer
+
+DELIMITER_FOR_INPUT:
+ name: Delimiter For Input
+ default: ','
+
+# validates_format_of :name, in app/models/tag.rb
+DELIMITER_FOR_OUTPUT:
+ name: Delimiter For Output
+ default: ', '
+
+#Caching
+CACHED_CLASSES:
+ name: Cached Classes
+ default: ['Work', 'Tag', 'User', 'Pseud', 'Collection']
+ type: list
+
+# production caching
+#PRODUCTION_CACHE: "memory"
+PRODUCTION_CACHE:
+ name: Production Cache Method (memcache or memory)
+ default: memcache
+
+# how long we cache autocomplete search results in minutes
+AUTOCOMPLETE_EXPIRATION_TIME:
+ name: Autocomplete Expire Time
+ default: 10
+ type: integer
+
+# how many cache pages to expire for a tag/collection/pseud when a work is updated or deleted
+PAGES_TO_CACHE:
+ name: Pages To Cache
+ default: 5
+ type: integer
+
+# Help directory, must be in the public folder.
+# Create subfolders for each supported language
+# (eg, /help/fr/ contains the French versions of the help)
+HELP_DIRECTORY:
+ name: Help Directory
+ default: /help
+
+RATING_CATEGORY_NAME:
+ name: Help Directory
+ default: Rating
+
+RATING_DEFAULT_TAG_NAME:
+ name: NR Tag Name
+ default: Not Rated
+
+RATING_EXPLICIT_TAG_NAME:
+ name: Explicit Tag Name
+ default: Explicit
+
+RATING_MATURE_TAG_NAME:
+ name: Mature Tag Name
+ default: Mature
+
+RATING_TEEN_TAG_NAME:
+ name: Teen Tag Name
+ default: Teen And Up Audiences
+
+RATING_GENERAL_TAG_NAME:
+ name: General Tag Name
+ default: General Audiences
+
+CATEGORY_CATEGORY_NAME:
+ name: Category Category Name
+ default: Category
+
+CATEGORY_GEN_TAG_NAME:
+ name: Gen Tag Name
+ default: Gen
+
+CATEGORY_HET_TAG_NAME:
+  name: Het Tag Name
+ default: F/M
+
+CATEGORY_SLASH_TAG_NAME:
+ name: Slash Tag Name
+ default: M/M
+
+CATEGORY_FEMSLASH_TAG_NAME:
+ name: Femslash Tag Name
+ default: F/F
+
+CATEGORY_MULTI_TAG_NAME:
+ name: Multi Tag Name
+ default: Multi
+
+CATEGORY_OTHER_TAG_NAME:
+ name: Other Tag Name
+ default: other
+
+MEDIA_CATEGORY_NAME:
+ name: Media Category Name
+ default: Media
+
+MEDIA_NO_TAG_NAME:
+ name: No Media Tag Name
+ default: No Media
+
+MEDIA_UNCATEGORIZED_NAME:
+ name: Uncategorized Media Name
+ default: Uncategorized Fandoms
+
+FANDOM_CATEGORY_NAME:
+ name: Fandom Category Name
+ default: Fandom
+
+FANDOM_NO_TAG_NAME:
+ name: No Fandom Tag Name
+ default: No Fandom
+
+RELATIONSHIP_CATEGORY_NAME:
+ name: Relationship Category Name
+ default: Relationship
+
+CHARACTER_CATEGORY_NAME:
+ name: Character Category Name
+ default: Character
+
+FREEFORM_CATEGORY_NAME:
+ name: Freform Category Name
+ default: Additional Tags
+
+COMMON_CATEGORY_NAME:
+ name: Common Category Name
+ default: Common
+
+BANNED_CATEGORY_NAME:
+ name: Banned Category Name
+ default: Banned
+

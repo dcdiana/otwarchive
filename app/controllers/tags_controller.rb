@@ -46,8 +46,8 @@ class TagsController < ApplicationController
     if @collection
       @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
     else
-      no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      @tags = no_fandom.children.by_type('Freeform').first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+      no_fandom = Fandom.find_by_name(Configurable.FANDOM_NO_TAG_NAME)
+      @tags = no_fandom.children.by_type('Freeform').first_class.limit(Configurable.TAGS_IN_CLOUD)
       # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
       # and then sort again at the very end to make it alphabetic
       @tags = if params[:show] == 'random'
@@ -97,7 +97,7 @@ class TagsController < ApplicationController
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
       children = {}
       (@tag.child_types - %w(SubTag)).each do |child_type|
-        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count_cache DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
+        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count_cache DESC').limit(Configurable.TAG_LIST_LIMIT + 1)
         children[child_type] = tags.to_a.uniq unless tags.blank?
       end
       children
@@ -300,11 +300,11 @@ class TagsController < ApplicationController
       end
       # this makes sure params[:status] is safe
       if %w(unfilterable canonical synonymous unwrangleable).include?(params[:status])
-        @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(page: params[:page], per_page: Configurable.ITEMS_PER_PAGE)
       elsif params[:status] == 'unwrangled'
-        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(page: params[:page], per_page: Configurable.ITEMS_PER_PAGE)
       else
-        @tags = @tag.send(params[:show]).find(:all, order: sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.send(params[:show]).find(:all, order: sort).paginate(page: params[:page], per_page: Configurable.ITEMS_PER_PAGE)
       end
     end
   end

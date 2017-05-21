@@ -26,7 +26,7 @@ module CssCleaner
   TOP_LEVEL_DOMAINS = %w(ac ad ae aero af ag ai al am an ao aq ar arpa as asia at au aw ax az ba bb bd be bf bg bh bi biz bj bm bn bo br bs bt bv bw by bz ca cat cc cd cf cg ch ci ck cl cm cn co com coop cr cu cv cx cy cz de dj dk dm do dz ec edu ee eg er es et eu fi fj fk fm fo fr ga gb gd ge gf gg gh gi gl gm gn gov gp gq gr gs gt gu gw gy hk hm hn hr ht hu id ie il im in info int io iq ir is it je jm jo jobs jp ke kg kh ki km kn kp kr kw ky kz la lb lc li lk lr ls lt lu lv ly ma mc md me mg mh mil mk ml mm mn mo mobi mp mq mr ms mt mu museum mv mw mx my mz na name nc ne net nf ng ni nl no np nr nu nz om org pa pe pf pg ph pk pl pm pn pr pro ps pt pw py qa re ro rs ru rw sa sb sc sd se sg sh si sj sk sl sm sn so sr st su sv sy sz tc td tel tf tg th tj tk tl tm tn to tp tr travel tt tv tw tz ua ug uk us uy uz va vc ve vg vi vn vu wf ws xn xxx ye yt za zm zw)
   DOMAIN_REGEX = Regexp.new('https?://\w[\w\-\.]+\.(' + TOP_LEVEL_DOMAINS.join('|') + ')')
   DOMAIN_OR_IMAGES_REGEX = Regexp.new('\/images|' + DOMAIN_REGEX.to_s)
-  URI_REGEX = Regexp.new(DOMAIN_OR_IMAGES_REGEX.to_s + '/[\w\-\.\/]*[\w\-]\.(' + ArchiveConfig.SUPPORTED_EXTERNAL_URLS.join('|') + ')')
+  URI_REGEX = Regexp.new(DOMAIN_OR_IMAGES_REGEX.to_s + '/[\w\-\.\/]*[\w\-]\.(' + Configurable.SUPPORTED_EXTERNAL_URLS.join('|') + ')')
   URL_REGEX = Regexp.new(URI_REGEX.to_s + '|"' + URI_REGEX.to_s + '"|\'' + URI_REGEX.to_s + '\'')
   URL_FUNCTION_REGEX = Regexp.new('url\(\s*' + URL_REGEX.to_s + '\s*\)')
 
@@ -85,12 +85,12 @@ module CssCleaner
   end
 
   def is_legal_property(property)
-    ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) || 
-      property.match(/-(#{PREFIX_REGEX})-(#{ArchiveConfig.SUPPORTED_CSS_PROPERTIES.join('|')})/)
+    Configurable.SUPPORTED_CSS_PROPERTIES.include?(property) ||
+      property.match(/-(#{PREFIX_REGEX})-(#{Configurable.SUPPORTED_CSS_PROPERTIES.join('|')})/)
   end
 
   def is_legal_shorthand_property(property)
-    property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
+    property.match(/#{Configurable.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
   end
 
   def sanitize_css_property(property)
@@ -98,7 +98,7 @@ module CssCleaner
   end
 
   # A declaration must match the format:   property: value;
-  # All properties must appear in ArchiveConfig.SUPPORTED_CSS_PROPERTIES or ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES,
+  # All properties must appear in Configurable.SUPPORTED_CSS_PROPERTIES or Configurable.SUPPORTED_CSS_SHORTHAND_PROPERTIES,
   # or that property and its value will be omitted.
   # All values are sanitized. If any values in a declaration are invalid, the value will be blanked out and an
   #   empty property returned.
@@ -112,7 +112,7 @@ module CssCleaner
       end
     elsif property == "content"
       clean = sanitize_css_content(value)
-    elsif value.match(/\burl\b/) && (!ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url") || !%w(background background-image border border-image list-style list-style-image).include?(property))
+    elsif value.match(/\burl\b/) && (!Configurable.SUPPORTED_CSS_KEYWORDS.include?("url") || !%w(background background-image border border-image list-style list-style-image).include?(property))
       # check whether we can use urls in this property
       clean = ""
     elsif is_legal_shorthand_property(property)
@@ -196,7 +196,7 @@ module CssCleaner
   end
 
 
-  # all values must either appear in ArchiveConfig.SUPPORTED_CSS_KEYWORDS, be urls of the format url(http://url/) or be
+  # all values must either appear in Configurable.SUPPORTED_CSS_KEYWORDS, be urls of the format url(http://url/) or be
   # rgba(), hex (#), or numeric values, or a comma-separated list of same
   def sanitize_css_value(value)
     value_stripped = value.downcase.gsub(/(!important)/, '').strip
@@ -205,7 +205,7 @@ module CssCleaner
     return value if value_stripped =~ /^(#{VALUE_REGEX}\,?)+$/i
 
     # If it's explicitly in our keywords it's fine
-    return value if value_stripped.split(',').all? {|subval| ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)}
+    return value if value_stripped.split(',').all? {|subval| Configurable.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)}
 
     return ""
   end

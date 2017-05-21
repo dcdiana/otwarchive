@@ -13,11 +13,11 @@ Given /^basic tags$/ do
 end
 
 Given /^the default ratings exist$/ do
-  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
-             ArchiveConfig.RATING_GENERAL_TAG_NAME,
-             ArchiveConfig.RATING_TEEN_TAG_NAME,
-             ArchiveConfig.RATING_MATURE_TAG_NAME,
-             ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
+  ratings = [Configurable.RATING_DEFAULT_TAG_NAME,
+             Configurable.RATING_GENERAL_TAG_NAME,
+             Configurable.RATING_TEEN_TAG_NAME,
+             Configurable.RATING_MATURE_TAG_NAME,
+             Configurable.RATING_EXPLICIT_TAG_NAME]
   ratings.each do |rating|
     Rating.find_or_create_by(name: rating, canonical: true)
   end

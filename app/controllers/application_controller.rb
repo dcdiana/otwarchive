@@ -289,7 +289,7 @@ public
       @page_title = title + " - " + author + " - " + fandom
     end
 
-    @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
+    @page_title += " [#{Configurable.APP_NAME}]" unless options[:omit_archive_name]
     @page_title.html_safe
   end
 
@@ -297,7 +297,7 @@ public
   before_filter :set_media
   def set_media
     uncategorized = Media.uncategorized
-    @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+    @menu_media = Media.by_name - [Media.find_by_name(Configurable.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
   end
 
   public

@@ -5,15 +5,15 @@ describe AdminMailer do
     let(:mail) { AdminMailer.abuse_report(report.id) }
 
     it "has the correct subject" do
-      expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
+      expect(mail).to have_subject "[#{Configurable.APP_SHORT_NAME}] Admin Abuse Report"
     end
 
     it "delivers to the correct address" do
-      expect(mail).to deliver_to ArchiveConfig.ABUSE_ADDRESS
+      expect(mail).to deliver_to Configurable.ABUSE_ADDRESS
     end
 
     it "delivers from the correct address" do
-      expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
+      expect(mail).to deliver_from("Archive of Our Own <#{Configurable.RETURN_ADDRESS}>")
     end
 
     it "body text contains the comment" do
@@ -37,11 +37,11 @@ describe AdminMailer do
 
 
    it "has the correct subject" do
-     expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
+     expect(mail).to have_subject "[#{Configurable.APP_SHORT_NAME}] Admin Abuse Report"
    end
 
    it "delivers to the correct address" do
-     expect(mail).to deliver_to ArchiveConfig.ABUSE_ADDRESS
+     expect(mail).to deliver_to Configurable.ABUSE_ADDRESS
    end
 
    it "ccs the user who filed the report" do
@@ -49,7 +49,7 @@ describe AdminMailer do
    end
 
    it "delivers from the correct address" do
-     expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
+     expect(mail).to deliver_from("Archive of Our Own <#{Configurable.RETURN_ADDRESS}>")
    end
 
    it "body text contains the comment" do

@@ -14,7 +14,7 @@ class SpamReport
     spam = {}
     users.each do |user|
       new_works, score = score_user(user)
-      if score > ArchiveConfig.SPAM_THRESHOLD
+      if score > Configurable.SPAM_THRESHOLD
         spam[user.id] = { score: score, work_ids: new_works }
       end
     end

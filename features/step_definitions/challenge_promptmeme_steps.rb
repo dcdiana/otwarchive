@@ -94,7 +94,7 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/
   step "I should see \"Collection was successfully created\""
 
   check("prompt_meme_signup_open")
-  fill_in("prompt_meme_requests_num_allowed", with: ArchiveConfig.PROMPT_MEME_PROMPTS_MAX)
+  fill_in("prompt_meme_requests_num_allowed", with: Configurable.PROMPT_MEME_PROMPTS_MAX)
   fill_in("prompt_meme_requests_num_required", with: 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_required", with: 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_allowed", with: 2)

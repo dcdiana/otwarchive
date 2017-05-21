@@ -38,7 +38,7 @@ describe AbuseReport do
   end
 
   context "invalid url" do
-    let(:invalid_url){build(:abuse_report, url: "nothing before #{ArchiveConfig.APP_URL}")}
+    let(:invalid_url){build(:abuse_report, url: "nothing before #{Configurable.APP_URL}")}
     it "text before url" do
       expect(invalid_url.save).to be_falsey
       expect(invalid_url.errors[:url]).not_to be_empty
@@ -76,7 +76,7 @@ describe AbuseReport do
 
     let(:common_report) { build(:abuse_report, url: work_url) }
     it "can be submitted up to a set number of times" do
-      (ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX - 1).times do
+      (Configurable.ABUSE_REPORTS_PER_WORK_MAX - 1).times do
         create(:abuse_report, url: work_url)
       end
       expect(common_report.save).to be_truthy
@@ -88,7 +88,7 @@ describe AbuseReport do
     work_url = "http://archiveofourown.org/works/789"
 
     before do
-      ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
+      Configurable.ABUSE_REPORTS_PER_WORK_MAX.times do
         create(:abuse_report, url: work_url)
       end
     end
@@ -96,7 +96,7 @@ describe AbuseReport do
     shared_examples "enough already" do |url|
       let(:report) { build(:abuse_report, url: url) }
       it "can't be submitted" do
-        expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX)
+        expect(AbuseReport.count).to eq(Configurable.ABUSE_REPORTS_PER_WORK_MAX)
         expect(report.save).to be_falsey
         expect(report.errors[:base].first).to include("URL has already been reported.")
       end
@@ -105,7 +105,7 @@ describe AbuseReport do
     shared_examples "alright" do |url|
       let(:report) { build(:abuse_report, url: url) }
       it "can be submitted" do
-        expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX)
+        expect(AbuseReport.count).to eq(Configurable.ABUSE_REPORTS_PER_WORK_MAX)
         expect(report.save).to be_truthy
         expect(report.errors[:base]).to be_empty
       end
@@ -152,7 +152,7 @@ describe AbuseReport do
 
     let(:common_report) { build(:abuse_report, url: page_url) }
     it "can be submitted an unrestricted number of times" do
-      ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
+      Configurable.ABUSE_REPORTS_PER_WORK_MAX.times do
         create(:abuse_report, url: page_url)
       end
       expect(common_report.save).to be_truthy

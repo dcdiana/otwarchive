@@ -57,14 +57,14 @@ class Skin < ActiveRecord::Base
 
   validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
   validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
-  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
+  validates_length_of :icon_alt_text, allow_blank: true, maximum: Configurable.ICON_ALT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.ICON_ALT_MAX)
 
-  validates_length_of :description, allow_blank: true, maximum: ArchiveConfig.SUMMARY_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
+  validates_length_of :description, allow_blank: true, maximum: Configurable.SUMMARY_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.SUMMARY_MAX)
 
-  validates_length_of :css, allow_blank: true, maximum: ArchiveConfig.CONTENT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
+  validates_length_of :css, allow_blank: true, maximum: Configurable.CONTENT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.CONTENT_MAX)
 
   before_validation :clean_media
   def clean_media
@@ -193,7 +193,7 @@ class Skin < ActiveRecord::Base
     if self.author.is_a? User
       author.login
     else
-      ArchiveConfig.APP_SHORT_NAME
+      Configurable.APP_SHORT_NAME
     end
   end
 

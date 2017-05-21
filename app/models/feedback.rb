@@ -9,8 +9,8 @@ class Feedback < ActiveRecord::Base
   validates_presence_of :summary
   validates_presence_of :language
   validates :email, email_veracity: {allow_blank: true}
-  validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
+  validates_length_of :summary, maximum: Configurable.FEEDBACK_SUMMARY_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
   validate :check_for_spam
   def check_for_spam
@@ -19,8 +19,8 @@ class Feedback < ActiveRecord::Base
 
   def akismet_attributes
     {
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
+      key: Configurable.AKISMET_KEY,
+      blog: Configurable.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
       comment_author_email: email,
@@ -62,7 +62,7 @@ class Feedback < ActiveRecord::Base
       email: email,
       username: username,
       user_agent: user_agent,
-      site_revision: ArchiveConfig.REVISION.to_s
+      site_revision: Configurable.REVISION.to_s
     )
     reporter.send_report!
   end

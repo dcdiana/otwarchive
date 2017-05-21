@@ -20,20 +20,20 @@ describe Work do
   context "invalid title" do
     it { expect(build(:work, title: nil)).to be_invalid }
 
-    let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
-    it "cannot be shorter than ArchiveConfig.TITLE_MIN" do
+    let(:too_short) {Configurable.TITLE_MIN - 1}
+    it "cannot be shorter than Configurable.TITLE_MIN" do
       expect(build(:work, title: Faker::Lorem.characters(too_short))).to be_invalid
     end
 
-    let(:too_long) {ArchiveConfig.TITLE_MAX + 1}
-    it "cannot be longer than ArchiveConfig.TITLE_MAX" do
+    let(:too_long) {Configurable.TITLE_MAX + 1}
+    it "cannot be longer than Configurable.TITLE_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
   end
 
   context "clean_and_validate_title" do
     before do
-      ArchiveConfig.TITLE_MIN = 10
+      Configurable.TITLE_MIN = 10
     end
     it "strips out leading spaces from the title" do
       @work = create(:work, title: "    Has Leading Spaces")
@@ -41,38 +41,38 @@ describe Work do
       expect(@work.title).to eq("Has Leading Spaces")
     end
 
-    let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
-    it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
+    let(:too_short) {Configurable.TITLE_MIN - 1}
+    it "errors if the title without leading spaces is shorter than #{Configurable.TITLE_MIN}" do
       expect {
         @work = create(:work, title: "     #{too_short}")
         @work.reload
-      }.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
+      }.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{Configurable.TITLE_MIN} characters long without leading spaces.")
     end
 
     # Reset the min characters in the title, so that the factory is valid
     after do
-      ArchiveConfig.TITLE_MIN = 1
+      Configurable.TITLE_MIN = 1
     end
   end
 
   context "invalid summary" do
-    let(:too_long) {ArchiveConfig.SUMMARY_MAX + 1}
-    it "cannot be longer than ArchiveConfig.SUMMARY_MAX" do
+    let(:too_long) {Configurable.SUMMARY_MAX + 1}
+    it "cannot be longer than Configurable.SUMMARY_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
   end
 
   context "invalid notes" do
-    let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
-    it "cannot be longer than ArchiveConfig.NOTES_MAX" do
+    let(:too_long) {Configurable.NOTES_MAX + 1}
+    it "cannot be longer than Configurable.NOTES_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
   end
 
 
   context "invalid endnotes" do
-    let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
-    it "cannot be longer than ArchiveConfig.NOTES_MAX" do
+    let(:too_long) {Configurable.NOTES_MAX + 1}
+    it "cannot be longer than Configurable.NOTES_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
   end

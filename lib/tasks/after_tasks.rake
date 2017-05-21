@@ -20,9 +20,9 @@ namespace :After do
 #        raise "Something went wrong with the warning tags"
 #      end
 #    end
-#    violence_tag = Warning.find_by_name(ArchiveConfig.WARNING_VIOLENCE_TAG_NAME)
-#    if violence_tag && violence_tag.name != ArchiveConfig.WARNING_VIOLENCE_TAG_NAME
-#      violence_tag.update_attribute(:name, ArchiveConfig.WARNING_VIOLENCE_TAG_NAME)
+#    violence_tag = Warning.find_by_name(Configurable.WARNING_VIOLENCE_TAG_NAME)
+#    if violence_tag && violence_tag.name != Configurable.WARNING_VIOLENCE_TAG_NAME
+#      violence_tag.update_attribute(:name, Configurable.WARNING_VIOLENCE_TAG_NAME)
 #    end
 #  end
 #

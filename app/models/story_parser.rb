@@ -318,9 +318,9 @@ class StoryParser
       work.restricted = options[:restricted] || options[:importing_for_others] || false
 
       # set default values for required tags
-      work.fandom_string = meta_or_default(work.fandom_string, options[:fandom], ArchiveConfig.FANDOM_NO_TAG_NAME)
-      work.rating_string = meta_or_default(work.rating_string, options[:rating], ArchiveConfig.RATING_DEFAULT_TAG_NAME)
-      work.warning_strings = meta_or_default(work.warning_strings, options[:warning], ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+      work.fandom_string = meta_or_default(work.fandom_string, options[:fandom], Configurable.FANDOM_NO_TAG_NAME)
+      work.rating_string = meta_or_default(work.rating_string, options[:rating], Configurable.RATING_DEFAULT_TAG_NAME)
+      work.warning_strings = meta_or_default(work.warning_strings, options[:warning], Configurable.WARNING_DEFAULT_TAG_NAME)
       work.category_string = meta_or_default(work.category_string, options[:category], [])
       work.character_string = meta_or_default(work.character_string, options[:character], [])
       work.relationship_string = meta_or_default(work.relationship_string, options[:relationship], [])
@@ -340,9 +340,9 @@ class StoryParser
 
       work.posted = true if options[:post_without_preview]
       work.chapters.each do |chapter|
-        if chapter.content.length > ArchiveConfig.CONTENT_MAX
+        if chapter.content.length > Configurable.CONTENT_MAX
           # TODO: eventually: insert a new chapter
-          chapter.content.truncate(ArchiveConfig.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
+          chapter.content.truncate(Configurable.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
         end
 
         chapter.posted = true
@@ -720,7 +720,7 @@ class StoryParser
 
       tags = []
       @doc.css("div.dev-about-cat-cc a.h").each { |node| tags << node.inner_html }
-      work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
+      work_params[:freeform_string] = clean_tags(tags.join(Configurable.DELIMITER_FOR_OUTPUT))
 
       details = @doc.css("div.dev-right-bar-content span[title]")
       unless details[0].nil?
@@ -771,7 +771,7 @@ class StoryParser
       if infotext.match(/Warnings: (.*)Challenges/)
         tags += $1.split(',').map {|c| c.strip}.uniq unless $1 == "None"
       end
-      work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
+      work_params[:freeform_string] = clean_tags(tags.join(Configurable.DELIMITER_FOR_OUTPUT))
 
       # use last updated date as revised_at date
       if site == "lotrfanfiction" && infotext.match(/Updated: (\d\d)\/(\d\d)\/(\d\d)/)
@@ -958,10 +958,10 @@ class StoryParser
       newlist = []
       tagslist.each do |tag|
         tag.gsub!(/[\*\<\>]/, '')
-        tag = truncate_on_word_boundary(tag, ArchiveConfig.TAG_MAX)
+        tag = truncate_on_word_boundary(tag, Configurable.TAG_MAX)
         newlist << tag unless tag.blank?
       end
-      return newlist.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+      return newlist.join(Configurable.DELIMITER_FOR_OUTPUT)
     end
 
     def truncate_on_word_boundary(text, max_length)
@@ -989,15 +989,15 @@ class StoryParser
     def convert_rating_string(rating)
       rating = rating.downcase
       if rating.match(/^(nc-?1[78]|x|ma|explicit)/)
-        ArchiveConfig.RATING_EXPLICIT_TAG_NAME
+        Configurable.RATING_EXPLICIT_TAG_NAME
       elsif rating.match(/^(r|m|mature)/)
-        ArchiveConfig.RATING_MATURE_TAG_NAME
+        Configurable.RATING_MATURE_TAG_NAME
       elsif rating.match(/^(pg-?1[35]|t|teen)/)
-        ArchiveConfig.RATING_TEEN_TAG_NAME
+        Configurable.RATING_TEEN_TAG_NAME
       elsif rating.match(/^(pg|g|k+|k|general audiences)/)
-        ArchiveConfig.RATING_GENERAL_TAG_NAME
+        Configurable.RATING_GENERAL_TAG_NAME
       else
-        ArchiveConfig.RATING_DEFAULT_TAG_NAME
+        Configurable.RATING_DEFAULT_TAG_NAME
       end
     end
 

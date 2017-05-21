@@ -19,7 +19,7 @@ describe AdminMailer do
     let(:email) { UserMailer.archive_notification(@admin, @user, @subject, @message).deliver }
 
     it "should have a valid from line" do
-      text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      text = "From: Archive of Our Own <#{Configurable.RETURN_ADDRESS}>"
       expect(email.encoded).to match(/#{text}/)
     end
   end

@@ -5,8 +5,8 @@ class Gift < ActiveRecord::Base
   has_one :user, through: :pseud
 
   validates_length_of :recipient_name,
-    :maximum => ArchiveConfig.NAME_LENGTH_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NAME_LENGTH_MAX),
+    :maximum => Configurable.NAME_LENGTH_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => Configurable.NAME_LENGTH_MAX),
     :allow_blank => true
 
   validates_format_of :recipient_name,

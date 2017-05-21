@@ -13,7 +13,7 @@ class AdminSetting < ActiveRecord::Base
   belongs_to :default_skin, class_name: 'Skin'
 
   def self.invite_from_queue_enabled?
-    self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED
+    self.first ? self.first.invite_from_queue_enabled? : Configurable.INVITE_FROM_QUEUE_ENABLED
   end
   def self.request_invite_enabled?
     self.first ? self.first.request_invite_enabled? : false
@@ -22,16 +22,16 @@ class AdminSetting < ActiveRecord::Base
     self.first.invite_from_queue_at
   end
   def self.invite_from_queue_number
-    self.first ? self.first.invite_from_queue_number : ArchiveConfig.INVITE_FROM_QUEUE_NUMBER
+    self.first ? self.first.invite_from_queue_number : Configurable.INVITE_FROM_QUEUE_NUMBER
   end
   def self.invite_from_queue_frequency
-    self.first ? self.first.invite_from_queue_frequency : ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY
+    self.first ? self.first.invite_from_queue_frequency : Configurable.INVITE_FROM_QUEUE_FREQUENCY
   end
   def self.account_creation_enabled?
-    self.first ? self.first.account_creation_enabled? : ArchiveConfig.ACCOUNT_CREATION_ENABLED
+    self.first ? self.first.account_creation_enabled? : Configurable.ACCOUNT_CREATION_ENABLED
   end
   def self.days_to_purge_unactivated
-    self.first ? self.first.days_to_purge_unactivated : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+    self.first ? self.first.days_to_purge_unactivated : Configurable.DAYS_TO_PURGE_UNACTIVATED
   end
   def self.suspend_filter_counts?
     self.first ? self.first.suspend_filter_counts? : false

@@ -8,8 +8,8 @@
         <dt><%= f.label :title, ts("Chapter Title") %> <%= link_to_help "chapter-title" %></dt>
         <dd>
           <%= f.text_field :title, class: "observe_textlength" %>
-          <%= live_validation_for_field("chapter_title", presence: false, maximum_length: ArchiveConfig.TITLE_MAX) %>
-          <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
+          <%= live_validation_for_field("chapter_title", presence: false, maximum_length: Configurable.TITLE_MAX) %>
+          <%= generate_countdown_html("chapter_title", Configurable.TITLE_MAX) %>
         </dd>
 
         <dt><%= f.label :position, ts("Chapter Number") %></dt>
@@ -34,8 +34,8 @@
         <dt class="summary"><%= f.label :summary, ts("Chapter Summary") %></dt>
         <dd class="summary">
           <%= f.text_area :summary, rows: 4, cols: 60, class: "observe_textlength" %>
-          <%= live_validation_for_field("chapter_summary", presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
-          <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) %>
+          <%= live_validation_for_field("chapter_summary", presence: false, maximum_length: Configurable.SUMMARY_MAX) %>
+          <%= generate_countdown_html("chapter_summary", Configurable.SUMMARY_MAX) %>
         </dd>
 
         <%= render "works/notes_form", f: f, type: "chapter" %>
@@ -57,13 +57,13 @@
   <div class="rtf-html-field">
     <%= f.text_area :content, id: "content", class: "mce-editor observe_textlength large" %>
     <%= live_validation_for_field("content",
-          maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED,
-          minimum_length: ArchiveConfig.CONTENT_MIN,
-          tooLongMessage: ts("We salute your ambition! But sadly each chapter of a work must be less than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX_DISPLAYED.to_s),
-          tooShortMessage: ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.", min: ArchiveConfig.CONTENT_MIN.to_s),
-          failureMessage: ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.", min: ArchiveConfig.CONTENT_MIN.to_s))
+          maximum_length: Configurable.CONTENT_MAX_DISPLAYED,
+          minimum_length: Configurable.CONTENT_MIN,
+          tooLongMessage: ts("We salute your ambition! But sadly each chapter of a work must be less than %{max} characters long.", max: Configurable.CONTENT_MAX_DISPLAYED.to_s),
+          tooShortMessage: ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.", min: Configurable.CONTENT_MIN.to_s),
+          failureMessage: ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.", min: Configurable.CONTENT_MIN.to_s))
         %>
-        <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX_DISPLAYED) %>
+        <%= generate_countdown_html("content", Configurable.CONTENT_MAX_DISPLAYED) %>
       </div>
     </fieldset>
 

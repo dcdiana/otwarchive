@@ -1,5 +1,5 @@
 require 'will_paginate/array'
-WillPaginate.per_page = ArchiveConfig.ITEMS_PER_PAGE
+WillPaginate.per_page = Configurable.ITEMS_PER_PAGE
 
 module WillPaginate
   module ActionView

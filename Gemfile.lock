@@ -1,3 +1,9 @@
+PATH
+  remote: /home/vagrant/otwarchive/configurable_engine
+  specs:
+    configurable_engine (0.4.9.3)
+      rails (> 3.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -446,6 +452,7 @@ DEPENDENCIES
   capybara (~> 2.6.2)
   capybara-screenshot
   cocaine
+  configurable_engine!
   connection_pool
   coveralls (~> 0.8.12)
   css_parser

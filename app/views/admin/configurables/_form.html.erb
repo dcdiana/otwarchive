@@ -1,0 +1,16 @@
+<%= form_for([:admin, configurable]) do |f| %>
+
+    <div class="field">
+      <%= f.label "Name" %>
+      <%= Configurable.defaults[@configurable.name][:name] %>
+    </div>
+
+    <div class="field">
+      <%= f.label "Value" %>
+      <%= f.text_area :value %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Submit" %>
+    </div>
+<% end %>

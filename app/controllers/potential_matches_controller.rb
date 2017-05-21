@@ -92,7 +92,7 @@ class PotentialMatchesController < ApplicationController
       else
         @assignments = @collection.assignments.with_request.with_offer.order_by_requesting_pseud
       end
-      @assignments = @assignments.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
+      @assignments = @assignments.paginate :page => params[:page], :per_page => Configurable.ITEMS_PER_PAGE
     end
   end
 

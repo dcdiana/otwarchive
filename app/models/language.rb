@@ -17,7 +17,7 @@ class Language < ActiveRecord::Base
   end
 
   def self.default
-    self.find_or_create_by(short: ArchiveConfig.DEFAULT_LANGUAGE_SHORT, name: ArchiveConfig.DEFAULT_LANGUAGE_NAME)
+    self.find_or_create_by(short: Configurable[:DEFAULT_LANGUAGE_SHORT], name: Configurable[:DEFAULT_LANGUAGE_NAME])
   end
 
   def work_count

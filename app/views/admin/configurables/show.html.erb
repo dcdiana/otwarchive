@@ -1,0 +1,13 @@
+<p>
+  <strong>Name:</strong>
+  <%= Configurable.defaults[@configurable.name][:name] %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @configurable.value %>
+</p>
+
+
+<%= link_to 'Edit', edit_admin_configurable_path(@configurable) %> |
+<%= link_to 'Back', admin_configurables_path %>

@@ -120,28 +120,28 @@ class Collection < ActiveRecord::Base
   validates_presence_of :name, message: ts("Please enter a name for your collection.")
   validates_uniqueness_of :name, case_sensitive: false, message: ts('Sorry, that name is already taken. Try again, please!')
   validates_length_of :name,
-    minimum: ArchiveConfig.TITLE_MIN,
-    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
+    minimum: Configurable.TITLE_MIN,
+    too_short: ts("must be at least %{min} characters long.", min: Configurable.TITLE_MIN)
   validates_length_of :name,
-    maximum: ArchiveConfig.TITLE_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
+    maximum: Configurable.TITLE_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.TITLE_MAX)
   validates_format_of :name,
     message: ts('must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.'),
     with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
-  validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
+  validates_length_of :icon_alt_text, allow_blank: true, maximum: Configurable.ICON_ALT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.ICON_ALT_MAX)
+  validates_length_of :icon_comment_text, allow_blank: true, maximum: Configurable.ICON_COMMENT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.ICON_COMMENT_MAX)
 
   validates :email, email_veracity: {allow_blank: true}
 
   validates_presence_of :title, message: ts("Please enter a title to be displayed for your collection.")
   validates_length_of :title,
-    minimum: ArchiveConfig.TITLE_MIN,
-    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
+    minimum: Configurable.TITLE_MIN,
+    too_short: ts("must be at least %{min} characters long.", min: Configurable.TITLE_MIN)
   validates_length_of :title,
-    maximum: ArchiveConfig.TITLE_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
+    maximum: Configurable.TITLE_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.TITLE_MAX)
   validate :no_reserved_strings
   def no_reserved_strings
     errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
@@ -155,8 +155,8 @@ class Collection < ActiveRecord::Base
 
   validates_length_of :description,
     allow_blank: true,
-    maximum: ArchiveConfig.SUMMARY_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
+    maximum: Configurable.SUMMARY_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: Configurable.SUMMARY_MAX)
 
   validates_format_of :header_image_url, allow_blank: true, with: URI::regexp(%w(http https)), message: ts("is not a valid URL.")
   validates_format_of :header_image_url, allow_blank: true, with: /\.(png|gif|jpg)$/, message: ts("can only point to a gif, jpg, or png file."), multiline: true

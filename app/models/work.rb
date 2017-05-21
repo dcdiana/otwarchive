@@ -96,27 +96,27 @@ class Work < ActiveRecord::Base
   ########################################################################
   validates_presence_of :title
   validates_length_of :title,
-    :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :minimum => Configurable.TITLE_MIN,
+    :too_short=> ts("must be at least %{min} characters long.", :min => Configurable.TITLE_MIN)
 
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :maximum => Configurable.TITLE_MAX,
+    :too_long=> ts("must be less than %{max} characters long.", :max => Configurable.TITLE_MAX)
 
   validates_length_of :summary,
     :allow_blank => true,
-    :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :maximum => Configurable.SUMMARY_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => Configurable.SUMMARY_MAX)
 
   validates_length_of :notes,
     :allow_blank => true,
-    :maximum => ArchiveConfig.NOTES_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :maximum => Configurable.NOTES_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => Configurable.NOTES_MAX)
 
   validates_length_of :endnotes,
     :allow_blank => true,
-    :maximum => ArchiveConfig.NOTES_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :maximum => Configurable.NOTES_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => Configurable.NOTES_MAX)
 
   # Checks that work has at least one author
   def validate_authors
@@ -144,8 +144,8 @@ class Work < ActiveRecord::Base
   def clean_and_validate_title
     unless self.title.blank?
       self.title = self.title.strip
-      if self.title.length < ArchiveConfig.TITLE_MIN
-        errors.add(:base, ts("Title must be at least %{min} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
+      if self.title.length < Configurable.TITLE_MIN
+        errors.add(:base, ts("Title must be at least %{min} characters long without leading spaces.", :min => Configurable.TITLE_MIN))
         return false
       else
         self.title_to_sort_on = self.sorted_title
@@ -1009,7 +1009,7 @@ class Work < ActiveRecord::Base
   # Virtual attribute for parent work, via related_works
   def parent_attributes=(attributes)
     unless attributes[:url].blank?
-      if attributes[:url].include?(ArchiveConfig.APP_HOST)
+      if attributes[:url].include?(Configurable.APP_HOST)
         if attributes[:url].match(/\/works\/(\d+)/)
           begin
             self.new_parent = {:parent => Work.find($1), :translation => attributes[:translation]}
@@ -1123,7 +1123,7 @@ class Work < ActiveRecord::Base
   scope :latest, -> { visible_to_all.
                       revealed.
                       order("revised_at DESC").
-                      limit(ArchiveConfig.ITEMS_PER_PAGE) }
+                      limit(Configurable.ITEMS_PER_PAGE) }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
@@ -1282,7 +1282,7 @@ class Work < ActiveRecord::Base
 
     works = works.posted
     works = works.order("revised_at DESC")
-    works = works.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    works = works.paginate(:page => options[:page], :per_page => Configurable.ITEMS_PER_PAGE)
   end
 
   def self.collected_without_filters(user, options)
@@ -1293,7 +1293,7 @@ class Work < ActiveRecord::Base
       works = works.posted
     end
     works = works.order("revised_at DESC")
-    works = works.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    works = works.paginate(:page => options[:page], :per_page => Configurable.ITEMS_PER_PAGE)
   end
 
   ########################################################################
@@ -1335,8 +1335,8 @@ class Work < ActiveRecord::Base
     user = users.first
     self.spam = Akismetor.spam?(
       comment_type: 'Fan Fiction',
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
+      key: Configurable.AKISMET_KEY,
+      blog: Configurable.AKISMET_NAME,
       user_ip: ip_address,
       comment_date_gmt: created_at.to_time.iso8601,
       blog_lang: language.short,

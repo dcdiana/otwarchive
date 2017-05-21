@@ -34,7 +34,7 @@
       <% else %>
         <%= ew.text_field :title, :class => "observe_textlength" %>
       <% end %>
-      <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) %>
+      <%= generate_countdown_html("bookmark_external_title", Configurable.TITLE_MAX) %>
     </dd>
     <dt>
       <%= ew.label :summary, ts('Creator\'s Summary') %>
@@ -42,14 +42,14 @@
     </dt>
     <dd>
       <%= ew.text_area :summary, :rows => 5, :class => "observe_textlength"%>
-      <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) %>
+      <%= generate_countdown_html("bookmark_external_summary", Configurable.SUMMARY_MAX) %>
     </dd>
   </dl>
 </fieldset>
 <fieldset>
   <legend><%= ts('Creator\'s Tags') %></legend>
   <p>
-    <%= ts('Creator\'s Tags (comma separated, %{max} characters per tag). Only a fandom is required.', :max => ArchiveConfig.TAG_MAX) %>
+    <%= ts('Creator\'s Tags (comma separated, %{max} characters per tag). Only a fandom is required.', :max => Configurable.TAG_MAX) %>
   </p>
   <dl>
     <dt class="required">
@@ -66,7 +66,7 @@
                                Rating.defaults_by_severity,
                                :name,
                                :name,
-                               selected: ArchiveConfig.RATING_DEFAULT_TAG_NAME 
+                               selected: Configurable.RATING_DEFAULT_TAG_NAME
                                %>
     </dd>
     <dt>

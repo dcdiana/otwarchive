@@ -62,9 +62,9 @@ class UsersController < ApplicationController
     visible = visible_items(current_user)
 
     @fandoms = @fandoms.all # force eager loading
-    @works = visible[:works].revealed.non_anon.order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    @series = visible[:series].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @works = visible[:works].revealed.non_anon.order('revised_at DESC').limit(Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @series = visible[:series].order('updated_at DESC').limit(Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
 
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @user.id,
@@ -102,7 +102,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = ts('Your password has been changed')
-      @user.create_log_item(options = { action: ArchiveConfig.ACTION_PASSWORD_RESET })
+      @user.create_log_item(options = { action: Configurable.ACTION_PASSWORD_RESET })
 
       redirect_to(user_profile_path(@user)) && return
     else
@@ -200,7 +200,7 @@ class UsersController < ApplicationController
 
     flash[:notice] = ts('Signup complete! Please log in.')
 
-    @user.create_log_item(action: ArchiveConfig.ACTION_ACTIVATE)
+    @user.create_log_item(action: Configurable.ACTION_ACTIVATE)
 
     # assign over any external authors that belong to this user
     external_authors = []
@@ -241,7 +241,7 @@ class UsersController < ApplicationController
       if @new_email == @confirm_email && @user.save
         flash[:notice] = ts('Your email has been successfully updated')
         UserMailer.change_email(@user.id, @old_email, @new_email).deliver
-        @user.create_log_item(options = { action: ArchiveConfig.ACTION_NEW_EMAIL })
+        @user.create_log_item(options = { action: Configurable.ACTION_NEW_EMAIL })
       else
         flash[:error] = ts("Email addresses don't match! Please retype and try again")
       end

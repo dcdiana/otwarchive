@@ -48,7 +48,7 @@ class OwnedTagSetsController < ApplicationController
         @tag_sets = @tag_sets.order("created_at DESC")
       end
     end
-    @tag_sets = @tag_sets.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+    @tag_sets = @tag_sets.paginate(:per_page => (params[:per_page] || Configurable.ITEMS_PER_PAGE), :page => (params[:page] || 1))
   end
 
   def show_options

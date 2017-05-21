@@ -12,7 +12,7 @@ class Tag < ActiveRecord::Base
   # Note: the order of this array is important.
   # It is the order that tags are shown in the header of a work
   # (banned tags are not shown)
-  TYPES = ArchiveConfig.TAG_TYPES
+  TYPES = Configurable.TAG_TYPES
 
   # these tags can be filtered on
   FILTERS = TYPES - ['Banned', 'Media']
@@ -21,7 +21,7 @@ class Tag < ActiveRecord::Base
   VISIBLE = TYPES - ['Media', 'Banned']
 
 
-  USER_DEFINED = ArchiveConfig.USER_DEFINED_TAG_TYPES
+  USER_DEFINED = Configurable.USER_DEFINED_TAG_TYPES
 
   def self.write_redis_to_database
     REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
@@ -44,8 +44,8 @@ class Tag < ActiveRecord::Base
     # 70 minutes. However we then apply a filter such that the minimum amount of time we will cache something for
     # would be TAGGINGS_COUNT_MIN_TIME ( defaults to 3 minutes ) and the maximum amount of time would be
     # TAGGINGS_COUNT_MAX_TIME ( defaulting to an hour ).
-    expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 1500)
-    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
+    expiry_time = count / (Configurable.TAGGINGS_COUNT_CACHE_DIVISOR || 1500)
+    [[expiry_time, (Configurable.TAGGINGS_COUNT_MIN_TIME || 3)].max, (Configurable.TAGGINGS_COUNT_MAX_TIME || 60)].min
   end
 
   def taggings_count_cache_key
@@ -61,7 +61,7 @@ class Tag < ActiveRecord::Base
   def taggings_count=(value)
     expiry_time = Tag.taggings_count_expiry(value)
     # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
-    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
+    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= (Configurable.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
     write_taggings_to_redis(value)
   end
 
@@ -75,7 +75,7 @@ class Tag < ActiveRecord::Base
 
   def update_tag_cache
     cache_read = Rails.cache.read(taggings_count_cache_key)
-    taggings_count if cache_read.nil? || (cache_read < (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
+    taggings_count if cache_read.nil? || (cache_read < (Configurable.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
   end
 
   def update_counts_cache(id)
@@ -156,8 +156,8 @@ class Tag < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_length_of :name, :minimum => 1, :message => "cannot be blank."
   validates_length_of :name,
-    :maximum => ArchiveConfig.TAG_MAX,
-    :message => "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
+    :maximum => Configurable.TAG_MAX,
+    :message => "of tag is too long -- try using less than #{Configurable.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
     :message => 'of a tag cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
@@ -487,7 +487,7 @@ class Tag < ActiveRecord::Base
   # Used for associations, such as work.fandoms.string
   # Yields a comma-separated list of tag names
   def self.string
-    all.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    all.map{|tag| tag.name}.join(Configurable.DELIMITER_FOR_OUTPUT)
   end
 
   # Use the tag name in urls and escape url-unfriendly characters

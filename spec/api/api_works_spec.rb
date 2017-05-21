@@ -261,16 +261,16 @@ describe "API WorksController - Create works" do
         expect(@work.chapters.first.title).to be_nil
       end
       it "Fandoms should be the default Archive fandom ('No Fandom')" do
-        expect(@work.fandoms.first.name).to eq(ArchiveConfig.FANDOM_NO_TAG_NAME)
+        expect(@work.fandoms.first.name).to eq(Configurable.FANDOM_NO_TAG_NAME)
       end
       it "Warnings should be the default Archive warning" do
-        expect(@work.warnings.first.name).to eq(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+        expect(@work.warnings.first.name).to eq(Configurable.WARNING_DEFAULT_TAG_NAME)
       end
       it "Characters should be empty" do
         expect(@work.characters).to be_empty
       end
       it "Ratings should be the default Archive rating" do
-        expect(@work.ratings.first.name).to eq(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+        expect(@work.ratings.first.name).to eq(Configurable.RATING_DEFAULT_TAG_NAME)
       end
       it "Relationships should be empty" do
         expect(@work.relationships).to be_empty
@@ -396,16 +396,16 @@ describe "API WorksController - Create works" do
         expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
       end
       it "Fandoms should be the default Archive fandom ('No Fandom')" do
-        expect(@work.fandoms.first.name).to eq(ArchiveConfig.FANDOM_NO_TAG_NAME)
+        expect(@work.fandoms.first.name).to eq(Configurable.FANDOM_NO_TAG_NAME)
       end
       it "Warnings should be the default Archive warning" do
-        expect(@work.warnings.first.name).to eq(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+        expect(@work.warnings.first.name).to eq(Configurable.WARNING_DEFAULT_TAG_NAME)
       end
       it "Characters should be empty" do
         expect(@work.characters).to be_empty
       end
       it "Ratings should be the default Archive rating" do
-        expect(@work.ratings.first.name).to eq(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+        expect(@work.ratings.first.name).to eq(Configurable.RATING_DEFAULT_TAG_NAME)
       end
       it "Relationships should be empty" do
         expect(@work.relationships).to be_empty

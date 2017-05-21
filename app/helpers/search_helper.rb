@@ -39,7 +39,7 @@ module SearchHelper
   
   
   def random_search_tip
-    ArchiveConfig.SEARCH_TIPS[rand(ArchiveConfig.SEARCH_TIPS.size)]
+    Configurable.SEARCH_TIPS[rand(Configurable.SEARCH_TIPS.size)]
   end
   
 end

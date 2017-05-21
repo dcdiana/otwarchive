@@ -14,7 +14,7 @@
 <%= form_for @tag, as: :tag, url: { action: "create" }  do |f| %>
   <dl>
     <dt><%= f.label :name, ts('Name') %></dt>
-    <dd><%= f.text_field :name, size: ArchiveConfig.TAG_MAX %></dd>
+    <dd><%= f.text_field :name, size: Configurable.TAG_MAX %></dd>
 
     <dt><%= f.label :canonical, ts('Canonical') %></dt>
     <dd><%= f.check_box :canonical %></dd>

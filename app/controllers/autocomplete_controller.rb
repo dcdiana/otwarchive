@@ -199,7 +199,7 @@ class AutocompleteController < ApplicationController
   def admin_posts
     if params[:term].present?
       search_param = '%' + params[:term] + '%'
-      results = AdminPost.non_translated.where("title LIKE ?", search_param).limit(ArchiveConfig.MAX_RECENT).map do |result|
+      results = AdminPost.non_translated.where("title LIKE ?", search_param).limit(Configurable.MAX_RECENT).map do |result|
         {id: (post_id = result.id),
         name: result.title + " (Post ##{post_id})" }
       end
@@ -210,7 +210,7 @@ class AutocompleteController < ApplicationController
   def admin_post_tags
     if params[:term].present?
       search_param = '%' + params[:term].strip + '%'
-      query = AdminPostTag.where("name LIKE ?", search_param).limit(ArchiveConfig.MAX_RECENT)
+      query = AdminPostTag.where("name LIKE ?", search_param).limit(Configurable.MAX_RECENT)
       render_output(query.pluck(:name))
     end
   end

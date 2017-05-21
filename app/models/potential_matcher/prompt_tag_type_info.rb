@@ -29,8 +29,8 @@ class PromptTagTypeInfo
     # consider the tag type "good." (This is a lower limit -- the more
     # different tags we see, the easier it will be to match on that type.)
     @limit_first_tags = [
-      ArchiveConfig.PREPROCESS_COUNT_TAGS_MAX,
-      @total_signups / ArchiveConfig.PREPROCESS_COUNT_TAGS_DIVISOR
+        Configurable.PREPROCESS_COUNT_TAGS_MAX,
+        @total_signups / Configurable.PREPROCESS_COUNT_TAGS_DIVISOR
     ].min
 
     # Control the number of prompts with any that we want to see for a given
@@ -38,8 +38,8 @@ class PromptTagTypeInfo
     # the more prompts we see with "any," the harder it will be to match on
     # that type.)
     @limit_prompts_with_any = [
-      ArchiveConfig.PREPROCESS_COUNT_ANY_MIN,
-      @total_prompts / ArchiveConfig.PREPROCESS_COUNT_ANY_DIVISOR
+        Configurable.PREPROCESS_COUNT_ANY_MIN,
+        @total_prompts / Configurable.PREPROCESS_COUNT_ANY_DIVISOR
     ].max
   end
 

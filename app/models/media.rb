@@ -1,7 +1,7 @@
 class Media < Tag
   include ActiveModel::ForbiddenAttributesProtection
 
-  NAME = ArchiveConfig.MEDIA_CATEGORY_NAME
+  NAME = Configurable.MEDIA_CATEGORY_NAME
   index_name Tag.index_name
 
   has_many :common_taggings, :as => :filterable
@@ -13,7 +13,7 @@ class Media < Tag
 
   # The media tag for unwrangled fandoms
   def self.uncategorized
-    self.find_or_create_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)
+    self.find_or_create_by_name(Configurable.MEDIA_UNCATEGORIZED_NAME)
   end
 
   def add_association(tag)

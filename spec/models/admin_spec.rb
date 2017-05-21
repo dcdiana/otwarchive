@@ -13,7 +13,7 @@ describe Admin, :ready do
     it "without a user name" do
       expect { create(:admin, login: nil) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-                    "Validation failed: Login can't be blank, Login is too short (minimum is #{ArchiveConfig.LOGIN_LENGTH_MIN} characters)")
+                    "Validation failed: Login can't be blank, Login is too short (minimum is #{Configurable.LOGIN_LENGTH_MIN} characters)")
     end
 
     it "without an invalid email address" do
@@ -42,30 +42,30 @@ describe Admin, :ready do
   end
 
   context "length of login" do
-    it "if under #{ArchiveConfig.LOGIN_LENGTH_MIN} long characters" do
-      expect { create(:admin, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MIN - 1)) }.to \
+    it "if under #{Configurable.LOGIN_LENGTH_MIN} long characters" do
+      expect { create(:admin, login: Faker::Lorem.characters(Configurable.LOGIN_LENGTH_MIN - 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-                    "Validation failed: Login is too short (minimum is #{ArchiveConfig.LOGIN_LENGTH_MIN} characters)")
+                    "Validation failed: Login is too short (minimum is #{Configurable.LOGIN_LENGTH_MIN} characters)")
     end
 
-    it "is invalid if over #{ArchiveConfig.LOGIN_LENGTH_MAX + 1} characters" do
-      expect { create(:admin, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MAX + 1)) }.to \
+    it "is invalid if over #{Configurable.LOGIN_LENGTH_MAX + 1} characters" do
+      expect { create(:admin, login: Faker::Lorem.characters(Configurable.LOGIN_LENGTH_MAX + 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-                    "Validation failed: Login is too long (maximum is #{ArchiveConfig.LOGIN_LENGTH_MAX} characters)")
+                    "Validation failed: Login is too long (maximum is #{Configurable.LOGIN_LENGTH_MAX} characters)")
     end
   end
 
   context "length of password" do
-    it "is invalid if under #{ArchiveConfig.PASSWORD_LENGTH_MIN - 1} characters" do
-      expect { create(:admin, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MIN - 1)) }.to \
+    it "is invalid if under #{Configurable.PASSWORD_LENGTH_MIN - 1} characters" do
+      expect { create(:admin, password: Faker::Lorem.characters(Configurable.PASSWORD_LENGTH_MIN - 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-                    "Validation failed: Password is too short (minimum is #{ArchiveConfig.PASSWORD_LENGTH_MIN} characters)")
+                    "Validation failed: Password is too short (minimum is #{Configurable.PASSWORD_LENGTH_MIN} characters)")
     end
 
-    it "is invalid if over #{ArchiveConfig.PASSWORD_LENGTH_MAX + 1} characters" do
-      expect { create(:admin, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MAX + 1)) }.to \
+    it "is invalid if over #{Configurable.PASSWORD_LENGTH_MAX + 1} characters" do
+      expect { create(:admin, password: Faker::Lorem.characters(Configurable.PASSWORD_LENGTH_MAX + 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-                    "Validation failed: Password is too long (maximum is #{ArchiveConfig.PASSWORD_LENGTH_MAX} characters)")
+                    "Validation failed: Password is too long (maximum is #{Configurable.PASSWORD_LENGTH_MAX} characters)")
     end
   end
 

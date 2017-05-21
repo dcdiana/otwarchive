@@ -5,7 +5,7 @@ class CommentObserver < ActiveRecord::Observer
   def after_create(comment)
     comment.reload
     # eventually we will set the locale to the user's stored language of choice
-    #Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]
+    #Locale.set Configurable.SUPPORTED_LOCALES[Configurable.DEFAULT_LOCALE]
     users = []
     admins = []
 
@@ -150,7 +150,7 @@ class CommentObserver < ActiveRecord::Observer
 
     def content_too_different?(new_content, old_content)
       # we added more than the threshold # of chars, just return
-      return true if new_content.length > (old_content.length + ArchiveConfig.COMMENT_MODERATION_THRESHOLD)
+      return true if new_content.length > (old_content.length + Configurable.COMMENT_MODERATION_THRESHOLD)
 
       # quick and dirty iteration to compare the two strings
       cost = 0
@@ -165,7 +165,7 @@ class CommentObserver < ActiveRecord::Observer
 
         cost += 1
         # interrupt as soon as we have changed > threshold chars
-        return true if cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
+        return true if cost > Configurable.COMMENT_MODERATION_THRESHOLD
 
         # peek ahead to see if we can catch up on either side eg if a letter has been inserted/deleted
         if new_content[new_i + 1] == old_content[old_i]
@@ -179,7 +179,7 @@ class CommentObserver < ActiveRecord::Observer
         end
       end
 
-      return cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
+      return cost > Configurable.COMMENT_MODERATION_THRESHOLD
     end
 
     def add_feedback_to_inbox(user, comment)

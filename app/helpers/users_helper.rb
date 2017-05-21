@@ -156,27 +156,27 @@ module UsersHelper
   end
 
   def log_item_action_name(action)
-    if action == ArchiveConfig.ACTION_ACTIVATE
+    if action == Configurable.ACTION_ACTIVATE
       t('users_helper.log_validated', default: 'Account Validated')
-    elsif action == ArchiveConfig.ACTION_ADD_ROLE
+    elsif action == Configurable.ACTION_ADD_ROLE
       t('users_helper.log_role_added', default: 'Role Added: ')
-    elsif action == ArchiveConfig.ACTION_REMOVE_ROLE
+    elsif action == Configurable.ACTION_REMOVE_ROLE
       t('users_helper.log_role_removed', default: 'Role Removed: ')
-    elsif action == ArchiveConfig.ACTION_SUSPEND
+    elsif action == Configurable.ACTION_SUSPEND
       t('users_helper.log_suspended', default: 'Suspended until ')
-    elsif action == ArchiveConfig.ACTION_UNSUSPEND
+    elsif action == Configurable.ACTION_UNSUSPEND
       t('users_helper.log_lift_suspension', default: 'Suspension Lifted')
-    elsif action == ArchiveConfig.ACTION_BAN
+    elsif action == Configurable.ACTION_BAN
       t('users_helper.log_ban', default: 'Suspended Permanently')
-    elsif action == ArchiveConfig.ACTION_WARN
+    elsif action == Configurable.ACTION_WARN
       t('users_helper.log_warn', default: 'Warned')
-    elsif action == ArchiveConfig.ACTION_RENAME
+    elsif action == Configurable.ACTION_RENAME
       t('users_helper.log_rename', default: 'Username Changed')
-    elsif action == ArchiveConfig.ACTION_PASSWORD_RESET
+    elsif action == Configurable.ACTION_PASSWORD_RESET
       t('users_helper.log_password_change', default: 'Password Changed')
-    elsif action == ArchiveConfig.ACTION_NEW_EMAIL
+    elsif action == Configurable.ACTION_NEW_EMAIL
       t('users_helper.log_email_change', default: 'Email Changed')
-    elsif action == ArchiveConfig.ACTION_TROUBLESHOOT
+    elsif action == Configurable.ACTION_TROUBLESHOOT
       t('users_helper.log_troubleshot', default: 'Account Troubleshot')
     end
   end

@@ -7,10 +7,10 @@ class AbuseReport < ActiveRecord::Base
   validates_presence_of :comment
   validates_presence_of :url
   validate :work_is_not_over_reported
-  validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
+  validates_length_of :summary, maximum: Configurable.FEEDBACK_SUMMARY_MAX,
                                 too_long: ts('must be less than %{max}
                                              characters long.',
-                                max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
+                                max: Configurable.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
   scope :by_date, -> { order('created_at DESC') }
 
@@ -30,7 +30,7 @@ class AbuseReport < ActiveRecord::Base
   end
 
   app_url_regex = Regexp.new('^https?:\/\/(www\.)?' +
-                             ArchiveConfig.APP_HOST, true)
+                             Configurable.APP_HOST, true)
   validates_format_of :url, with: app_url_regex,
                             message: ts('does not appear to be on this site.'),
                             multiline: true
@@ -66,7 +66,7 @@ class AbuseReport < ActiveRecord::Base
                                                  url LIKE ?',
                                                  1.month.ago,
                                                  "%#{work_params_only}%").count
-      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
+      if existing_reports_total >= Configurable.ABUSE_REPORTS_PER_WORK_MAX
         errors[:base] << ts('URL has already been reported. To make sure the
                             Abuse Team can handle reports quickly and
                             efficiently, we limit the number of times a URL can

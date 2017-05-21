@@ -399,7 +399,7 @@ end
 When /^I list the work "([^"]*)" as inspiration$/ do |title|
   work = Work.find_by(title: title)
   check("parent-options-show")
-  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
+  url_of_work = work_url(work).sub("www.example.com", Configurable.APP_HOST)
   fill_in("work_parent_attributes_url", with: url_of_work)
 end
 When /^I set the publication date to today$/ do

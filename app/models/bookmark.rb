@@ -12,7 +12,7 @@ class Bookmark < ActiveRecord::Base
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
   validates_length_of :notes,
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+                      :maximum => Configurable.NOTES_MAX, :too_long => ts("must be less than %{max} letters long.", :max => Configurable.NOTES_MAX)
 
   default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
 
@@ -67,7 +67,7 @@ class Bookmark < ActiveRecord::Base
 
   scope :visible_to_admin, -> { not_private }
 
-  scope :latest, -> { is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
+  scope :latest, -> { is_public.limit(Configurable.ITEMS_PER_PAGE).join_work }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
@@ -136,7 +136,7 @@ class Bookmark < ActiveRecord::Base
   end
 
   def tag_string
-    tags.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tags.map{|tag| tag.name}.join(Configurable.DELIMITER_FOR_OUTPUT)
   end
 
   def tag_string=(tag_string)
@@ -147,7 +147,7 @@ class Bookmark < ActiveRecord::Base
 
     # Replace unicode full-width commas
     tag_string.gsub!(/\uff0c|\u3001/, ',')
-    tag_array = tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT)
+    tag_array = tag_string.split(Configurable.DELIMITER_FOR_INPUT)
 
     tag_array.each do |string|
       string.strip!
@@ -172,7 +172,7 @@ class Bookmark < ActiveRecord::Base
     unless User.current_user == user
       bookmarks = bookmarks.is_public
     end
-    bookmarks = bookmarks.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    bookmarks = bookmarks.paginate(:page => options[:page], :per_page => Configurable.ITEMS_PER_PAGE)
   end
 
   #################################

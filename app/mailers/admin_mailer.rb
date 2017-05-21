@@ -3,7 +3,7 @@ class AdminMailer < ActionMailer::Base
 
   layout 'mailer'
   helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
+  default from: "Archive of Our Own " + "<#{Configurable.RETURN_ADDRESS}>"
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
@@ -11,8 +11,8 @@ class AdminMailer < ActionMailer::Base
     @url = abuse_report.url
     @comment = abuse_report.comment
     mail(
-      to: ArchiveConfig.ABUSE_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
+      to: Configurable.ABUSE_ADDRESS,
+      subject: "[#{Configurable.APP_SHORT_NAME}] Admin Abuse Report"
     )
   end
 
@@ -22,7 +22,7 @@ class AdminMailer < ActionMailer::Base
     @email = "translation@transformativeworks.org"
     mail(
       to: @email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Creation",
+      subject: "[#{Configurable.APP_SHORT_NAME}] FAQ Creation",
     )
   end
 
@@ -32,7 +32,7 @@ class AdminMailer < ActionMailer::Base
     @email = "translation@transformativeworks.org"
     mail(
       to: @email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Edit",
+      subject: "[#{Configurable.APP_SHORT_NAME}] FAQ Edit",
          )
   end
 
@@ -46,9 +46,9 @@ class AdminMailer < ActionMailer::Base
              end
     @language = feedback.language
     mail(
-      from: feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : feedback.email,
-      to: ArchiveConfig.FEEDBACK_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
+      from: feedback.email.blank? ? Configurable.RETURN_ADDRESS : feedback.email,
+      to: Configurable.FEEDBACK_ADDRESS,
+      subject: "[#{Configurable.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
   end
 
@@ -62,8 +62,8 @@ class AdminMailer < ActionMailer::Base
       user_ids.size.to_s + " users, including: " + User.limit(20).find(user_ids).map(&:login).join(", ")
     end
     mail(
-      to: ArchiveConfig.WEBMASTER_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Archive Notification Sent - #{subject}"
+      to: Configurable.WEBMASTER_ADDRESS,
+      subject: "[#{Configurable.APP_SHORT_NAME}] Admin Archive Notification Sent - #{subject}"
     )
   end
   
@@ -72,8 +72,8 @@ class AdminMailer < ActionMailer::Base
     # admin = Admin.find(admin_id)
     @comment = Comment.find(comment_id)
     mail(
-      to: ArchiveConfig.ADMIN_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
+      to: Configurable.ADMIN_ADDRESS,
+      subject: "[#{Configurable.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
     )
   end
 
@@ -82,8 +82,8 @@ class AdminMailer < ActionMailer::Base
     # admin = Admin.find(admin_id)
     @comment = Comment.find(comment_id)
     mail(
-      to: ArchiveConfig.ADMIN_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
+      to: Configurable.ADMIN_ADDRESS,
+      subject: "[#{Configurable.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
     )
   end
 
@@ -91,8 +91,8 @@ class AdminMailer < ActionMailer::Base
   def send_spam_alert(spam)
     @spam = spam
     mail(
-      to: ArchiveConfig.SPAM_ALERT_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Potential spam alert"
+      to: Configurable.SPAM_ALERT_ADDRESS,
+      subject: "[#{Configurable.APP_SHORT_NAME}] Potential spam alert"
     )
   end
 end

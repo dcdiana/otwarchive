@@ -6,9 +6,9 @@
     <p>Email address: <%= raw @email %></p>
   <% end %>
   <p>Language: <%= @language %></p>
-  <% unless ArchiveConfig.REVISION.blank? %>
+  <% unless Configurable.REVISION.blank? %>
     <p>
-      Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
+      Archive revision: (rev. <%= Configurable.REVISION %>)
     </p>
   <% end %>
 

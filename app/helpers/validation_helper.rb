@@ -77,9 +77,9 @@ module ValidationHelper
   # More custom usage (from work form): 
   #    <%= c.text_area :content, :class => "mce-editor", :id => "content" %>
   #    <%= live_validation_for_field('content', 
-  #        :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
-  #        :tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,
-  #        :tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/ArchiveConfig.CONTENT_MIN,
+  #        :maximum_length => Configurable.CONTENT_MAX, :minimum_length => Configurable.CONTENT_MIN,
+  #        :tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/Configurable.CONTENT_MAX,
+  #        :tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/Configurable.CONTENT_MIN,
   #        :failureMessage => 'You did want to post a story here, right?')
   #    %>
   # 

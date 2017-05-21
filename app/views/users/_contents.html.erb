@@ -5,7 +5,7 @@
     <h3 class="heading"><%= ts("Fandoms") %></h3>
     <ol class="index group">
       <% @fandoms.each_with_index do |fandom, i| %>
-        <% if i>= ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD && !params[:expand_fandoms] %>
+        <% if i>= Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD && !params[:expand_fandoms] %>
           <li class="more hidden">
         <% else %>
           <li>
@@ -18,7 +18,7 @@
         </li>
      <% end %>
     </ol>
-    <% if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+    <% if @fandoms.length > Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
       <p class="actions">
         <noscript>  
           <% if params[:expand_fandoms] %>
@@ -43,11 +43,11 @@
       <% end %>
     </ul>
     <% if @pseud %>
-      <% if @pseud.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+      <% if @pseud.works.count > Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
         <ul class="actions" role="navigation"><li><%= print_pseud_works_link(@pseud) %></li>
       <% end %>
     <% else %>   
-      <% if @user.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+      <% if @user.works.count > Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
         <ul class="actions" role="navigation"><li><%= print_works_link(@user) %></li></ul>
       <% end %>
     <% end %>
@@ -63,11 +63,11 @@
       <% end %>
     </ol>
     <% if @pseud %>
-      <% if @pseud.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+      <% if @pseud.series.count > Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
         <ul class="actions" role="navigation"><li><%= print_pseud_series_link(@pseud) %></li></ul>
       <% end %>
     <% else %>
-      <% if @user.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+      <% if @user.series.count > Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
         <ul class="actions" role="navigation"><li><%= print_series_link(@user) %></li></ul>
       <% end %>
     <% end %> 
@@ -84,11 +84,11 @@
     </ol>
     <% unless @user == User.orphan_account %>
       <% if @pseud %>
-        <% if @pseud.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+        <% if @pseud.bookmarks.visible.size > Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
           <ul class="actions" role="navigation"><li><%= print_pseud_bookmarks_link(@pseud) %></li></ul>
         <% end %>
       <% else %>
-        <% if @user.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+        <% if @user.bookmarks.visible.size > Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
           <ul class="actions" role="navigation"><li><%= print_bookmarks_link(@user) %></li></ul>
         <% end %>
       <% end %> 

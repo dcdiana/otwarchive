@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Otwarchive::Application.config.secret_token = ArchiveConfig.SESSION_SECRET
+Otwarchive::Application.config.secret_token = Configurable.SESSION_SECRET

@@ -197,7 +197,7 @@ When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
 
   commentable = chapter
 
-  count = ArchiveConfig.COMMENT_THREAD_MAX_DEPTH + 1
+  count = Configurable.COMMENT_THREAD_MAX_DEPTH + 1
 
   count.times do |i|
     commentable = Comment.create(

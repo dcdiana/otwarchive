@@ -3,7 +3,7 @@ class Admin < ActiveRecord::Base
 
   devise :database_authenticatable,
          :validatable,
-         password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
+         password_length: Configurable.PASSWORD_LENGTH_MIN..Configurable.PASSWORD_LENGTH_MAX
 
   # http://stackoverflow.com/questions/6113375/converting-existing-password-hash-to-devise
   # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/acts_as_authentic/password.rb#L361
@@ -47,7 +47,7 @@ class Admin < ActiveRecord::Base
   has_many :invitations, as: :creator
   has_many :wrangled_tags, class_name: 'Tag', as: :last_wrangler
 
-  validates :login, presence: true, uniqueness: true, length: { in: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX }
+  validates :login, presence: true, uniqueness: true, length: { in: Configurable.LOGIN_LENGTH_MIN..Configurable.LOGIN_LENGTH_MAX }
   validates :email, uniqueness: true
   validates_presence_of :password_confirmation, if: :new_record?
   validates_confirmation_of :password, if: :new_record?

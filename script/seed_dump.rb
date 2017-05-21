@@ -91,7 +91,7 @@ def write_model(thing)
   # redact email addresses
   if thing.respond_to? :email
     if thing.respond_to? :login  # users and admins
-      thing.email = "#{thing.login}-seed@ao3.org" unless ArchiveConfig.DUMP_EMAIL.include?(thing.login)
+      thing.email = "#{thing.login}-seed@ao3.org" unless Configurable.DUMP_EMAIL.include?(thing.login)
     else # everything else
       thing.email = "#{thing.class.name}-#{thing.id.to_s}-seed@ao3.org"
     end
@@ -120,7 +120,7 @@ PSEUDS = {}
 TAGS = {}
 
 # populate the hashes
-ArchiveConfig.DUMP_SEEDS.each do |seed|
+Configurable.DUMP_SEEDS.each do |seed|
   user = User.find_by(login: seed)
   raise "seed #{seed} is not a user!!!" unless user.is_a?(User)
   USERS[user.id] = user
@@ -306,7 +306,7 @@ user_associations(USERS)
 ## COLLECTIONS first because it add more WORKS
 
 if MULTI
-  ArchiveConfig.DUMP_COLLECTION_SEEDS.each do |seed|
+  Configurable.DUMP_COLLECTION_SEEDS.each do |seed|
     collection = Collection.find_by(name: seed)
     raise "seed #{collection} is not a collection!!!" unless collection.is_a?(Collection)
     COLLECTIONS[collection.id] = collection

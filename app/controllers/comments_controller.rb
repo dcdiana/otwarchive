@@ -162,7 +162,7 @@ class CommentsController < ApplicationController
       end
     else
       if logged_in_as_admin?
-        @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
+        @comments = Comment.top_level.not_deleted.limit(Configurable.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
       else
         redirect_back_or_default(root_path)
         flash[:error] = ts("Sorry, you don't have permission to access that page.")
@@ -486,7 +486,7 @@ class CommentsController < ApplicationController
   # redirect to a particular comment in a thread, going into the thread
   # if necessary to display it
   def redirect_to_comment(comment, options = {})
-    if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
+    if comment.depth > Configurable.COMMENT_THREAD_MAX_DEPTH
       if comment.ultimate_parent.is_a?(Tag)
         default_options = {
            :controller => :comments,

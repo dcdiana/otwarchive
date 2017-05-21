@@ -34,12 +34,12 @@ module PermitYo
           if should_have_role
             unless self.roles.include?(role)
               self.roles << role
-              self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
+              self.create_log_item( options = {:action => Configurable.ACTION_ADD_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
             end
           else
             if self.roles.include?(role)
               self.roles.delete(role)
-              self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
+              self.create_log_item( options = {:action => Configurable.ACTION_REMOVE_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
             end
           end
         end

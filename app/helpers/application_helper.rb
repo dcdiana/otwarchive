@@ -162,11 +162,11 @@ module ApplicationHelper
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
     help_file = ""
     #if Locale.active && Locale.active.language
-    #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
+    #  help_file = "#{Configurable.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
     #end
 
     unless !help_file.blank? && File.exists?("#{Rails.root}/public/#{help_file}")
-      help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
+      help_file = "#{Configurable.HELP_DIRECTORY}/#{help_entry}.html"
     end
 
     " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
@@ -337,7 +337,7 @@ module ApplicationHelper
   end
 
   def mailto_link(user, options={})
-    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\" class=\"mailto\">
+    "<a href=\"mailto:#{h(user.email)}?subject=[#{Configurable.APP_SHORT_NAME}]#{options[:subject]}\" class=\"mailto\">
       <img src=\"/images/envelope_icon.gif\" alt=\"email #{h(user.login)}\">
     </a>".html_safe
   end
@@ -467,7 +467,7 @@ module ApplicationHelper
     checkboxes_ul = content_tag(:ul, checkboxes, class: css_class)
 
     toggle = "".html_safe
-    if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
+    if options[:include_toggle] && !options[:concise] && size > (Configurable.OPTIONS_TO_SHOW * 6)
       toggle = checkbox_section_toggle(checkboxes_id, size)
     end
 
@@ -479,10 +479,10 @@ module ApplicationHelper
     css_class = "options index group"
 
     if concise
-      css_class += " concise lots" if size > ArchiveConfig.OPTIONS_TO_SHOW
+      css_class += " concise lots" if size > Configurable.OPTIONS_TO_SHOW
     else
-      css_class += " many" if size > ArchiveConfig.OPTIONS_TO_SHOW
-      css_class += " lots" if size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
+      css_class += " many" if size > Configurable.OPTIONS_TO_SHOW
+      css_class += " lots" if size > (Configurable.OPTIONS_TO_SHOW * 6)
     end
 
     css_class

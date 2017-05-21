@@ -57,7 +57,7 @@ module WorksHelper
 
   # select default rating if this is a new work
   def rating_selected(work)
-    work.nil? || work.rating_string.empty? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : work.rating_string
+    work.nil? || work.rating_string.empty? ? Configurable.RATING_DEFAULT_TAG_NAME : work.rating_string
   end
 
   # Determines whether or not to expand the related work association fields when the work form loads

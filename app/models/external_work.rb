@@ -13,16 +13,16 @@ class ExternalWork < ActiveRecord::Base
   AUTHOR_LENGTH_MAX = 500
 
   validates_presence_of :title
-  validates_length_of :title, minimum: ArchiveConfig.TITLE_MIN,
+  validates_length_of :title, minimum: Configurable.TITLE_MIN,
                               too_short: ts("must be at least %{min} characters long.",
-                                            min: ArchiveConfig.TITLE_MIN)
-  validates_length_of :title, maximum: ArchiveConfig.TITLE_MAX,
+                                            min: Configurable.TITLE_MIN)
+  validates_length_of :title, maximum: Configurable.TITLE_MAX,
                               too_long: ts("must be less than %{max} characters long.",
-                                           max: ArchiveConfig.TITLE_MAX)
+                                           max: Configurable.TITLE_MAX)
 
-  validates_length_of :summary, allow_blank: true, maximum: ArchiveConfig.SUMMARY_MAX,
+  validates_length_of :summary, allow_blank: true, maximum: Configurable.SUMMARY_MAX,
                                 too_long: ts("must be less than %{max} characters long.",
-                                             max: ArchiveConfig.SUMMARY_MAX)
+                                             max: Configurable.SUMMARY_MAX)
 
   validates_presence_of :author, message: ts('^Creator can\'t be blank')
   validates_length_of :author, maximum: AUTHOR_LENGTH_MAX,

@@ -2,7 +2,7 @@ module SeriesHelper
 
   def show_series_data(work)
     series_data = series_data_for_work(work)
-    series_data.join(ArchiveConfig.DELIMITER_FOR_OUTPUT).html_safe
+    series_data.join(Configurable.DELIMITER_FOR_OUTPUT).html_safe
   end
 
   # this should only show prev and next works visible to the current user

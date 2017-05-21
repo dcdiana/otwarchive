@@ -7,11 +7,11 @@ describe AdminMailer do
      let(:mail) {AdminMailer.feedback(feedback.id)}
 
      it "has the correct subject" do
-       expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{feedback.summary}"
+       expect(mail).to have_subject "[#{Configurable.APP_SHORT_NAME}] Support - #{feedback.summary}"
      end
 
      it "delivers to the correct address" do
-       expect(mail).to deliver_to ArchiveConfig.FEEDBACK_ADDRESS
+       expect(mail).to deliver_to Configurable.FEEDBACK_ADDRESS
      end
 
      it "delivers from the correct address" do
@@ -34,15 +34,15 @@ describe AdminMailer do
     let(:mail) {AdminMailer.feedback(feedback.id)}
 
     it "has the correct subject" do
-      expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{feedback.summary}"
+      expect(mail).to have_subject "[#{Configurable.APP_SHORT_NAME}] Support - #{feedback.summary}"
     end
 
     it "delivers to the correct address" do
-      expect(mail).to deliver_to ArchiveConfig.FEEDBACK_ADDRESS
+      expect(mail).to deliver_to Configurable.FEEDBACK_ADDRESS
     end
 
     it "delivers from the correct address" do
-      expect(mail).to deliver_from ArchiveConfig.RETURN_ADDRESS
+      expect(mail).to deliver_from Configurable.RETURN_ADDRESS
     end
 
     it "body text contains the comment" do

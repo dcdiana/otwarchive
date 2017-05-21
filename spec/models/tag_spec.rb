@@ -13,11 +13,11 @@ describe Tag do
   context 'checking count caching' do
     before(:each) do
       # Set the minimal amount of time a tag can be cached for.
-      ArchiveConfig.TAGGINGS_COUNT_MIN_TIME = 1
+      Configurable.TAGGINGS_COUNT_MIN_TIME = 1
       # Set so that we need few uses of a tag to start caching it.
-      ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR = 2
+      Configurable.TAGGINGS_COUNT_CACHE_DIVISOR = 2
       # Set the minimum number of uses needed for before caching is started.
-      ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
+      Configurable.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
       @fandom_tag = FactoryGirl.create(:fandom)
     end
 
@@ -30,7 +30,7 @@ describe Tag do
       end
 
       it 'will start caching a when tag when that tag is used significantly' do
-        (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
+        (1..Configurable.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq 0
@@ -40,7 +40,7 @@ describe Tag do
         @fandom_tag.reload
         # This value should be cached and wrong
         expect(@fandom_tag.taggings_count_cache).to eq 0
-        expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
+        expect(@fandom_tag.taggings_count).to eq Configurable.TAGGINGS_COUNT_MIN_CACHE_COUNT
       end
     end
 
@@ -54,7 +54,7 @@ describe Tag do
       end
 
       it 'will start caching a when tag when that tag is used significantly' do
-        (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
+        (1..Configurable.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
           Tag.write_redis_to_database
           @fandom_tag.reload
@@ -65,20 +65,20 @@ describe Tag do
         Tag.write_redis_to_database
         @fandom_tag.reload
         # This value should be cached and wrong
-        expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
-        expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
+        expect(@fandom_tag.taggings_count_cache).to eq Configurable.TAGGINGS_COUNT_MIN_CACHE_COUNT
+        expect(@fandom_tag.taggings_count).to eq Configurable.TAGGINGS_COUNT_MIN_CACHE_COUNT
       end
 
       it "Writes to the database do not happen immeadiately" do
-        (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
+        (1..40 * Configurable.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq 0
         end
-        @fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
+        @fandom_tag.taggings_count = 40 * Configurable.TAGGINGS_COUNT_CACHE_DIVISOR
         Tag.write_redis_to_database
         @fandom_tag.reload
-        expect(@fandom_tag.taggings_count_cache).to eq 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
+        expect(@fandom_tag.taggings_count_cache).to eq 40 * Configurable.TAGGINGS_COUNT_CACHE_DIVISOR
       end
     end
   end

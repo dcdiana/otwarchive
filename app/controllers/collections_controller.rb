@@ -70,16 +70,16 @@ class CollectionsController < ApplicationController
 
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
-      visible_bookmarks = @collection.approved_bookmarks.visible.order('RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      @works = Work.in_collection(@collection).visible.random_order.limit(Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
+      visible_bookmarks = @collection.approved_bookmarks.visible.order('RAND()').limit(Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
+      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
       # visible_bookmarks = @collection.approved_bookmarks.visible(order: 'bookmarks.created_at DESC')
-      visible_bookmarks = Bookmark.in_collection(@collection).visible.order('bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      visible_bookmarks = Bookmark.in_collection(@collection).visible.order('bookmarks.created_at DESC').limit(Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     end
     # Having the number of items as a limit was finding the limited number of items, then visible ones within them
-    @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
+    @bookmarks = visible_bookmarks[0...Configurable.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
 
   end
 

@@ -7,8 +7,8 @@ class TagNomination < ActiveRecord::Base
   attr_accessor :from_fandom_nomination
 
   validates_length_of :tagname,
-    :maximum => ArchiveConfig.TAG_MAX,
-    :message => ts("^Tag nominations must be between 1 and #{ArchiveConfig.TAG_MAX} characters.")
+    :maximum => Configurable.TAG_MAX,
+    :message => ts("^Tag nominations must be between 1 and #{Configurable.TAG_MAX} characters.")
 
   validates_format_of :tagname,
     :if => "!tagname.blank?",

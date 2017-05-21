@@ -8,7 +8,7 @@ class CollectionMailer < ActionMailer::Base
   helper :series
 
   layout 'mailer'
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
+  default from: "Archive of Our Own " + "<#{Configurable.RETURN_ADDRESS}>"
   
   def item_added_notification(creation_id, collection_id, item_type)
     @item_type = item_type
@@ -16,7 +16,7 @@ class CollectionMailer < ActionMailer::Base
     @collection = Collection.find(collection_id)
     mail(
       to: @collection.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{@item_type.capitalize} added to " + @collection.title.gsub("&gt;", ">").gsub("&lt;", "<")
+      subject: "[#{Configurable.APP_SHORT_NAME}] #{@item_type.capitalize} added to " + @collection.title.gsub("&gt;", ">").gsub("&lt;", "<")
     )
   end
 end

@@ -6,13 +6,13 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` on Rails 4+ applications as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  config.secret_key = ArchiveConfig.SESSION_SECRET
+  config.secret_key = Configurable.SESSION_SECRET
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+  config.mailer_sender = "Archive of Our Own <#{Configurable.RETURN_ADDRESS}>"
 
   # Configure the class responsible to send e-mails.
   config.mailer = 'Devise::Mailer'
@@ -118,7 +118,7 @@ Devise.setup do |config|
   # their account can't be confirmed with the token any more.
   # Default is nil, meaning there is no restriction on how long a user can take
   # before confirming their account.
-  config.confirm_within = ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED.days
+  config.confirm_within = Configurable.DAYS_TO_PURGE_UNACTIVATED.days
 
   # If true, requires any email changes to be confirmed (exactly the same way as
   # initial account confirmation) to be applied. Requires additional unconfirmed_email
@@ -146,7 +146,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :validatable
   # Range for password length.
-  config.password_length = ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
+  config.password_length = Configurable.PASSWORD_LENGTH_MIN..Configurable.PASSWORD_LENGTH_MAX
 
   # Email regex used to validate email formats. It simply asserts that
   # one (and only one) @ exists in the given string. This is mainly

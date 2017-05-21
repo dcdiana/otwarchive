@@ -73,14 +73,14 @@ class Prompt < ActiveRecord::Base
     (restriction = get_prompt_restriction) && restriction.description_required
   end
   validates_length_of :description,
-    :maximum => ArchiveConfig.NOTES_MAX,
-    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    :maximum => Configurable.NOTES_MAX,
+    :too_long => ts("must be less than %{max} letters long.", :max => Configurable.NOTES_MAX)
   def title_required?
     (restriction = get_prompt_restriction) && restriction.title_required
   end
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
+    :maximum => Configurable.TITLE_MAX,
+    :too_long=> ts("must be less than %{max} letters long.", :max => Configurable.TITLE_MAX)
 
   validates :url, :url_format => {:allow_blank => true} # we validate the presence above, conditionally
 
@@ -115,7 +115,7 @@ class Prompt < ActiveRecord::Base
         unless tag_count.between?(required, allowed)
           taglist_string = taglist.empty? ?
               ts("none") :
-              "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+              "(#{tag_count}) -- " + taglist.collect(&:name).join(Configurable.DELIMITER_FOR_OUTPUT)
           if allowed == 0
             errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} cannot include any #{tag_type} tags, but you have included %{taglist}.",
               :taglist => taglist_string))
@@ -148,7 +148,7 @@ class Prompt < ActiveRecord::Base
             errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
               :tag_type => tag_type,
               :prompt_type => self.class.name.downcase,
-              :taglist => disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
+              :taglist => disallowed_taglist.collect(&:name).join(Configurable.DELIMITER_FOR_OUTPUT)))
           end
         else
           noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
@@ -156,7 +156,7 @@ class Prompt < ActiveRecord::Base
             errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
               :tag_type => tag_type,
               :prompt_type => self.class.name.downcase,
-              :taglist => noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
+              :taglist => noncanonical_taglist.collect(&:name).join(Configurable.DELIMITER_FOR_OUTPUT)))
           end
         end
       end
@@ -179,8 +179,8 @@ class Prompt < ActiveRecord::Base
           unless disallowed_taglist.empty?
             errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
                               :prompt_type => self.class.name.downcase,
-                              :tag_type => tag_type, :fandom => tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
-                              :taglist => disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
+                              :tag_type => tag_type, :fandom => tag_set.fandom_taglist.collect(&:name).join(Configurable.DELIMITER_FOR_OUTPUT),
+                              :taglist => disallowed_taglist.collect(&:name).join(Configurable.DELIMITER_FOR_OUTPUT)))
           end
         end
       end

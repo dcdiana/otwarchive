@@ -9,7 +9,7 @@
   # Authlogic gem
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true
-    if (ArchiveConfig.BCRYPT || "true") == "true"
+    if (Configurable.BCRYPT || "true") == "true"
       config.crypto_provider = Authlogic::CryptoProviders::BCrypt
       config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
     else
@@ -19,10 +19,10 @@
     # Use our own validations for login
     config.validate_login_field = false
     config.validates_length_of_password_field_options = { on: :update,
-                                                          minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                          minimum: Configurable.PASSWORD_LENGTH_MIN,
                                                           if: :has_no_credentials? }
     config.validates_length_of_password_confirmation_field_options = { on: :update,
-                                                                       minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                                       minimum: Configurable.PASSWORD_LENGTH_MIN,
                                                                        if: :has_no_credentials? }
   end
 
@@ -207,20 +207,20 @@
 
   ## used in app/views/users/new.html.erb
   validates_length_of :login,
-                      within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
+                      within: Configurable.LOGIN_LENGTH_MIN..Configurable.LOGIN_LENGTH_MAX,
                       too_short: ts("is too short (minimum is %{min_login} characters)",
-                                    min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
+                                    min_login: Configurable.LOGIN_LENGTH_MIN),
                       too_long: ts("is too long (maximum is %{max_login} characters)",
-                                   max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
+                                   max_login: Configurable.LOGIN_LENGTH_MAX)
 
   # allow nil so can save existing users
   validates_length_of :password,
-                      within: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX,
+                      within: Configurable.PASSWORD_LENGTH_MIN..Configurable.PASSWORD_LENGTH_MAX,
                       allow_nil: true,
                       too_short: ts("is too short (minimum is %{min_pwd} characters)",
-                                    min_pwd: ArchiveConfig.PASSWORD_LENGTH_MIN),
+                                    min_pwd: Configurable.PASSWORD_LENGTH_MIN),
                       too_long: ts("is too long (maximum is %{max_pwd} characters)",
-                                   max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
+                                   max_pwd: Configurable.PASSWORD_LENGTH_MAX)
 
   validates_format_of :login,
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
@@ -367,7 +367,7 @@
 
   # Gets the user account for authored objects if orphaning is enabled
   def self.orphan_account
-    User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
+    User.fetch_orphan_account if Configurable.ORPHANING_ALLOWED
   end
 
   # Allow admins to set roles and change email
@@ -561,6 +561,6 @@
   end
 
    def log_change_if_login_was_edited
-     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_was}; New Username: #{login}" }) if login_changed?
+     create_log_item(options = {action: Configurable.ACTION_RENAME, note: "Old Username: #{login_was}; New Username: #{login}" }) if login_changed?
    end
 end

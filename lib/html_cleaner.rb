@@ -88,11 +88,11 @@ module HtmlCleaner
   def sanitize_field(object, fieldname)
     return "" if object.send(fieldname).nil?
     if object.respond_to?("#{fieldname}_sanitizer_version")
-      if object.send("#{fieldname}_sanitizer_version") < ArchiveConfig.SANITIZER_VERSION
+      if object.send("#{fieldname}_sanitizer_version") < Configurable.SANITIZER_VERSION
         # sanitize and save it
         Rails.logger.debug "Sanitizing and saving #{fieldname} on #{object.class.name} (id #{object.id})"
         object.update_attribute(fieldname, sanitize_value(fieldname, object.send("#{fieldname}")))
-        object.update_attribute("#{fieldname}_sanitizer_version", ArchiveConfig.SANITIZER_VERSION)
+        object.update_attribute("#{fieldname}_sanitizer_version", Configurable.SANITIZER_VERSION)
       end
       # return the field without sanitizing
       Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
@@ -143,8 +143,8 @@ module HtmlCleaner
   end
 
   def sanitize_value(field, value)
-    if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
-      return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
+    if Configurable.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
+      return (value.to_i > 0) ? value.to_i : Configurable.NONZERO_INTEGER_PARAMETERS[field.to_s]
     end
     return "" if value.blank?
     value.strip!
@@ -153,16 +153,16 @@ module HtmlCleaner
       value.gsub!("<", "&lt;")
       value.gsub!(">", "&gt;")
     end
-    if ArchiveConfig.FIELDS_ALLOWING_LESS_THAN.include?(field.to_s)
+    if Configurable.FIELDS_ALLOWING_LESS_THAN.include?(field.to_s)
       value.gsub!("<", "&lt;")
     end
-    if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
+    if Configurable.FIELDS_ALLOWING_HTML.include?(field.to_s)
       # We're allowing users to use HTML in this field
       transformers = []
-      if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
+      if Configurable.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_VIDEO_EMBEDS
       end
-      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
+      if Configurable.FIELDS_ALLOWING_CSS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
       end
       # the screencast field shouldn't be wrapped in <p> tags
@@ -179,7 +179,7 @@ module HtmlCleaner
     end
 
     # Plain text fields can't contain &amp; entities:
-    value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
+    value.gsub!(/&amp;/, '&') unless (Configurable.FIELDS_ALLOWING_HTML_ENTITIES + Configurable.FIELDS_ALLOWING_HTML).include?(field.to_s)
     value
   end
 

@@ -3,7 +3,7 @@ class KudoMailer < ActionMailer::Base
 
   layout 'mailer'
   helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
+  default from: "Archive of Our Own " + "<#{Configurable.RETURN_ADDRESS}>"
 
   # send a batched-up notification
   # user_kudos is a hash of arrays converted to JSON string format
@@ -43,7 +43,7 @@ class KudoMailer < ActionMailer::Base
       end
       mail(
         to: user.email,
-        subject: t('mailer.kudos.you_have', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t('mailer.kudos.you_have', app_name: Configurable.APP_SHORT_NAME)
       )
     end
     ensure

@@ -101,7 +101,7 @@ class ChallengeClaimsController < ApplicationController
         redirect_to '/' and return
       end
     end
-    @claims = @claims.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
+    @claims = @claims.paginate :page => params[:page], :per_page => Configurable.ITEMS_PER_PAGE
   end
 
   def show

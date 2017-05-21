@@ -7,9 +7,9 @@ class ExternalAuthorName < ActiveRecord::Base
   validates_presence_of :name
 
   validates_length_of :name, 
-    :within => ArchiveConfig.NAME_LENGTH_MIN..ArchiveConfig.NAME_LENGTH_MAX,
-    :too_short => ts("is too short (minimum is %{min} characters)", :min => ArchiveConfig.NAME_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max} characters)", :max => ArchiveConfig.NAME_LENGTH_MAX)
+    :within => Configurable.NAME_LENGTH_MIN..Configurable.NAME_LENGTH_MAX,
+    :too_short => ts("is too short (minimum is %{min} characters)", :min => Configurable.NAME_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max} characters)", :max => Configurable.NAME_LENGTH_MAX)
 
   validates_uniqueness_of :name, :scope => :external_author_id, :case_sensitive => false
 

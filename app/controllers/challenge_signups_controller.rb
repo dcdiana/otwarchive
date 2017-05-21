@@ -105,7 +105,7 @@ class ChallengeSignupsController < ApplicationController
               @query = params[:query]
               @challenge_signups = @challenge_signups.where("pseuds.name LIKE ?", '%' + params[:query] + '%')
             end
-            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: Configurable.ITEMS_PER_PAGE)
           elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
             @challenge_signups = @collection.signups.by_user(current_user)
           else
@@ -127,9 +127,9 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def summary
-    if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
-      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
-    elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
+    if @collection.signups.count < (Configurable.ANONYMOUS_THRESHOLD_COUNT/2)
+      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", :count => ((Configurable.ANONYMOUS_THRESHOLD_COUNT/2)))
+    elsif @collection.signups.count > Configurable.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
       if !File.exists?(ChallengeSignup.summary_file(@collection)) ||
           (@collection.challenge.signup_open? && File.mtime(ChallengeSignup.summary_file(@collection)) < 1.hour.ago)

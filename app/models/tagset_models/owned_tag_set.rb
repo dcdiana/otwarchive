@@ -36,19 +36,19 @@ class OwnedTagSet < ActiveRecord::Base
   validates_presence_of :title, :message => ts("^Please enter a title for your tag set.")
   validates_uniqueness_of :title, :case_sensitive => false, :message => ts('^Sorry, that name is already taken. Try again, please!')
   validates_length_of :title,
-    :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :minimum => Configurable.TITLE_MIN,
+    :too_short=> ts("must be at least %{min} characters long.", :min => Configurable.TITLE_MIN)
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :maximum => Configurable.TITLE_MAX,
+    :too_long=> ts("must be less than %{max} characters long.", :max => Configurable.TITLE_MAX)
   validates_format_of :title,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
     :message => '^The title of a tag set cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
 
   validates_length_of :description,
     :allow_blank => true,
-    :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :maximum => Configurable.SUMMARY_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => Configurable.SUMMARY_MAX)
 
   validates_numericality_of :fandom_nomination_limit, :character_nomination_limit, :relationship_nomination_limit, :freeform_nomination_limit,
     :only_integer => true, :less_than_or_equal_to => 20, :greater_than_or_equal_to => 0,

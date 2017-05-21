@@ -2,7 +2,7 @@
   <row no="1">
     <fl val="Contact Name"><%= cdata_section(@report.username.present? ? @report.username : "Anonymous user") %></fl>
     <fl val="Email"><%= cdata_section(@report.email.present? ? @report.email : "do-not-reply@archiveofourown.org") %></fl>
-    <fl val="Subject"><%= cdata_section(@report.title.present? ? "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - #{@report.title.html_safe}" : "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - No Subject") %></fl>
+    <fl val="Subject"><%= cdata_section(@report.title.present? ? "[#{Configurable.APP_SHORT_NAME}] Abuse - #{@report.title.html_safe}" : "[#{Configurable.APP_SHORT_NAME}] Abuse - No Subject") %></fl>
     <fl val="Description"><%= cdata_section(@report.description.present? ? @report.description.html_safe : "No comment submitted.") %></fl>
     <fl val="Language"><%= cdata_section(@report.language.present? ? @report.language : "English") %></fl>
     <fl val="IP"><%= cdata_section(@report.ip_address.present? ? @report.ip_address : "Unknown IP") %></fl>

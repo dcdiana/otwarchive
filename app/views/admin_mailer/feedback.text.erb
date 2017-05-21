@@ -5,8 +5,8 @@ Here's some user feedback on the Archive!
     Email address: <%= raw @email %>
   <% end %>
     Language: <%= @language %>
-  <% unless ArchiveConfig.REVISION.blank? %>
-    Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
+  <% unless Configurable.REVISION.blank? %>
+    Archive revision: (rev. <%= Configurable.REVISION %>)
   <% end %>
 
 Feedback: 

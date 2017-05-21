@@ -22,7 +22,7 @@ class TagSet < ActiveRecord::Base
   # virtual attribute "tagnames" to use instead until after validation.
   attr_writer :tagnames
   def tagnames
-    @tagnames || tags.select('tags.name').order('tags.name').collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    @tagnames || tags.select('tags.name').order('tags.name').collect(&:name).join(Configurable.DELIMITER_FOR_OUTPUT)
   end
   def taglist
     @tagnames ? tagnames_to_list(@tagnames) : tags
@@ -45,8 +45,8 @@ class TagSet < ActiveRecord::Base
     attr_writer "#{type}_tagnames".to_sym
 
     define_method("#{type}_tagnames") do
-      self.instance_variable_get("@#{type}_tagnames") || (self.new_record? ? self.tags.select {|t| t.type == type.classify}.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT) :
-                                                                             self.tags.with_type(type.classify).select('tags.name').order('tags.name').collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
+      self.instance_variable_get("@#{type}_tagnames") || (self.new_record? ? self.tags.select {|t| t.type == type.classify}.collect(&:name).join(Configurable.DELIMITER_FOR_OUTPUT) :
+                                                                             self.tags.with_type(type.classify).select('tags.name').order('tags.name').collect(&:name).join(Configurable.DELIMITER_FOR_OUTPUT))
     end
 
     define_method("#{type}_taglist") do
@@ -98,7 +98,7 @@ class TagSet < ActiveRecord::Base
 
     # This overrides the type-specific
     if !@tagnames_to_remove.blank?
-      tags_to_remove = @tagnames_to_remove.split(ArchiveConfig.DELIMITER_FOR_INPUT).map {|tname| Tag.find_by_name(tname.squish)}.compact
+      tags_to_remove = @tagnames_to_remove.split(Configurable.DELIMITER_FOR_INPUT).map {|tname| Tag.find_by_name(tname.squish)}.compact
     end
 
     # And this overrides the add/remove-specific
@@ -124,12 +124,12 @@ class TagSet < ActiveRecord::Base
   def tagnames_must_exist
     nonexist = []
     if @tagnames
-      nonexist += @tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT).select {|t| !Tag.where(:name => t.squish).exists?}
+      nonexist += @tagnames.split(Configurable.DELIMITER_FOR_INPUT).select {|t| !Tag.where(:name => t.squish).exists?}
     end
     if owned_tag_set.nil?
       TAG_TYPES.each do |type|
         if (tagnames = self.instance_variable_get("@#{type}_tagnames_to_add"))
-          tagnames = (tagnames.is_a?(Array) ? tagnames : tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT)).map {|t| t.squish}
+          tagnames = (tagnames.is_a?(Array) ? tagnames : tagnames.split(Configurable.DELIMITER_FOR_INPUT)).map {|t| t.squish}
           nonexist += tagnames.select {|t| !t.blank? && !Tag.where(:name => t).exists?}
         end
       end
@@ -282,7 +282,7 @@ class TagSet < ActiveRecord::Base
 
   protected
     def tagnames_to_list(taglist, type=nil)
-      taglist = (taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : taglist).uniq
+      taglist = (taglist.kind_of?(String) ? taglist.split(Configurable.DELIMITER_FOR_INPUT) : taglist).uniq
       if type
         raise "Redshirt: Attempted to constantize invalid class initialize tagnames_to_list #{type}" unless TAG_TYPES.include?(type)
         if Tag::USER_DEFINED.include?(type.classify)

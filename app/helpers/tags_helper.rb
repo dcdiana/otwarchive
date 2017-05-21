@@ -157,20 +157,20 @@ module TagsHelper
   # Changes display name of warnings in works blurb
   def warning_display_name(name)
     case name
-    when ArchiveConfig.WARNING_DEFAULT_TAG_NAME
-      return ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_NONE_TAG_NAME
-      return ArchiveConfig.WARNING_NONE_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_NONE_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_SOME_TAG_NAME
-      return ArchiveConfig.WARNING_SOME_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_SOME_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_VIOLENCE_TAG_NAME
-      return ArchiveConfig.WARNING_VIOLENCE_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_VIOLENCE_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_DEATH_TAG_NAME
-      return ArchiveConfig.WARNING_DEATH_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_DEATH_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_NONCON_TAG_NAME
-      return ArchiveConfig.WARNING_NONCON_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_NONCON_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_CHAN_TAG_NAME
-      return ArchiveConfig.WARNING_CHAN_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_CHAN_TAG_DISPLAY_NAME.to_s : name
+    when Configurable.WARNING_DEFAULT_TAG_NAME
+      return Configurable.WARNING_DEFAULT_TAG_DISPLAY_NAME ? Configurable.WARNING_DEFAULT_TAG_DISPLAY_NAME.to_s : name
+    when Configurable.WARNING_NONE_TAG_NAME
+      return Configurable.WARNING_NONE_TAG_DISPLAY_NAME ? Configurable.WARNING_NONE_TAG_DISPLAY_NAME.to_s : name
+    when Configurable.WARNING_SOME_TAG_NAME
+      return Configurable.WARNING_SOME_TAG_DISPLAY_NAME ? Configurable.WARNING_SOME_TAG_DISPLAY_NAME.to_s : name
+    when Configurable.WARNING_VIOLENCE_TAG_NAME
+      return Configurable.WARNING_VIOLENCE_TAG_DISPLAY_NAME ? Configurable.WARNING_VIOLENCE_TAG_DISPLAY_NAME.to_s : name
+    when Configurable.WARNING_DEATH_TAG_NAME
+      return Configurable.WARNING_DEATH_TAG_DISPLAY_NAME ? Configurable.WARNING_DEATH_TAG_DISPLAY_NAME.to_s : name
+    when Configurable.WARNING_NONCON_TAG_NAME
+      return Configurable.WARNING_NONCON_TAG_DISPLAY_NAME ? Configurable.WARNING_NONCON_TAG_DISPLAY_NAME.to_s : name
+    when Configurable.WARNING_CHAN_TAG_NAME
+      return Configurable.WARNING_CHAN_TAG_DISPLAY_NAME ? Configurable.WARNING_CHAN_TAG_DISPLAY_NAME.to_s : name
     else
       return name
     end
@@ -318,13 +318,13 @@ module TagsHelper
   def get_warnings_class(warning_tags = [])
     if warning_tags.blank? # for testing
       "warning-choosenotto warnings"
-    elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME
+    elsif warning_tags.size == 1 && warning_tags.first.name == Configurable.WARNING_NONE_TAG_NAME
       # only one tag and it says "no warnings"
       "warning-no warnings"
-    elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+    elsif warning_tags.size == 1 && warning_tags.first.name == Configurable.WARNING_DEFAULT_TAG_NAME
       # only one tag and it says choose not to warn
       "warning-choosenotto warnings"
-    elsif warning_tags.size == 2 && ((warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_NONE_TAG_NAME) || (warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME))
+    elsif warning_tags.size == 2 && ((warning_tags.first.name == Configurable.WARNING_DEFAULT_TAG_NAME && warning_tags.second.name == Configurable.WARNING_NONE_TAG_NAME) || (warning_tags.first.name == Configurable.WARNING_NONE_TAG_NAME && warning_tags.second.name == Configurable.WARNING_DEFAULT_TAG_NAME))
       # two tags and they are "choose not to warn" and "no archive warnings apply" in either order
       "warning-choosenotto warnings"
     else
@@ -337,13 +337,13 @@ module TagsHelper
       "rating-notrated rating"
     else
       names = rating_tags.collect(&:name)
-      if names.include?(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
+      if names.include?(Configurable.RATING_EXPLICIT_TAG_NAME)
         "rating-explicit rating"
-      elsif names.include?(ArchiveConfig.RATING_MATURE_TAG_NAME)
+      elsif names.include?(Configurable.RATING_MATURE_TAG_NAME)
         "rating-mature rating"
-      elsif names.include?(ArchiveConfig.RATING_TEEN_TAG_NAME)
+      elsif names.include?(Configurable.RATING_TEEN_TAG_NAME)
         "rating-teen rating"
-      elsif names.include?(ArchiveConfig.RATING_GENERAL_TAG_NAME)
+      elsif names.include?(Configurable.RATING_GENERAL_TAG_NAME)
         "rating-general-audience rating"
       else
         "rating-notrated rating"
@@ -358,17 +358,17 @@ module TagsHelper
       "category-multi category"
     else
       case category_tags.first.name
-      when ArchiveConfig.CATEGORY_GEN_TAG_NAME
+      when Configurable.CATEGORY_GEN_TAG_NAME
         "category-gen category"
-      when ArchiveConfig.CATEGORY_SLASH_TAG_NAME
+      when Configurable.CATEGORY_SLASH_TAG_NAME
         "category-slash category"
-      when ArchiveConfig.CATEGORY_HET_TAG_NAME
+      when Configurable.CATEGORY_HET_TAG_NAME
         "category-het category"
-      when ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME
+      when Configurable.CATEGORY_FEMSLASH_TAG_NAME
         "category-femslash category"
-      when ArchiveConfig.CATEGORY_MULTI_TAG_NAME
+      when Configurable.CATEGORY_MULTI_TAG_NAME
         "category-multi category"
-      when ArchiveConfig.CATEGORY_OTHER_TAG_NAME
+      when Configurable.CATEGORY_OTHER_TAG_NAME
         "category-other category"
       else
         "category-none category"

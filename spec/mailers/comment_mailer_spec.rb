@@ -10,7 +10,7 @@ describe CommentMailer do
     let(:email) { CommentMailer.comment_sent_notification(@comment).deliver }
 
     it "should have a valid from line" do
-      text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      text = "From: Archive of Our Own <#{Configurable.RETURN_ADDRESS}>"
       expect(email.encoded).to match(/#{text}/)
     end
   end

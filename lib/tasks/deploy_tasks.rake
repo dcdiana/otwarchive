@@ -18,7 +18,7 @@ namespace :deploy do
   task(:clear_emails => [:get_servername, :environment]) do
     if @server == "stage" || @server == "dev"     
       puts "redacting all email addresses, will take a while"
-      User.where("login NOT IN (?)", ArchiveConfig.DUMP_EMAIL).find_each {|u| u.update_attribute(:email, "#{u.login}-test@ao3.org")}
+      User.where("login NOT IN (?)", Configurable.DUMP_EMAIL).find_each {|u| u.update_attribute(:email, "#{u.login}-test@ao3.org")}
     else
       puts "Don't clear emails except on stage!!!"
     end

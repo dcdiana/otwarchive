@@ -32,8 +32,8 @@
       <dd class="required">
         <%= form.text_area :content %>
         <%= live_validation_for_field(field_id(form, "content").to_sym,
-        minimum_length: ArchiveConfig.CONTENT_MIN,
-        failureMessage: ts("Please enter an answer that is at least %{min} characters long.", min: ArchiveConfig.CONTENT_MIN.to_s)) %>
+        minimum_length: Configurable.CONTENT_MIN,
+        failureMessage: ts("Please enter an answer that is at least %{min} characters long.", min: Configurable.CONTENT_MIN.to_s)) %>
       </dd>
       
       <dt>

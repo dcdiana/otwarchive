@@ -24,8 +24,8 @@
         <%= collection_form.text_field :name, "aria-describedby" => "name-field-notes" %>
         <p class="footnote" id="name-field-notes">
           <%= ts("%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)",
-                minimum: ArchiveConfig.TITLE_MIN,
-                maximum: ArchiveConfig.TITLE_MAX) %>
+                minimum: Configurable.TITLE_MIN,
+                maximum: Configurable.TITLE_MAX) %>
         </p>
       </dd>
 
@@ -91,7 +91,7 @@
     </dt>
     <dd>
       <%= collection_form.text_field :icon_alt_text, class: "observe_textlength" %>
-      <%= generate_countdown_html("collection_icon_alt_text", ArchiveConfig.ICON_ALT_MAX) %>
+      <%= generate_countdown_html("collection_icon_alt_text", Configurable.ICON_ALT_MAX) %>
     </dd>
 
     <dt>
@@ -100,15 +100,15 @@
     </dt>
     <dd>
       <%= collection_form.text_field :icon_comment_text, class: "observe_textlength" %>
-      <%= generate_countdown_html("collection_icon_comment_text", ArchiveConfig.ICON_COMMENT_MAX) %>
+      <%= generate_countdown_html("collection_icon_comment_text", Configurable.ICON_COMMENT_MAX) %>
     </dd>
 
       <dt><%= collection_form.label :description, ts("Brief description") %></dt>
       <dd>
         <%= collection_form.text_area :description, rows: 4, cols: 60, class: "description-field observe_textlength" %>
         <%= live_validation_for_field('collection_description',
-              presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
-        <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) %>
+              presence: false, maximum_length: Configurable.SUMMARY_MAX) %>
+        <%= generate_countdown_html("collection_description", Configurable.SUMMARY_MAX) %>
       </dd>
     </dl>
   </fieldset>
@@ -183,8 +183,8 @@
     <p>
       <%= profile_form.text_area :intro, rows: 10, cols: 80, class: "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_intro',
-            presence: false, maximum_length: ArchiveConfig.INFO_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_intro", ArchiveConfig.INFO_MAX) %>
+            presence: false, maximum_length: Configurable.INFO_MAX) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_intro", Configurable.INFO_MAX) %>
     </p>
 
     <h3 class="heading">
@@ -193,8 +193,8 @@
     <p>
       <%= profile_form.text_area :faq, rows: 10, cols: 80, class: "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_faq',
-            presence: false, maximum_length: ArchiveConfig.INFO_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_faq", ArchiveConfig.INFO_MAX) %>
+            presence: false, maximum_length: Configurable.INFO_MAX) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_faq", Configurable.INFO_MAX) %>
     </p>
 
     <h3 class="heading">
@@ -202,8 +202,8 @@
     </h3>
       <p><%= profile_form.text_area :rules, rows: 10, cols: 80, class: "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_rules',
-            presence: false, maximum_length: ArchiveConfig.INFO_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_rules", ArchiveConfig.INFO_MAX) %>
+            presence: false, maximum_length: Configurable.INFO_MAX) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_rules", Configurable.INFO_MAX) %>
     </p>
 
     <h3 class="heading">
@@ -217,8 +217,8 @@
             class: "observe_textlength",
             "aria-describedby" => "assignment-notification-field-description" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_assignment_notification',
-            presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_assignment_notification", ArchiveConfig.SUMMARY_MAX) %>
+            presence: false, maximum_length: Configurable.SUMMARY_MAX) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_assignment_notification", Configurable.SUMMARY_MAX) %>
     </p>
 
     <h3 class="heading">
@@ -232,8 +232,8 @@
             class: "observe_textlength",
             "aria-describedby" => "gift-notification-field-description" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_gift_notification',
-            presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_gift_notification", ArchiveConfig.SUMMARY_MAX) %>
+            presence: false, maximum_length: Configurable.SUMMARY_MAX) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_gift_notification", Configurable.SUMMARY_MAX) %>
     </p>
 
   <% end %>

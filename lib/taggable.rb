@@ -139,7 +139,7 @@ module Taggable
   # Add an error message if the user tried to add invalid tags to the work
   def check_for_invalid_tags
     unless self.invalid_tags.blank?
-      errors.add(:base, "The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than #{ArchiveConfig.TAG_MAX} characters long and do not contain any invalid characters.")
+      errors.add(:base, "The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than #{Configurable.TAG_MAX} characters long and do not contain any invalid characters.")
       self.invalid_tags.each do |tag|
         tag.errors.to_a.each do |error|
           errors.add(:base, error)
@@ -185,7 +185,7 @@ module Taggable
   end
 
   def line_limited_tags(taglist)
-    taglist = taglist[0..(ArchiveConfig.TAGS_PER_LINE-1)] if taglist.size > ArchiveConfig.TAGS_PER_LINE
+    taglist = taglist[0..(Configurable.TAGS_PER_LINE-1)] if taglist.size > Configurable.TAGS_PER_LINE
     taglist
   end
 
@@ -196,8 +196,8 @@ module Taggable
   # for testing
   def add_default_tags
     self.fandom_string = "Test Fandom"
-    self.rating_string = ArchiveConfig.RATING_TEEN_TAG_NAME
-    self.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
+    self.rating_string = Configurable.RATING_TEEN_TAG_NAME
+    self.warning_strings = [Configurable.WARNING_NONE_TAG_NAME]
     self.save
   end
 
@@ -215,7 +215,7 @@ module Taggable
     if options[:return_array]
       tag_names
     else
-      tag_names.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+      tag_names.join(Configurable.DELIMITER_FOR_OUTPUT)
     end
   end
 
@@ -227,7 +227,7 @@ module Taggable
     if incoming_tags.is_a?(String)
       # Replace unicode full-width commas
       incoming_tags.gsub!(/\uff0c|\u3001/, ',')
-      tag_array = incoming_tags.split(ArchiveConfig.DELIMITER_FOR_INPUT)
+      tag_array = incoming_tags.split(Configurable.DELIMITER_FOR_INPUT)
     else
       tag_array = incoming_tags
     end

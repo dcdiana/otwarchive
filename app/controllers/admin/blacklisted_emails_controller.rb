@@ -6,7 +6,7 @@ class Admin::BlacklistedEmailsController < ApplicationController
     @admin_blacklisted_email = AdminBlacklistedEmail.new
     if params[:query]
       @admin_blacklisted_emails = AdminBlacklistedEmail.where(["email LIKE ?", '%' + params[:query] + '%'])
-      @admin_blacklisted_emails = @admin_blacklisted_emails.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @admin_blacklisted_emails = @admin_blacklisted_emails.paginate(page: params[:page], per_page: Configurable.ITEMS_PER_PAGE)
     end
   end
 

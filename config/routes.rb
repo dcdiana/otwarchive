@@ -131,6 +131,7 @@ Otwarchive::Application.routes.draw do
 
   namespace :admin do
     resources :activities, only: [:index, :show]
+    resources :configurables, only: [:index, :show, :edit, :update, :destroy]
     resources :banners do
       member do
         get :confirm_delete

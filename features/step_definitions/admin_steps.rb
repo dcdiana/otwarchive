@@ -1,11 +1,11 @@
 default_settings = {
-  invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
-  invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
-  invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+  invite_from_queue_enabled: Configurable.INVITE_FROM_QUEUE_ENABLED,
+  invite_from_queue_number: Configurable.INVITE_FROM_QUEUE_NUMBER,
+  invite_from_queue_frequency: Configurable.INVITE_FROM_QUEUE_FREQUENCY,
   account_creation_enabled: true,
   creation_requires_invite: true,
   request_invite_enabled: true,
-  days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+  days_to_purge_unactivated: Configurable.DAYS_TO_PURGE_UNACTIVATED
 }
 
 def update_settings(settings)

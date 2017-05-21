@@ -1,6 +1,6 @@
 class Relationship < Tag
 
-  NAME = ArchiveConfig.RELATIONSHIP_CATEGORY_NAME
+  NAME = Configurable.RELATIONSHIP_CATEGORY_NAME
   index_name Tag.index_name
   
   # Types of tags to which a relationship tag can belong via common taggings or meta taggings

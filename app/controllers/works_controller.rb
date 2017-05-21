@@ -127,7 +127,7 @@ class WorksController < ApplicationController
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them
         if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? &&
-           (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
+           (params[:page].blank? || params[:page].to_i <= Configurable.PAGES_TO_CACHE)
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = @tag.present? && @tag != @owner ? @tag : nil
           user = current_user.present? ? 'logged_in' : 'logged_out'
@@ -537,11 +537,11 @@ class WorksController < ApplicationController
     end
 
     # make sure we're not importing too many at once
-    if params[:import_multiple] == 'works' && (!current_user.archivist && @urls.length > ArchiveConfig.IMPORT_MAX_WORKS || @urls.length > ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST)
-      flash.now[:error] = ts('You cannot import more than %{max} works at a time.', max: current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
+    if params[:import_multiple] == 'works' && (!current_user.archivist && @urls.length > Configurable.IMPORT_MAX_WORKS || @urls.length > Configurable.IMPORT_MAX_WORKS_BY_ARCHIVIST)
+      flash.now[:error] = ts('You cannot import more than %{max} works at a time.', max: current_user.archivist ? Configurable.IMPORT_MAX_WORKS_BY_ARCHIVIST : Configurable.IMPORT_MAX_WORKS)
       render(:new_import) && return
-    elsif params[:import_multiple] == 'chapters' && @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
-      flash.now[:error] = ts('You cannot import more than %{max} chapters at a time.', max: ArchiveConfig.IMPORT_MAX_CHAPTERS)
+    elsif params[:import_multiple] == 'chapters' && @urls.length > Configurable.IMPORT_MAX_CHAPTERS
+      flash.now[:error] = ts('You cannot import more than %{max} chapters at a time.', max: Configurable.IMPORT_MAX_CHAPTERS)
       render(:new_import) && return
     end
 

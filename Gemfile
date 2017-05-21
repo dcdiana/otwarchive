@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.0'
 gem 'bundler'
 
 gem 'rails', '4.0.13'
-
+gem 'configurable_engine', path: "/home/vagrant/otwarchive/configurable_engine"
 gem 'rails-observers'
 gem 'actionpack-page_caching'
 #gem 'activerecord-deprecated_finders'

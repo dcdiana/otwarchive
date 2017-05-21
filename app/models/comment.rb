@@ -14,8 +14,8 @@ class Comment < ActiveRecord::Base
 
   validates_presence_of :content
   validates_length_of :content,
-    :maximum => ArchiveConfig.COMMENT_MAX,
-    :too_long => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)
+    :maximum =>Configurable[:comment_max],
+    :too_long => ts("must be less than %{count} characters long.", :count => Configurable[:comment_max])
 
   validate :check_for_spam
   def check_for_spam
@@ -39,8 +39,8 @@ class Comment < ActiveRecord::Base
 
   def akismet_attributes
     {
-      :key => ArchiveConfig.AKISMET_KEY,
-      :blog => ArchiveConfig.AKISMET_NAME,
+      :key => Configurable.AKISMET_KEY,
+      :blog => Configurable.AKISMET_NAME,
       :user_ip => ip_address,
       :user_agent => user_agent,
       :comment_author => name,

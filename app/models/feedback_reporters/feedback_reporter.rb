@@ -29,7 +29,7 @@ class FeedbackReporter
     # URL needs to be Percent-encoded so that everything shows up correctly on
     # the other end. (https://en.wikipedia.org/wiki/Percent-encoding)
     encoded_xml = CGI.escape(xml.to_str)
-    HTTParty.post("#{ArchiveConfig.NEW_BUGS_SITE}#{project_path}",
+    HTTParty.post("#{Configurable.NEW_BUGS_SITE}#{project_path}",
                   body: "&xml=#{encoded_xml}")
   end
 

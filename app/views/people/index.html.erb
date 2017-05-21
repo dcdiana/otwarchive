@@ -7,7 +7,7 @@
   <% if @collection %>
     <%= ts("Participants in %{collection}", :collection => @collection.title) %>
   <% else %>
-    <%= ts("People in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
+    <%= ts("People in the %{archive_name}", :archive_name => Configurable.APP_NAME) %>
   <% end %>
 </h2>
 <!--/descriptions-->

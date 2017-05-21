@@ -52,7 +52,7 @@ class CollectionItemsController < ApplicationController
     end
 
     sort = "created_at DESC"
-    @collection_items = @collection_items.order(sort).paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
+    @collection_items = @collection_items.order(sort).paginate page: params[:page], per_page: Configurable.ITEMS_PER_PAGE
   end
 
   def load_collectible_item

@@ -48,13 +48,13 @@
             <%= radio_button_tag "import_multiple", "works", true %>
             <%= label_tag "import_multiple_works",
                           ts("Works (limit of %{max})",
-                             max: current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
+                             max: current_user.archivist ? Configurable.IMPORT_MAX_WORKS_BY_ARCHIVIST : Configurable.IMPORT_MAX_WORKS) %>
           </li>
           <li>
             <%= radio_button_tag "import_multiple", "chapters" %>
             <%= label_tag "import_multiple_chapters",
                           ts("Chapters in a single work (limit of %{max})",
-                             max: ArchiveConfig.IMPORT_MAX_CHAPTERS) %>
+                             max: Configurable.IMPORT_MAX_CHAPTERS) %>
           </li>
         </ul>
       </dd>
@@ -128,7 +128,7 @@
       <dt><%= label_tag :notes, ts("Notes at the beginning") %></dt>
       <dd>
         <%= text_area_tag :notes, nil, class: "observe_textlength" %>
-        <%= generate_countdown_html(".notes", ArchiveConfig.NOTES_MAX) %>
+        <%= generate_countdown_html(".notes", Configurable.NOTES_MAX) %>
       </dd>
     </dl>
   </fieldset>

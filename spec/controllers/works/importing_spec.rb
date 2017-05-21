@@ -38,7 +38,7 @@ describe WorksController do
         end
 
         it "should error when importing over the maximum number of works" do
-          max = ArchiveConfig.IMPORT_MAX_WORKS
+          max = Configurable.IMPORT_MAX_WORKS
           urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
           params = { urls: urls, importing_for_others: false, import_multiple: "works" }
           get :import, params
@@ -48,7 +48,7 @@ describe WorksController do
 
       context "the current user is an archivist" do
         it "should error when importing over the maximum number of works" do
-          max = ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
+          max = Configurable.IMPORT_MAX_WORKS_BY_ARCHIVIST
           urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
           params = { urls: urls, importing_for_others: false, import_multiple: "works" }
           allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
@@ -60,7 +60,7 @@ describe WorksController do
         end
 
         it "should error when importing over the maximum number of chapters" do
-          max = ArchiveConfig.IMPORT_MAX_CHAPTERS
+          max = Configurable.IMPORT_MAX_CHAPTERS
           urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
           params = { urls: urls, importing_for_others: false, import_multiple: "chapters" }
           allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
