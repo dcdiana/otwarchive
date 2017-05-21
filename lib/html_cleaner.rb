@@ -143,8 +143,8 @@ module HtmlCleaner
   end
 
   def sanitize_value(field, value)
-    if Configurable.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
-      return (value.to_i > 0) ? value.to_i : Configurable.NONZERO_INTEGER_PARAMETERS[field.to_s]
+    if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
+      return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
     end
     return "" if value.blank?
     value.strip!

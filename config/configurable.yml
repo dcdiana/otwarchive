@@ -1,11 +1,23 @@
-DEFAULT_LANGUAGE_SHORT:
- name: title
- default: en
-
 PERFORM_DELIVERIES:
  name: Deliver Emails
  default: false
  type: boolean
+
+DEFAULT_LANGUAGE_NAME:
+  default: English
+  name: "Default Language Name"
+
+DEFAULT_LANGUAGE_SHORT:
+  default: en
+  name: "Default Language Short Name"
+
+DEFAULT_LOCALE_ISO:
+  default: en
+  name: "Default Locale ISO"
+
+DEFAULT_LOCALE_NAME:
+  default: "English (US)"
+  name: "Default Locale Name"
 
 BCRYPT_COST:
  name: cost
@@ -141,6 +153,10 @@ ELASTICSEARCH_1_URL:
 ELASTICSEARCH_URL:
   default: "http://localhost:9200"
   name: "Primary Elastic Search URL"
+
+BCRYPT:
+ name: "Use BCRYPT"
+ default: true
 
 INVITE_FROM_QUEUE_ENABLED:
   default: true
@@ -549,21 +565,7 @@ COUNT_EXPIRATION:
  name: "Count Expiration"
  default: 40.minutes
 
-DEFAULT_LANGUAGE_NAME:
-  default: English
-  name: "Default Language Name"
 
-DEFAULT_LANGUAGE_SHORT:
-  default: en
-  name: "Default Language Short Name"
-
-DEFAULT_LOCALE_ISO:
-  default: en
-  name: "Default Locale ISO"
-
-DEFAULT_LOCALE_NAME:
-  default: "English (US)"
-  name: "Default Locale Name"
 
 FIELDS_ALLOWING_LESS_THAN:
   default:
@@ -1010,14 +1012,6 @@ RELATIONSHIP_CATEGORY_NAME:
 
 SEARCH_TIPS:
   default:
-    - "arthur merlin words>1000 sort:hits"
-    - "words:100"
-    - "buffy gen teen AND \"no archive warnings apply\""
-    - "lex m/m (mature OR explicit)"
-    - "hetalia f/f sort:kudos"
-    - "\"sherlock (tv)\" m/m NOT \"sherlock holmes/john watson\""
-    - "austen words:10000-50000 sort:title"
-    - "katekyou \"alternate universe\" sort:>words"
-    - "\"uchiha sasuke/uzumaki naruto\" angst kudos>10"
+    - "arthur merlin words>1000 sort hits"
   name: "Search Tips"
   type: list
